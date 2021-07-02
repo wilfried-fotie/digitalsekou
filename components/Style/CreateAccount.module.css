@@ -1,0 +1,14 @@
+.df {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    align-items: center;
+    font-size: .88em;
+    margin: 20px 0px 10px;
+}
+
+.h2 {
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+}

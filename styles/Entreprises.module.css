@@ -1,0 +1,58 @@
+    .text {
+        text-align: center;
+        display: flex;
+        padding: 10px 50px 10px;
+        font-size: 1.82em;
+        line-height: 2.2rem;
+        color: black;
+        font-family: "montserratBold"!important;
+        font-weight: 900;
+    }
+    
+    .main {
+        padding-top: 3%;
+    }
+    
+    .h1 {
+        text-align: center;
+        padding: 2% 4% 1%;
+    }
+    
+    .split {
+        color: #4a00b4;
+        padding: 10px 20px 10px;
+    }
+    
+    .os {
+        color: #4a00b4;
+        font-family: "montserratBold"!important;
+        font-weight: 900;
+        font-size: 3em!important;
+        display: inline-block;
+        border: 2px solid #4a00b4;
+        border-radius: 100%;
+        padding: 10px 30px;
+    }
+    
+    .df {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    
+    .grid {
+        display: grid;
+        grid-template-rows: 1fr 2fr;
+        padding: 10px 20px 10px;
+    }
+    
+    .icon {
+        top: 0;
+    }
+    
+    .mg {
+        text-align: center;
+        display: flex;
+        margin: 0px 30% 2%;
+        justify-content: space-evenly;
+    }

@@ -1,0 +1,28 @@
+.all {
+    max-width: 40vw;
+    height: 55vh;
+    margin-bottom: 20px;
+    overflow: auto;
+}
+
+.animated {
+    animation: slide 1s;
+    max-width: 40vw;
+    height: 55vh;
+    margin-bottom: 20px;
+    overflow: auto;
+}
+
+.title {
+    font-family: "montserratBold";
+    font-size: 1.2em;
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(100px);
+    }
+    to {
+        transform: translateX(0px);
+    }
+}

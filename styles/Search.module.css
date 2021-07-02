@@ -1,0 +1,85 @@
+.search {
+    height: 30vh;
+    width: 100%;
+    background-image: url("/search.svg");
+    background-position: right 10% top 25%;
+    background-size: 30%;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    text-align: center;
+    justify-content: center;
+    padding-right: 25%;
+    background-color: #4a00b4;
+}
+
+.search h1 {
+    color: #fff!important;
+}
+
+.result {
+    width: 100%;
+    display: flex;
+}
+
+.res {
+    width: 95%;
+    background-color: #fff;
+    box-shadow: #fff 5px 5px 10px 10px;
+    padding: 20px 20px 5px;
+    margin-bottom: 40px;
+}
+
+.app {
+    max-width: 80%;
+}
+
+.searBar {
+    position: absolute;
+    background-color: #fff;
+    width: 45%;
+    border-radius: 20px;
+    margin-top: -30px;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.df {
+    display: flex;
+    justify-content: center;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4a00b4;
+    width: 20%;
+}
+
+#input {
+    margin: 10px 20px 10px;
+    border: 0px!important;
+}
+
+.left {
+    width: 20%;
+    padding: 2% 30px 20px;
+}
+
+.right {
+    width: 80%;
+    background-color: lightgray;
+    padding: 4% 30px 20px;
+}
+
+.pad {
+    padding: 10px 10px 10px;
+    font-size: .9em;
+}
+
+.pad div {
+    line-height: 2em;
+}

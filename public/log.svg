@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="69.64032mm"
+   height="4.6482mm"
+   viewBox="0 0 69.640321 4.6482002"
+   version="1.1"
+   id="svg33192"
+   inkscape:version="1.1 (ce6663b3b7, 2021-05-25)"
+   sodipodi:docname="log.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview33194"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.59152637"
+     inkscape:cx="-551.11659"
+     inkscape:cy="44.799355"
+     inkscape:window-width="1440"
+     inkscape:window-height="836"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs33189">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath33097">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 8.7927264,-435.27786 c 0,0 13.2923316,14.26345 23.5461236,14.13576 10.253792,-0.12768 22.395564,3.97389 25.736444,3.74298 3.340881,-0.23087 71.339266,-2.59675 71.339266,-2.59675 0,0 32.81961,-5.34265 34.50387,-17.76365 1.68426,-12.42097 2.21911,-30.32321 -6.08527,-38.90208 -8.30438,-8.57888 -70.515097,-59.67458 -70.515097,-59.67458 l -78.8739794,17.20914 c 0,0 -15.162638,70.83406 -13.5174125,71.55085 1.6452252,0.71675 13.8660553,12.29833 13.8660553,12.29833 z"
+         id="path33099" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath32978">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 7.3016998,-447.44562 c 0,0 5.3506102,17.75105 63.4011462,16.85758 58.050534,-0.89347 62.930224,-3.69334 62.930224,-3.69334 l 15.86593,-80.03046 -78.267535,-21.97753 -60.217586,14.26011 -19.3048042,68.22168 z"
+         id="path32980" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-68.367237,-65.522309)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:Montserrat;-inkscape-font-specification:'Montserrat Heavy';word-spacing:0px;fill:#4a00b4;fill-opacity:1;stroke-width:0.264583"
+       x="68.005287"
+       y="70.068909"
+       id="text34872"><tspan
+         sodipodi:role="line"
+         id="tspan34870"
+         style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:6.35px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Heavy';fill:#4a00b4;fill-opacity:1;stroke-width:0.264583"
+         x="68.005287"
+         y="70.068909">DIGITAL EDUCATION</tspan></text>
+  </g>
+</svg>

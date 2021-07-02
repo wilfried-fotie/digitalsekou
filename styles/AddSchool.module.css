@@ -1,0 +1,160 @@
+.left {
+    display: inline-block;
+    padding: 10px 30px 10px;
+    width: 45vw;
+    background-color: #fff;
+}
+
+.right {
+    width: 70%;
+}
+
+.dg textarea {
+    padding: 10px 20px 10px;
+}
+
+.tab {
+    height: 100px;
+    border: 2px solid #4a00b4;
+    overflow: auto;
+    padding: 10px 20px 10px;
+    margin-top: 10px;
+}
+
+.ds {
+    display: flex;
+    align-items: center;
+}
+
+.fixed {
+    position: fixed!important;
+    top: 10%;
+    flex: 1;
+    width: 60%;
+    z-index: 2;
+}
+
+.lending {
+    background-image: url("/site.svg");
+    background-repeat: no-repeat;
+    background-color: #4a00b4;
+    background-size: 500px 300px;
+    background-position: 90% -5%;
+}
+
+.pad {
+    width: 60%;
+    padding: 20px 30px 10px;
+}
+
+.app {
+    width: 50%;
+}
+
+.links {
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 30px;
+}
+
+.p {
+    color: #fff;
+    width: 50%;
+    padding-bottom: 30px;
+}
+
+.main {
+    margin-top: 2%;
+    scroll-behavior: smooth;
+}
+
+.pad h1 {
+    text-transform: uppercase;
+    color: #FFF;
+}
+
+.as {
+    margin: 20px 0px 20px;
+}
+
+.df {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #000;
+    margin-bottom: 20px;
+}
+
+.dg {
+    display: table;
+    justify-content: start;
+    padding: 10px 0px 10px;
+    color: #000;
+    margin-bottom: 20px;
+}
+
+.dg textarea {
+    margin-top: 10px;
+    width: 100%;
+    font-family: "Montserrat";
+}
+
+.profil {
+    height: 100px;
+    width: 100px;
+}
+
+.gen {
+    background-color: lightgray;
+    display: flex;
+    justify-content: space-between;
+    font-size: .9em;
+}
+
+.end {
+    margin-bottom: 20px;
+}
+
+.nav {
+    text-align: center;
+    padding: 20px 10px 20px;
+}
+
+.active {
+    color: #fff;
+    background-color: #4a00b4;
+    padding: 5px 10px 3px;
+    border-bottom: 3px solid #e77204;
+    text-decoration-style: solid;
+}
+
+.desk {
+    border: 4px solid gray;
+    height: 60%;
+    width: 90%;
+    border-radius: 20px;
+    padding: 5px 10px 3px;
+    background-color: #fff;
+    height: 70vh;
+    overflow: auto;
+}
+
+.mob {
+    border: 4px solid gray;
+    width: 45%;
+    height: 80vh;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 5px 10px 3px;
+    overflow: auto;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+}
+
+.nope {
+    display: none;
+}
