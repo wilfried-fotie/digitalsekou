@@ -144,6 +144,26 @@ option {
     align-items: center;
 }
 
+.dfs {
+    display: grid;
+    grid-template-columns: 10% 80%;
+    grid-gap: 2%;
+    align-items: center;
+}
+
+button {
+    list-style: none;
+    border: 0;
+    box-decoration-break: 0;
+    font-family: "Montserrat";
+}
+
+.error {
+    color: red;
+    padding: 10px 20px 10px;
+    font-size: .88em;
+}
+
 .h2 {
     font-size: x-large;
     font-weight: bold;

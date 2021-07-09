@@ -1,16 +1,13 @@
 .all {
     max-width: 40vw;
-    height: 55vh;
-    margin-bottom: 20px;
+    max-height: 60vh;
     overflow: auto;
 }
 
-.animated {
-    animation: slide 1s;
-    max-width: 40vw;
-    height: 55vh;
+.df {
+    display: flex;
+    justify-content: space-evenly;
     margin-bottom: 20px;
-    overflow: auto;
 }
 
 .title {

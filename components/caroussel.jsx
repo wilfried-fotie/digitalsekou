@@ -4,6 +4,7 @@ import Image from 'next/image';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ArrowRight, ArrowLeft } from 'react-bootstrap-icons'
+import Icon from "./CustomHooks/Icon";
 
 
 export default function SimpleSlider() {
@@ -17,8 +18,8 @@ export default function SimpleSlider() {
         slidesToShow: 1,
         arrows: true,
         slidesToScroll: 1,
-        prevArrow: <ArrowLeft size={100} color="#4a00b4" />,
-        nextArrow: <ArrowRight size={100} color="#4a00b4" />
+        prevArrow: <ArrowLeft height={100} color="#4a00b4" />,
+        nextArrow: <ArrowRight height={100} color="#4a00b4" />,
 
     };
     return (

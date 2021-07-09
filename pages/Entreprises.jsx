@@ -151,7 +151,15 @@ function Entreprises() {
                 </div>
 
                 <div className={styles.mg}>
-                    <a className="btnPrimary">Commencer maintenant</a>
+                    <a className="btnPrimary" onClick={() => {
+
+                        if (sessionStorage.getItem("token") !== "" && sessionStorage.getItem("token") !== undefined) {
+                            alert("vous êtes déja connecter")
+                        } else {
+                            <CustomModal onModalChange={handleClose} component={<HelpEntre />} />
+                        }
+
+                    }}>Commencer maintenant</a>
                     <a className="btnSecondary"
                         onClick={(e) => {
                             e.preventDefault()

@@ -12,3 +12,11 @@
     text-align: center;
     color: #000;
 }
+
+.dfss {
+    display: flex;
+    width: 40%;
+    justify-content: flex-start;
+    gap: 20%;
+    align-items: center;
+}
