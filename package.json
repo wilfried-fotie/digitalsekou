@@ -8,15 +8,21 @@
     "start": "next start"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.6.0",
+    "@tinymce/tinymce-react": "^3.12.6",
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.5.0",
-    "dante3": "^1.0.5",
     "next": "^10.0.4",
     "react": "17.0.2",
     "react-bootstrap-icons": "^1.5.0",
     "react-dom": "17.0.2",
+    "react-hook-form": "^7.10.1",
     "react-select": "^4.3.1",
     "react-slick": "^0.28.1",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "@types/yup": "^0.29.13"
   }
 }

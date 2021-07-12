@@ -1,5 +1,5 @@
 import React from 'react'
-import { Lock, Person, StopwatchFill, Telephone } from 'react-bootstrap-icons'
+import { Lock, Person, } from 'react-bootstrap-icons'
 import styles from './Style/CreateAccount.module.css'
 import "../global"
 import axios from "axios"

@@ -60,7 +60,8 @@ function CreateAccount() {
                 axios.post("/create", data).then(res => {
                     sessionStorage.setItem("token", res.data.access_token)
                     setStore(res.data.access_token)
-                    // router.push('/addSchoolPro')
+
+                    router.push('/addSchoolPro')
                 }).catch(res => alert(res))
 
             }

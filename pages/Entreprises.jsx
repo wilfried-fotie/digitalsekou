@@ -7,6 +7,7 @@ import React from 'react'
 import Footer from './Template/footer'
 import { ArrowRight } from 'react-bootstrap-icons'
 import { useState } from 'react'
+import Link from 'next/link'
 
 function Entreprises() {
 
@@ -93,7 +94,7 @@ function Entreprises() {
                 </div>
 
                 <div className={styles.mg}>
-                    <a className="btnPrimary">Commencer maintenant</a>
+                    <Link href="/StartPub"><a className="btnPrimary" >Commencer maintenant</a></Link>
                     <a className="btnSecondary" onClick={() => {
                         handleClose(false)
 
@@ -151,22 +152,14 @@ function Entreprises() {
                 </div>
 
                 <div className={styles.mg}>
-                    <a className="btnPrimary" onClick={() => {
-
-                        if (sessionStorage.getItem("token") !== "" && sessionStorage.getItem("token") !== undefined) {
-                            alert("vous êtes déja connecter")
-                        } else {
-                            <CustomModal onModalChange={handleClose} component={<HelpEntre />} />
-                        }
-
-                    }}>Commencer maintenant</a>
+                    <Link href="/StartPub"><a className="btnPrimary" >Commencer maintenant</a></Link>
                     <a className="btnSecondary"
-                        onClick={(e) => {
+                        onClick={React.useCallback((e) => {
                             e.preventDefault()
                             handleClose(false)
 
 
-                        }}
+                        })}
 
                     >Obtenir de l'aide</a>
                 </div>

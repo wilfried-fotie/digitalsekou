@@ -53,6 +53,15 @@ b {
     color: black;
 }
 
+.op {
+    z-index: 10000;
+}
+
+.dfb {
+    display: flex;
+    justify-content: space-between;
+}
+
 .btnPri {
     padding: 7px 20px 7px;
     background-color: #4a00b4;

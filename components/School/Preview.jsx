@@ -5,44 +5,52 @@ import useChangeBool from '../handleBool'
 
 
 
-function Preview(data) {
-
-    const [p, setPosition] = useState(0)
+function Preview({ data }) {
+    const article = React.useRef(null)
     const [choise, handleChoiseState] = useChangeBool(true)
     const [fixed, setFixed] = useState(false)
 
     useEffect(() => {
+
+
+
         window.document.addEventListener("scroll", () => {
+            if (window.document.querySelector("article") !== null) {
+                let p = window.document.querySelector("article").getBoundingClientRect().top
+                let b = window.document.querySelector("article").getBoundingClientRect().bottom
+                console.log(p, b)
+                if (p < 60) {
+                    setFixed(true)
+                }
+                else {
 
-
-
-
-            setPosition(document.querySelector("article").getBoundingClientRect().top)
-            if (document.querySelector("article").getBoundingClientRect().top < 60) {
-                setFixed(true)
-
-
+                    setFixed(false)
+                }
             } else {
-                setFixed(false)
 
             }
 
-        })
+        }
+        )
+
+
     }, [])
 
 
     return (
-        <article>
+        <article ref={article}>
             <div className={fixed ? styles.fixed : null} >
-                <div className={styles.nav}> <a onClick={() => { handleChoiseState(choise) }} className={choise ? styles.active : null}>Desktop</a> <a className={!choise ? styles.active : null} onClick={() => { handleChoiseState(!choise) }}>Mobile</a> </div>
+                <div className={styles.nav}>
+                    <a onClick={() => { handleChoiseState(choise) }} className={choise ? styles.active : null}>Desktop</a>
+                    <a className={!choise ? styles.active : null} onClick={() => { handleChoiseState(!choise) }}>Mobile</a> </div>
                 <div className={styles.content}>
 
                     <div className={choise ? styles.desk : styles.mob}>
                         <nav className={styles.nav}>
                             <div className="df">
 
-                                {JSON.stringify(data)}
-                                <img src={data} alt="Logo" />
+
+                                <img src={data.logo} alt="Logo" />
                                 <div className={styles.links}>
                                     <a > Acceuil </a>
                                     <a > Spécialités </a>

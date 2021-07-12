@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import styles from '../../styles/Header.module.css'
 import CustomModal from '../../components/customModal'
-import React, { useState, memo } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import CreateAccount from '../../components/CreateAccount'
 import Login from '../../components/Login'

@@ -75,7 +75,7 @@ function Entreprises() {
         covert: ""
     }
 
-    const [data, setData] = useState()
+    const [data, setData] = useState(app)
 
 
     const handleLogoChange = (e) => {
@@ -114,6 +114,7 @@ function Entreprises() {
                         <Add
 
                             onLogoChange={handleLogoChange}
+                            state={data}
 
 
                         />
