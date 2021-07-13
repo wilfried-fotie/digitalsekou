@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image } from 'react-bootstrap-icons'
+import { GeoAlt, Image } from 'react-bootstrap-icons'
 import styles from '../../styles/AddSchool.module.css'
 import useChangeBool from '../handleBool'
 
@@ -37,6 +37,7 @@ function Preview({ data }) {
     }, [])
 
 
+
     return (
         <article ref={article}>
             <div className={fixed ? styles.fixed : null} >
@@ -47,10 +48,12 @@ function Preview({ data }) {
 
                     <div className={choise ? styles.desk : styles.mob}>
                         <nav className={styles.nav}>
-                            <div className="df">
+                            <div className="dfss">
 
+                                <div>
+                                    <img src={data.logo} className={styles.img} alt="Logo" />
+                                </div>
 
-                                <img src={data.logo} alt="Logo" />
                                 <div className={styles.links}>
                                     <a > Acceuil </a>
                                     <a > Spécialités </a>
@@ -62,22 +65,23 @@ function Preview({ data }) {
 
                             <div className={styles.df}>
 
-                                {JSON.stringify(data.logo)}
                                 <div className={styles.app}>
-                                    <div className="h1"> Nom complet de l'établissement + sigle</div>
+                                    <div className="h1">
 
-                                    <p>
-                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                        Delectus, praesentium! Explicabo eaque, aperiam dicta minus,
-                                        <img src={data} alt="LOGO" />
-                                    </p>
+                                        {data.name || "Nom complet de l'établissement"}
+                                        ( {data.cible || "Sigle"} ) </div>
+
+                                    <p> {data.description.substr(0, 400) ||
+                                        "Ajouter la description de votre établissement ici"
+
+                                    } </p>
                                     <div>
                                         <a className="btnPrimary">Nous Contacter</a>
                                     </div>
                                 </div>
-                                <Image size={250} color="#4a00b4" />
+                                {data.profil == "" || data.profil == undefined ? <Image size={250} color="#4a00b4" /> : <img src={data.profil} className={styles.profil} />}
                             </div>
-
+                            <center style={{ display: "flex" }}> <GeoAlt size={20} color="#4a00b4" /> {data.position == [] ? "Votre position" : data.position.map(e => e.label + ", ")}</center>
                             <div>
                                 <center className="h2">Nos Spécialités</center>
                                 <p>

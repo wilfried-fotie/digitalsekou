@@ -12,7 +12,7 @@ import Select from 'react-select'
 import { Editor } from '@tinymce/tinymce-react';
 
 
-function useModal(initial) {
+export function useModal(initial) {
 
     const [value, setValue] = React.useState(initial)
 
@@ -27,7 +27,7 @@ function useModal(initial) {
 
 
 
-function Sudo() {
+export function Sudo() {
 
     const [sudoToken, setSudoToken] = React.useState("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyNTk4MDI5NSwianRpIjoiYWFlY2U0NmYtYjA5ZS00OTU2LWE4YzMtZDdiOTBiNTg4ZDY3IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjU5ODAyOTUsImV4cCI6MTYyNTk4MTE5NX0.hz0L4rWi93ochvOpcCOF4OTZyRh8ocdIGRqyt-Yszkc")
     React.useEffect(() => {

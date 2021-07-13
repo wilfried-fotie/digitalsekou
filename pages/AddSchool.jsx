@@ -66,25 +66,65 @@ function Entreprises() {
 
     const app = {
         logo: "",
-        sigle: "",
+        cible: "",
+        tel: "",
         name: "",
         description: "",
-        imgs: "",
-        slogan: "",
-        position: {},
-        covert: ""
+        profil: "",
+        position: [],
+
     }
 
     const [data, setData] = useState(app)
 
 
-    const handleLogoChange = (e) => {
+    const handleChange = (e) => {
+        const name = e.target.name
+        const value = e.target.value
+        setData(s => {
+            return {
+                ...s,
+                [name]: value
+            }
+        }
+        )
+    }
 
-        setImage(e)
-        uploader(e)
-        setData(result)
-        console.log(data)
+    const handleImageChange = (e) => {
+        const name = e.target.name
 
+        if (e.target.files && e.target.files[0]) {
+
+
+            //     let reader = new FileReader();
+            //     reader.onload = (ev) => {
+            //         setData(s => {
+            //             return {
+            //                 ...s,
+            //                 name: event.target.result
+            //             }
+            //         });
+            //     };
+            //     reader.readAsDataURL(e.target.files[0]);
+            // }
+
+            setData(s => {
+                return {
+                    ...s,
+                    [name]: URL.createObjectURL(e.target.files[0])
+                }
+            });
+        }
+    }
+    const handleSelectChange = (e) => {
+
+        setData(s => {
+            return {
+                ...s,
+                position: [...e]
+            }
+        }
+        )
     }
 
 
@@ -109,12 +149,12 @@ function Entreprises() {
 
 
 
-
                     <div className={styles.gen} id="start">
                         <Add
-
-                            onLogoChange={handleLogoChange}
+                            onChange={handleChange}
+                            onImageChange={handleImageChange}
                             state={data}
+                            onSelectChange={handleSelectChange}
 
 
                         />

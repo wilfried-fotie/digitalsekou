@@ -12,8 +12,12 @@ import Link from 'next/link'
 function Entreprises() {
 
     const [state, setState] = useState(false)
+    const [state2, setState2] = useState(false)
 
     const handleClose = (s) => {
+        setState(s => !s)
+    }
+    const handleClose2 = (s) => {
         setState(s => !s)
     }
     return (
@@ -156,7 +160,7 @@ function Entreprises() {
                     <a className="btnSecondary"
                         onClick={React.useCallback((e) => {
                             e.preventDefault()
-                            handleClose(false)
+                            handleClose2(false)
 
 
                         })}
@@ -164,7 +168,7 @@ function Entreprises() {
                     >Obtenir de l'aide</a>
                 </div>
                 {state && <CustomModal onModalChange={handleClose} component={<HelpEntre />} />}
-                {state && <CustomModal onModalChange={handleClose} component={<HelpEntre />} />}
+                {state2 && <CustomModal onModalChange={handleClose} component={<HelpEntre />} />}
 
 
             </main>

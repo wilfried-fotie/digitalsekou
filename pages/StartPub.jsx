@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../styles/startpub.module.css'
-import { Building, ImageAlt, NodeMinus, TelephoneFill, BarChart, Pen, Display, Person, ArrowLeft, Diagram2Fill, CurrencyExchange } from 'react-bootstrap-icons'
+import { Building, ImageAlt, NodeMinus, TelephoneFill, BarChart, Pen, Display, Person, ArrowLeft, Diagram2Fill, CurrencyExchange, PersonCircle } from 'react-bootstrap-icons'
 import Preview from '../components/School/Preview'
 import { Connect, Six, App } from "./Sudo"
 import { useRouter } from "next/router"
@@ -61,16 +61,20 @@ function StartPub() {
 
                 <div className={styles.bar}>
                     <nav className={styles.bar, styles.dss}>
+
                         <span className={level == 0 ? styles.active : styles.span} onClick={(e) => {
                             e.preventDefault()
                             setLevel(0)
                             router.push("/Entreprises")
-                        }}> <ArrowLeft size={20} color={level == 0 ? "#fff" : "#fff9"} className={level == 0 ? styles.acticon : styles.icon} /> Revenir au site</span>
+                        }}> <ArrowLeft size={20} color={level == 0 ? "#fff" : "#fff9"} className={level == 0 ? styles.acticon : styles.icon} />Retour</span>
+
 
                         <div className={styles.dgc}>
-                            <Person size={80} color="#fff" />
+                            <PersonCircle size={80} color="#fff" />
                             <span className={styles.dbcText}>Wilfried</span>
                         </div>
+
+
                         <span className={level == 1 ? styles.active : styles.span} onClick={() => { setLevel(1) }}> <CurrencyExchange size={20} color={level == 1 ? "#fff" : "#fff9"} className={level == 1 ? styles.acticon : styles.icon} /> Publicités </span>
                         <span className={level == 2 ? styles.active : styles.span} onClick={() => { setLevel(2) }}> <Diagram2Fill size={20} color={level == 2 ? "#fff" : "#fff9"} className={level == 2 ? styles.acticon : styles.icon} /> Offres </span>
                         <span className={level == 3 ? styles.active : styles.span} onClick={() => { setLevel(3) }}> <BarChart size={20} color={level == 3 ? "#fff" : "#fff9"} className={level == 3 ? styles.acticon : styles.icon} /> Statistiques </span>

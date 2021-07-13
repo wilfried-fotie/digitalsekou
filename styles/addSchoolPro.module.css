@@ -1,0 +1,66 @@
+.app {
+    display: grid;
+    grid-template-areas: "nav nav nav" "body body aside";
+    align-items: center;
+}
+
+.nav {
+    grid-area: nav;
+    height: 10vh;
+    padding: 10px 20px 10px;
+    border-bottom: 2px solid #4a00b4;
+}
+
+.aside {
+    grid-area: aside;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px 10px;
+}
+
+.aside {
+    grid-area: body;
+    padding: 10px 20px 10px;
+}
+
+.bar .span:hover,
+.content .span:hover,
+.active:hover,
+.active2:hover {
+    cursor: pointer;
+}
+
+.acticon {
+    margin-right: 10px;
+    height: 20;
+    color: #fff!important;
+}
+
+.icon {
+    margin-right: 10px;
+    height: 20;
+    color: #4a00b4!important;
+}
+
+.bar {
+    height: 100ch;
+    background: #4a00b4;
+    min-width: 20vw;
+}
+
+.db {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content {
+    width: 80%;
+}
+
+.bar .span {
+    color: rgb(204, 202, 202);
+    padding: 20px 20px 10px;
+    display: flex;
+    align-items: center;
+}

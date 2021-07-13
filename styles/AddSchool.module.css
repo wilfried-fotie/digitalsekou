@@ -1,7 +1,7 @@
 .left {
     display: inline-block;
     padding: 10px 30px 10px;
-    width: 45vw;
+    width: 42vw;
     background-color: #fff;
 }
 
@@ -14,7 +14,11 @@
 }
 
 .img {
-    max-height: 200px;
+    max-height: 80px;
+}
+
+.links {
+    padding-top: 20px;
 }
 
 .mob .nav {
@@ -101,7 +105,7 @@
     position: fixed!important;
     top: 10%;
     flex: 1;
-    max-width: 60%;
+    max-width: 65%;
     z-index: 2;
 }
 
@@ -182,8 +186,8 @@
 }
 
 .profil {
-    height: 100px;
-    width: 100px;
+    height: 60%;
+    width: 40%;
 }
 
 .gen {

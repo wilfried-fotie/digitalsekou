@@ -1,10 +1,11 @@
+import Link from 'next/link'
 import React from 'react'
 import { Building, ImageAlt, NodeMinus, TelephoneFill } from 'react-bootstrap-icons'
 
 import Select from 'react-select'
 import styles from '../../styles/AddSchool.module.css'
 
-function Field({ auto, children, name, value, onChange, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+export function Field({ auto, children, name, value, onChange, image = <NodeMinus size={30} color="#4a00b4" /> }) {
     return <div className={styles.dg}>
 
         <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
@@ -13,7 +14,7 @@ function Field({ auto, children, name, value, onChange, image = <NodeMinus size=
     </div>
 }
 
-function TextArea({ children, name, value, onChange }) {
+export function TextArea({ children, name, value, onChange }) {
     return <div>
 
         <div> <label htmlFor={name}>{children}</label> </div>
@@ -23,7 +24,7 @@ function TextArea({ children, name, value, onChange }) {
 }
 
 
-function File({ children, name, onChange, multiple = false }) {
+export function File({ children, name, onChange, multiple = false }) {
     return <div className={styles.dg}>
         <div className="dfs">
             <ImageAlt size={20} color="#4a00b4" />
@@ -77,6 +78,7 @@ export default class Add extends React.PureComponent {
 
         return (
             <div className={styles.left}>
+
                 <Field name="name" auto="exp: Institut universitaire...." image={<Building size={20} color="#4a00b4" />} onChange={this.handle} value={this.props.state.name}>Nom Complet De L'établissement</Field>
                 <Field name="cible" auto="exp: INSAM" onChange={this.handle} value={this.props.state.cible}>Sigle De L'établissement </Field>
                 <Field name="tel" auto="exp: 678 55 02 04" image={<TelephoneFill size={20} color="#4a00b4" />} tel={true} onChange={this.handle} value={this.props.state.tel}>Ajouter Le Numéro de Téléphone</Field>
@@ -90,7 +92,7 @@ export default class Add extends React.PureComponent {
                 <File name="profil" onChange={this.handleImage}>Importer Une Image de Profil</File>
                 <TextArea name="description" onChange={this.handle} value={this.props.state.description}>Description De L'établissement </TextArea>
 
-                <div className={styles.dg}> <center><a href="/addSchoolPro" className="btnPri">Enregistrer</a></center>  </div>
+                <div className={styles.dg}> <center> <Link href="/addSchoolPro"><a href="/addSchoolPro" className="btnPri">Enregistrer</a></Link></center>  </div>
 
 
             </div>
