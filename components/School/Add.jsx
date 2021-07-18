@@ -44,7 +44,7 @@ export function File({ children, name, onChange, multiple = false }) {
 
 
 
-export default class Add extends React.PureComponent {
+class Add extends React.PureComponent {
 
     constructor(props) {
         super(props)
@@ -100,4 +100,4 @@ export default class Add extends React.PureComponent {
     }
 }
 
-
+export default Add

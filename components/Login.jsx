@@ -5,6 +5,7 @@ import "../global"
 import axios from "axios"
 import { useRouter } from "next/router"
 
+
 function CreateAccount() {
 
     const [info, setInfo] = React.useState({

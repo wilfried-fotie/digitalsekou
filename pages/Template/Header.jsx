@@ -6,6 +6,7 @@ import Link from 'next/link'
 import CreateAccount from '../../components/CreateAccount'
 import Login from '../../components/Login'
 import { useEffect } from 'react'
+import ErrorBoundary from '../../components/CustomHooks/ErrorBoundary'
 
 
 function useModal(initial) {
@@ -73,6 +74,7 @@ function Header({ value }) {
 
                 {visbility && <CustomModal onModalChange={v} component={<CreateAccount />} />}
                 {visbility2 && <CustomModal onModalChange={v2} component={<Login />} />}
+
 
             </main>
         </nav >

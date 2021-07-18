@@ -54,7 +54,7 @@ function useChecked(initial) {
 
 
 
-function Entreprises() {
+function AddSchool() {
 
 
     const [image, setImage] = useState("");
@@ -172,4 +172,4 @@ function Entreprises() {
     )
 }
 
-export default Entreprises
+export default AddSchool

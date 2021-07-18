@@ -71,7 +71,7 @@ function Preview({ data }) {
                                         {data.name || "Nom complet de l'établissement"}
                                         ( {data.cible || "Sigle"} ) </div>
 
-                                    <p> {data.description.substr(0, 400) ||
+                                    <p> {data.description && data.description.substr(0,400) ||
                                         "Ajouter la description de votre établissement ici"
 
                                     } </p>
@@ -81,7 +81,7 @@ function Preview({ data }) {
                                 </div>
                                 {data.profil == "" || data.profil == undefined ? <Image size={250} color="#4a00b4" /> : <img src={data.profil} className={styles.profil} />}
                             </div>
-                            <center style={{ display: "flex" }}> <GeoAlt size={20} color="#4a00b4" /> {data.position == [] ? "Votre position" : data.position.map(e => e.label + ", ")}</center>
+                            <center style={{ display: "flex" }}> <GeoAlt size={20} color="#4a00b4" /> {data.position == [] ? "Votre position" : data.position && data.position.map(e => e.label + ", ")}</center>
                             <div>
                                 <center className="h2">Nos Spécialités</center>
                                 <p>

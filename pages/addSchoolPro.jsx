@@ -29,6 +29,25 @@ export function useModal(initial) {
 
 
 
+export function Verif() {
+    return (
+        <>
+            <div className={style.dg}>
+
+
+                <a className="dfss">
+                    <Link size={20} color="#4a00b4" className={style.icon} /> Se Déconnecter</a>
+
+                <a className="dfss">
+                    <LockFill size={20} color="#4a00b4" className={style.icon} /> Changer de mot de passe</a>
+
+
+
+            </div>
+        </>
+    )
+}
+
 
 export function Connect() {
     const [visbility2, v2] = useModal(false)
@@ -110,7 +129,7 @@ export default function Dasboard() {
                         <div className={style.right}>
 
                             {level == 2 && <Un />}
-                            {level == 3 && <Trois />}
+                            {level == 3 && <Six />}
                             {level == 4 && <Quatre />}
                             {level == 5 && <Cinq />}
                             {level == 6 && <Six />}
@@ -166,7 +185,7 @@ export function Un() {
             </tbody>
         </table>
         {visbility3 && <CustomModal onModalChange={v3} position={position} component={<Trois />} />}
-        {visbility && <CustomModal onModalChange={v} position={{ top: 20, left: 20 }} component={<Edit />} />}
+        {visbility && <CustomModal onModalChange={v} position={{ top: 0, left: 0 }} component={<Edit />} />}
 
 
         Vos Filaires
@@ -196,6 +215,53 @@ export function Un() {
 
 
 
+export function Six() {
+    return (
+        <>
+
+            <div className={style.dfw}>
+                {[{
+                    label: "Lorem ipsum dolor, sit amet",
+                    val: 124
+                }, {
+                    label: "Lorem ipsum dolor, sit ",
+                    val: 421
+                }, {
+                    label: "Lorem ipsum dolor, sit amet",
+                    val: 1234
+                }, {
+                    label: "Lorem ipsum dolor",
+                    val: 45
+                }, {
+                    label: "Lorem ipsum dolor, sit amet",
+                    val: 30
+                }, {
+                    label: "Lorem ipsum dolor",
+                    val: 110
+                }].map(e => <Card text={e.label} val={e.val} inc={<Exclude size={30} color="#4a00b4" />} />)}
+            </div>
+
+        </>
+    )
+}
+export function Card({ text, val, inc }) {
+    return (
+        <>
+            <div className={style.ca}>
+                <div>
+                    <center>   {inc}</center>
+                </div>
+                <div className={style.txt}>
+                    {text}
+                </div>
+                <div className={style.val}>
+                    {val}
+                </div>
+            </div>
+        </>
+    )
+}
+
 
 export function Trois() {
     return (<>
@@ -222,16 +288,16 @@ export function Edit() {
 
                 <tr>
                     <td><div className="dfss"> <Briefcase size={20} color="#4a00b4" /> Filière</div></td>
-                    <td><Select isMulti options={options} name="position" className="basic-multi-select op"
+                    <td><Select isMulti defaultValue="Reseau et telecom" options={options} name="position" className="basic-multi-select op"
                         classNamePrefix="select" /></td>
                 </tr> <tr>
-                    <td colSpan={2}> <Field name="name" auto="exp: Institut universitaire...." image={<Briefcase size={20} color="#4a00b4" />} >Spécialité</Field></td>
+                    <td colSpan={2}> <Field name="name" auto="Master" image={<Briefcase size={20} color="#4a00b4" />} >Classe</Field></td>
                 </tr>
                 <tr>
-                    <td colSpan={2}> <Field name="name" auto="exp: Institut universitaire...." image={<Cash size={20} color="#4a00b4" />} >Filière</Field></td>
+                    <td colSpan={2}> <Field name="name" auto="Administration t securité réseau" image={<Cash size={20} color="#4a00b4" />} >Filière</Field></td>
                 </tr>
                 <tr>
-                    <td colSpan={2}> <Field name="name" auto="exp: Institut universitaire...." image={<Cash size={20} color="#4a00b4" />} >Prix</Field></td>
+                    <td colSpan={2}> <Field name="name" auto="700 000" image={<Cash size={20} color="#4a00b4" />} >Prix</Field></td>
                 </tr>
 
             </tbody>
