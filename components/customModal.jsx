@@ -7,7 +7,7 @@ function CustomModal({ onModalChange, component }) {
     const handleClick = (value) => {
         onModalChange(value)
     }
-    console.log("modal")
+    
     return createPortal(
         <div className={styles.app} onClick={() => { handleClick(false) }}>
             <div className={styles.modal} onClick={(e) => {

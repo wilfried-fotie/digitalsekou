@@ -10,6 +10,7 @@ import FineModal from '../components/fineModal'
 import CustomModal from '../components/customModal'
 import Select from 'react-select'
 import { Editor } from '@tinymce/tinymce-react';
+import { useForm } from 'react-hook-form'
 
 
 export function useModal(initial) {
@@ -31,9 +32,13 @@ export function Sudo() {
 
     const [sudoToken, setSudoToken] = React.useState("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyNTk4MDI5NSwianRpIjoiYWFlY2U0NmYtYjA5ZS00OTU2LWE4YzMtZDdiOTBiNTg4ZDY3IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjU5ODAyOTUsImV4cCI6MTYyNTk4MTE5NX0.hz0L4rWi93ochvOpcCOF4OTZyRh8ocdIGRqyt-Yszkc")
     React.useEffect(() => {
+        sessionStorage.setItem("sudoToken",sudoToken)
         let tok = sessionStorage.getItem("sudoToken")
         setSudoToken(tok)
     }, [sudoToken])
+
+
+
 
     return (
         <>
@@ -163,7 +168,7 @@ export function Deux() {
 
     const handleClick = (pos) => {
         v3(true)
-        console.log(pos)
+      
         setPosition({
             top: (pos.current.offsetHeight) + "px",
             left: pos.current.offsetHeight + "px"
@@ -238,7 +243,7 @@ export function Trois() {
 
     const handleClick = (pos) => {
         v3(true)
-        console.log(pos)
+        
         setPosition({
             top: (pos.current.offsetHeight) + "px",
             left: pos.current.offsetHeight + "px"
@@ -278,7 +283,7 @@ export function Quatre() {
 
     const handleClick = (pos) => {
         v3(true)
-        console.log(pos)
+        
         setPosition({
             top: (pos.current.offsetHeight) + "px",
             left: pos.current.offsetHeight + "px"
@@ -314,7 +319,7 @@ export function App() {
     const editorRef = React.useRef(null);
     const log = () => {
         if (editorRef.current) {
-            console.log(editorRef.current.getContent());
+            
         }
     };
     return (
@@ -420,7 +425,7 @@ export let One = React.memo(function One({ choise, handleChoiseState }) {
 
     const handleClick = (pos) => {
         v3(true)
-        console.log(pos)
+        
         setPosition({
             top: (pos.current.offsetHeight) + "px",
             left: pos.current.offsetHeight + "px"
@@ -484,98 +489,52 @@ export let One = React.memo(function One({ choise, handleChoiseState }) {
 
 export function Login({ onSetSudoToken, token }) {
 
-    const [info, setInfo] = React.useState({
-        username: "",
-        password: ""
-    })
+    const { register, handleSubmit, formState: { errors } } = useForm()
 
 
+    const onSubmit = data => {
 
-    const router = useRouter()
-    const error = React.useRef(null)
-    const handleChange = (e) => {
-        // if (e.target.value == "") return
-
-        const name = e.target.name
-        const value = e.target.value.toString()
-        setInfo(state => {
-            return {
-                ...state,
-                [name]: value
-            }
-        }
-
-        )
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        try {
-            if (info.username === "") {
-                // error.current.innerText = "Veuillez ajouter un Nom"
-                throw new Error("Veuillez ajouter un Nom")
-
-
-            } else if (info.password === "") {
-
-                // error.current.innerText = "Veuillez ajouter un mot de passe"
-                throw new Error("Veuillez ajouter un mot de passe")
-
-            } else {
-                axios.post("/login", info).then(res => {
-                    sessionStorage.setItem("sudoToken", res.data.access_token)
-                    onSetSudoToken({ "sudoToken": res.data.access_token })
-
-                })
-                    .catch(res => alert(res))
-            }
-
-        } catch (e) {
-            error.current.innerText = e
-            return
-
-        }
-
-
+       
 
     }
 
     return (
 
         <div>
-            {JSON.stringify(info)}
-            <div className="error" ref={error}>
-
-            </div>
-            {token && token != undefined && token !== "" ?
-                <p>Vous êtes déja connecter {JSON.stringify(info.username)} </p>
-                :
-                <form action="" onSubmit={handleSubmit}>
-                    <center className={styles.h2}>
-                        Connection
-                    </center>
-                    <div className={styles.df}>
-                        <label htmlFor="name"> <Person color="#4a00b4" size="20px" /> </label>
-                        <input type="text" value={info.username} name="username" onChange={handleChange} id="name" placeholder="Entrez votre Nom" />
-                    </div>
-
-                    <div className={styles.df}>
-                        <label htmlFor="password"> <Lock color="#4a00b4" size="20px" /> </label>
-                        <input type="password" name="password" value={info.password} onChange={handleChange} id="password" placeholder="Entrez votre mot de passe" />
-                    </div>
-
-                    <div className={styles.df}>
-
-                        <button type="submit" className="btnPri">Se Connecter </button>
-                    </div>
 
 
-                    <div className={styles.df}>
-                        <span> mot de passe oublié? <span style={{ color: "#4a00b4" }}>Oui</span></span>
-                    </div>
-                </form>
-            }
 
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <center className={styles.h2}>
+                    Connection
+                </center>
+                <div className={styles.df}>
+                    <label htmlFor="name"> <Person color="#4a00b4" size="20px" /> </label>
+
+                    <input type="text" id="name" name="username" placeholder="Entrez votre Nom" {...register("username", { required: true })} />
+
+                </div>
+                <div className="error" >
+                    {errors.username && <span className="error">Le nom est obligatoire</span>}
+                </div>
+                <div className={styles.df}>
+                    <label htmlFor="password"> <Lock color="#4a00b4" size="20px" /> </label>
+                    <input type="password" name="password" id="password" placeholder="Entrez votre mot de passe" {...register("password", { required: "Required" })} />
+
+                </div> <div className="error" >
+                    {errors.password && <span className="error"> Le mot de passe est obligatoire</span>}
+                </div>
+
+                <div className={styles.df}>
+
+                    <button type="submit" className="btnPri">Se Connecter </button>
+                </div>
+
+
+                <div className={styles.df}>
+                    <span> mot de passe oublié? <span style={{ color: "#4a00b4" }}>Oui</span></span>
+                </div>
+            </form>
         </div>
     )
 }

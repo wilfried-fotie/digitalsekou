@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { GeoAlt, Image } from 'react-bootstrap-icons'
+import { GeoAlt, Grid3x3GapFill, Image,  MenuButton } from 'react-bootstrap-icons'
 import styles from '../../styles/AddSchool.module.css'
 import useChangeBool from '../handleBool'
 
 
 
-function Preview({ data }) {
+function Preview({ data ,getValue}) {
     const article = React.useRef(null)
     const [choise, handleChoiseState] = useChangeBool(true)
     const [fixed, setFixed] = useState(false)
@@ -18,7 +18,7 @@ function Preview({ data }) {
             if (window.document.querySelector("article") !== null) {
                 let p = window.document.querySelector("article").getBoundingClientRect().top
                 let b = window.document.querySelector("article").getBoundingClientRect().bottom
-                console.log(p, b)
+             
                 if (p < 60) {
                     setFixed(true)
                 }
@@ -48,12 +48,15 @@ function Preview({ data }) {
 
                     <div className={choise ? styles.desk : styles.mob}>
                         <nav className={styles.nav}>
-                            <div className="dfss">
+                            <div className={choise ? "dfss" : styles.dfb}>
 
                                 <div>
                                     <img src={data.logo} className={styles.img} alt="Logo" />
                                 </div>
-
+                                <div className={!choise ? styles.bloc : styles.menu}>
+                                    { data.cible || "Sigle" }
+                                </div>
+                                <Grid3x3GapFill className={!choise ? styles.bloc : styles.menu} color="#4a00b4" size={20}/>
                                 <div className={styles.links}>
                                     <a > Acceuil </a>
                                     <a > Spécialités </a>
@@ -68,7 +71,7 @@ function Preview({ data }) {
                                 <div className={styles.app}>
                                     <div className="h1">
 
-                                        {data.name || "Nom complet de l'établissement"}
+                                        {getValue("name")  || "Nom complet de l'établissement"}
                                         ( {data.cible || "Sigle"} ) </div>
 
                                     <p> {data.description && data.description.substr(0,400) ||

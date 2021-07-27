@@ -3,6 +3,9 @@ import styles from '../styles/AddSchool.module.css'
 import Header from './Template/Header.jsx'
 import React from 'react'
 import { useState } from 'react'
+import { useRouter } from "next/router"
+import axios from 'axios'
+import { useForm, useController } from "react-hook-form"
 import Add from '../components/School/Add'
 import Preview from '../components/School/Preview'
 
@@ -60,6 +63,7 @@ function AddSchool() {
     const [image, setImage] = useState("");
     const [result, uploader] = useDisplayImage();
 
+    const { register, getValues, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isValid, isSubmitting } } = useForm({ mode: "onTouched" })
 
 
 
@@ -155,11 +159,16 @@ function AddSchool() {
                             onImageChange={handleImageChange}
                             state={data}
                             onSelectChange={handleSelectChange}
-
+                            control={control}
+                            errors={errors}
+                            handleSubmit={handleSubmit}
+                            getValue={getValues}
 
                         />
                         <div className={styles.right}>
-                            <Preview data={data}
+                            <Preview
+                                data={data}
+                                getValue={getValues}
 
                             />
                         </div>

@@ -6,6 +6,36 @@
     max-width: 100vw;
 }
 
+.acc {
+    padding: 10px 14px 10px;
+    background-color: #c6afe6;
+    color: rgb(39, 37, 37);
+    border-radius: 20px;
+    font-size: .9em;
+    text-transform: capitalize;
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0px 20% 0px;
+}
+
+.acc:hover {
+    cursor: pointer;
+}
+
+.dfss {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.tab {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .fixed {
     position: fixed;
     top: 0;

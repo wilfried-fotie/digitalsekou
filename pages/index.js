@@ -208,19 +208,7 @@ export default function Home() {
 
 
         </div>
-        <div className={styles.contact}>
-
-          <center>
-            <h2>Nous Contacter</h2>
-
-          </center>
-          <div className={styles.dolor}>
-            <input type="text" name="num" id={styles.tel} placeholder="Votre contact" />
-            <a href="/" className="btnPrimary">Envoyer</a>
-
-          </div>
-        </div>
-
+        
 
       </main>
 

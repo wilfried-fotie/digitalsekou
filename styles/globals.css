@@ -127,8 +127,24 @@ h2 {
     align-items: center;
 }
 
+.container {
+    max-width: 90vw;
+    display: flex;
+    justify-content: center;
+    padding: 20px 30px 10px;
+}
+
+.fine {
+    color: green;
+    font-size: .88em;
+}
+
 a:hover {
     cursor: pointer;
+}
+
+input[type=password] {
+    list-style: initial!important;
 }
 
 a {
