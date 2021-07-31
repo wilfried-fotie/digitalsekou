@@ -1,12 +1,12 @@
 import React from "react"
-import { EyeFill, EyeSlashFill, ImageAlt, NodeMinus } from 'react-bootstrap-icons'
+import { BoxSeam, EyeFill, EyeSlashFill, ImageAlt, Lock, LockFill, NodeMinus } from 'react-bootstrap-icons'
 import {  useController } from "react-hook-form"
 
 import styles from '../styles/AddSchool.module.css'
 
 
 
-export function Field({ auto, children, name, control, type = "text", min = 4, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+export function FieldValidate({ auto, children, name, control, type = "text", min = 4, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
     
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
@@ -19,6 +19,16 @@ export function Field({ auto, children, name, control, type = "text", min = 4, m
     </div>
 }
 
+
+export function Field({ auto, children, name, type = "text", value, onChange, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+
+    return <div className={styles.dg}>
+
+        <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
+        <div>  <input type={type} placeholder={auto} value={value} onChange={onChange} name={name} id={name} />   </div>
+
+    </div>
+}
 
 
 
@@ -39,7 +49,7 @@ export function File({ children, name, onChange, multiple = false }) {
             <label htmlFor={name}>{children}</label>
         </div>
         <div>
-            <input type="file" name={name} id={name}
+            <input type="file" name={name} id={name + "Data"}
                 accept="image/*"
                 multiple={multiple == true ? multiple : null}
                 onChange={onChange}
@@ -50,33 +60,43 @@ export function File({ children, name, onChange, multiple = false }) {
 }
 
 
-export function Password({ children, name }) {
+export function Password({ children, name, value, onChange, image = <LockFill size={20} color="#4a00b4" />}) {
 
-
-    const [value, setValue] = React.useState({
-        showPassword: false,
-        password: ""
-    });
-
-    const handleChange = (event) => {
-        setValue({ ...value, password: event.target.value });
-    };
-
+    const [state,setState] = React.useState(false)
     const handleClickShowPassword = () => {
-        setValue({ ...value, showPassword: !value.showPassword });
+        setState(s => !s);
     };
 
     return (
         <div className={styles.dg}>
-            <label htmlFor={name}>{children}</label>
+            <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
             <div className="df">
-                <input id={name} type={value.showPassword ? "text" : "password"} placeholder="mot de passe" className={styles.password} value={value.password} onChange={handleChange} />
+                <input name={name} id={name} type={state ? "text" : "password"} placeholder="mot de passe" className={styles.password} value={value} onChange={onChange} />
                 <div>
 
-                    {!value.showPassword ? <EyeSlashFill size={20} color="#4a00b4" onClick={handleClickShowPassword} /> : <EyeFill size={20} color="#4a00b4" onClick={handleClickShowPassword} />}
+                    {!state ? <EyeSlashFill size={20} color="#4a00b4" onClick={handleClickShowPassword} /> : <EyeFill size={20} color="#4a00b4" onClick={handleClickShowPassword} />}
                 </div>
             </div>
         </div>
+    )
+}
+
+
+export function Radio({ children, name, data, onChange, image = <BoxSeam size={20} color="#4a00b4" /> }){
+    return (
+        <>
+            
+            <div className={styles.border}>
+            <div>
+                <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
+            <div className={styles.checkbox}>
+
+                    {data.map(e => <div key={e}> <input type="radio" name={name} id={e} defaultChecked={e == "Non" || e == "Privé"} onChange={onChange} /><label htmlFor={e}>{e}</label></div>)}
+     
+
+            </div>
+            </div>
+        </>
     )
 }
 

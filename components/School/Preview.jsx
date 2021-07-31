@@ -5,7 +5,7 @@ import useChangeBool from '../handleBool'
 
 
 
-function Preview({ data ,getValue}) {
+function Preview({ data}) {
     const article = React.useRef(null)
     const [choise, handleChoiseState] = useChangeBool(true)
     const [fixed, setFixed] = useState(false)
@@ -54,7 +54,7 @@ function Preview({ data ,getValue}) {
                                     <img src={data.logo} className={styles.img} alt="Logo" />
                                 </div>
                                 <div className={!choise ? styles.bloc : styles.menu}>
-                                    { data.cible || "Sigle" }
+                                    { data.sigle || "Sigle" }
                                 </div>
                                 <Grid3x3GapFill className={!choise ? styles.bloc : styles.menu} color="#4a00b4" size={20}/>
                                 <div className={styles.links}>
@@ -71,13 +71,16 @@ function Preview({ data ,getValue}) {
                                 <div className={styles.app}>
                                     <div className="h1">
 
-                                        {getValue("name")  || "Nom complet de l'établissement"}
-                                        ( {data.cible || "Sigle"} ) </div>
+                                        {data.name  || "Nom complet de l'établissement"}
+                                        ( {data.sigle || "Sigle"} ) </div>
 
-                                    <p> {data.description && data.description.substr(0,400) ||
-                                        "Ajouter la description de votre établissement ici"
-
+                                    <p> {data.description !== "" ?
+                                            data.description.length > 400 ?
+                                                data.description.substr(0, 400) + " ..." : data.description :
+                                                    "Ajouter la description de votre établissement ici"
                                     } </p>
+{}
+
                                     <div>
                                         <a className="btnPrimary">Nous Contacter</a>
                                     </div>

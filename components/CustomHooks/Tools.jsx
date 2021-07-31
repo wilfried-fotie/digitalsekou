@@ -1,42 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { EmojiDizzyFill } from 'react-bootstrap-icons'
 
-
-export function useDisplayImage() {
-    const [result, setResult] = React.useState("");
-
-    function uploader(e) {
-        const imageFile = e;
-
-        const reader = new FileReader();
-        reader.addEventListener("load", (e) => {
-            setResult(e.target.result);
-        });
-
-        reader.readAsDataURL(imageFile);
-    }
-
-
-    return [result, uploader];
+export function Tools() {
+    return (
+        <div style={{ color: "red" }}>
+            
+           <center>  <EmojiDizzyFill size={50} color="red"/> </center><br />
+            Cet Établissement existe déja!
+        </div>
+    )
 }
 
+export function ToolsBefore() {
+    return (
+        <div style={{ color: "red" }}>
 
-
-
-export function useText() {
-    const [text, setText] = useState("")
-    const handleText = (e) => {
-        setText(e)
-    }
-
-    return [text, handleText]
+            <center>  <EmojiDizzyFill size={50} color="red" /> </center><br />
+            Veuillez vérifier les informations soumis!
+        </div>
+    )
 }
-
-export function useChecked(initial) {
-    const [text, setChecked] = useState(initial)
-    const handleCheck = (e) => {
-        setChecked(e.target.checked)
-    }
-
-
-    return [text, handleCheck]
-}
+ 

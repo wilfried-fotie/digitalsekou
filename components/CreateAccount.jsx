@@ -65,7 +65,7 @@ function CreateAccount({ stateChange, setToken, e, data }) {
                         stateChange(false)
                         router.push("/StartPub")
 
-                    }).catch(e => setErr("Cet utilisateur existe déjaiii" + e))
+                    }).catch(e => setErr("Cet utilisateur existe déjà"))
 
                 }
 

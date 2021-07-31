@@ -5,7 +5,6 @@ import React from 'react'
 import { useState } from 'react'
 import { useRouter } from "next/router"
 import axios from 'axios'
-import { useForm, useController } from "react-hook-form"
 import Add from '../components/School/Add'
 import Preview from '../components/School/Preview'
 
@@ -60,22 +59,33 @@ function useChecked(initial) {
 function AddSchool() {
 
 
-    const [image, setImage] = useState("");
     const [result, uploader] = useDisplayImage();
+    const d = new Date()
+    const dateOfDay = d.getFullYear().toFixed() + "-" + d.getMonth().toFixed() + "-" + d.getDay().toFixed()
 
-    const { register, getValues, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isValid, isSubmitting } } = useForm({ mode: "onTouched" })
+
 
 
 
 
     const app = {
         logo: "",
-        cible: "",
+        logoName: "",
+        logoData: "",
+        sigle: "",
         tel: "",
         name: "",
         description: "",
+        password: "",
+        status: "Privé",
+        type: [],
+        multiple: "Non",
+        outro: "...",
         profil: "",
+        profilName: "",
+        profilData: "",
         position: [],
+       
 
     }
 
@@ -93,35 +103,68 @@ function AddSchool() {
         }
         )
     }
+    const handleCheckChange = (e) => {
+        const name = e.target.name
+        console.log(e.target.value)
+        const value = e.target.id
+        setData(s => {
+            return {
+                ...s,
+                [name]: value
+            }
+        }
+        )
+    }
 
     const handleImageChange = (e) => {
         const name = e.target.name
+        const id = e.target.id
 
         if (e.target.files && e.target.files[0]) {
 
+            
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+                reader.onload = (ev) => {
+                    setData(s => {
+                        return {
+                            ...s,
+                            [name]: ev.target.result,
+                            [id]: e.target.files[0],
+                            [name + "Name"]: e.target.files[0].name
+                            
 
-            //     let reader = new FileReader();
-            //     reader.onload = (ev) => {
-            //         setData(s => {
-            //             return {
-            //                 ...s,
-            //                 name: event.target.result
-            //             }
-            //         });
-            //     };
-            //     reader.readAsDataURL(e.target.files[0]);
-            // }
+                        }
+                    });
+                };
+                
+            }
 
-            setData(s => {
-                return {
-                    ...s,
-                    [name]: URL.createObjectURL(e.target.files[0])
-                }
-            });
-        }
+
+// const data = new FormData();
+//     data.append('file', this.uploadInput.files[0]);
+//     data.append('filename', this.fileName.value);
+
+//     fetch('http://localhost:8000/upload', {
+//       method: 'POST',
+//       body: data,
+//     }).then((response) => {
+//       response.json().then((body) => {
+//         this.setState({ imageURL: `http://localhost:8000/${body.file}` });
+//       });
+//     });
+
+
+            // setData(s => {
+            //     return {
+            //         ...s,
+            //         [name]: URL.createObjectURL(e.target.files[0])
+            //     }
+            // });
+       //}
     }
     const handleSelectChange = (e) => {
-
+        
         setData(s => {
             return {
                 ...s,
@@ -130,6 +173,17 @@ function AddSchool() {
         }
         )
     }
+    const handleSelectStatusChange = (e) => {
+
+        setData(s => {
+            return {
+                ...s,
+                type: s.multiple == "Oui" ? [...e] : [e]
+            }
+        }
+        )
+    }
+   
 
 
     return (
@@ -159,16 +213,14 @@ function AddSchool() {
                             onImageChange={handleImageChange}
                             state={data}
                             onSelectChange={handleSelectChange}
-                            control={control}
-                            errors={errors}
-                            handleSubmit={handleSubmit}
-                            getValue={getValues}
+                            onSelectStatusChange={handleSelectStatusChange}
+                            onStatusCheckedChange={handleCheckChange}
 
                         />
                         <div className={styles.right}>
                             <Preview
                                 data={data}
-                                getValue={getValues}
+                               
 
                             />
                         </div>

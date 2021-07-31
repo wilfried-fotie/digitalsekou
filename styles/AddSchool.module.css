@@ -11,6 +11,12 @@
 
 .area {
     width: 100%!important;
+    border-color: #4a00b4!important;
+}
+
+.checkbox {
+    margin-left: 15%;
+    padding: 10px 20px 10px;
 }
 
 .img {
@@ -29,6 +35,10 @@
 .mob .img {
     padding: 5px 10px 0px 5px;
     height: 60px;
+}
+
+.mob .app p {
+    padding: 5px 0px 5px;
 }
 
 .mob .profil {
@@ -188,13 +198,18 @@
     border-bottom: 0 solid white;
 }
 
+.border {
+    border-bottom: 1px solid #4a00b4;
+    margin-bottom: 20px;
+}
+
 .dg {
     display: grid;
     align-items: center;
     grid-template-rows: 2fr 2fr;
     grid-gap: 1fr;
-    border: 1px solid #4a00b4;
-    border-bottom: 3px solid #4a00b4;
+    /* border: 1px solid #4a00b4;*/
+    border-bottom: 1px solid #4a00b4;
     padding: 10px 10px 0px;
     color: #000;
     margin-bottom: 20px;

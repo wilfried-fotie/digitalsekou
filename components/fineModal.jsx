@@ -3,13 +3,13 @@ import { XCircle } from 'react-bootstrap-icons'
 import { createPortal } from 'react-dom'
 import styles from '../styles/fine.module.css'
 
-function FineModal({ onModalChange, component, position }) {
+function FineModal({ onModalChange, component, position}) {
     const handleClick = (value) => {
         onModalChange(value)
     }
     return createPortal(
         <div className={styles.app} onClick={() => { handleClick(false) }}>
-            <div className={styles.modal} style={position} onClick={(e) => {
+            <div className={styles.modal} style={position}  onClick={(e) => {
                 e.stopPropagation()
             }}>
                 <div className={styles.header}>
