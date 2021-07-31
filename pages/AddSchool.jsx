@@ -94,7 +94,9 @@ function AddSchool() {
 
     const handleChange = (e) => {
         const name = e.target.name
-        const value = e.target.value
+        const value = e.target.value.trim()
+
+        name == "sigle" ? value.toUpperCase() : value
         setData(s => {
             return {
                 ...s,
@@ -200,7 +202,6 @@ function AddSchool() {
                     <p className={styles.p}>
                         Lorem, ipsum dolor sit amet consectetur adipisicing elit.
 
-                        <img src={data} alt="LOGO" />
                     </p>
 
 

@@ -11,13 +11,11 @@ import { useForm } from "react-hook-form"
 
 
 
-function Login({ stateChange, setToken, e }) {
+function Login({ stateChange, setToken, e ,school}) {
 
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
 
-    const entrepriseId = sessionStorage.getItem("entrepriseId")
-    const userId = sessionStorage.getItem("userId")
 
     const router = useRouter()
     const { register, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isValid } } = useForm({ mode: "onTouched" })
@@ -35,14 +33,28 @@ function Login({ stateChange, setToken, e }) {
                     sessionStorage.setItem("entreprise", res.data.username)
                     sessionStorage.setItem("entrepriseId", res.data.id)
                     setToken(sessionStorage.getItem("etoken"))
-                    setFine("Votre comte est connecter avec succes!" + e)
+                    setFine("Votre comte est connecter avec succes!")
                     stateChange(false)
                     router.push("/StartPub")
 
 
-                }).catch(e => setErr("Cet utilisateur n'existe pas" + e))
+                }).catch(e => setErr("Cet utilisateur n'existe pas"))
 
 
+            } else if (school) {
+                
+                await axios.post("/school", data).then(res => {
+
+                    sessionStorage.setItem("schoolToken", res.data.schoolToken)
+                    sessionStorage.setItem("school", res.data.school)
+                    sessionStorage.setItem("schoolId", res.data.id)
+                    setToken(sessionStorage.getItem("schoolToken"))
+                    setFine("Vous êtes connecter avec succes!")
+                    stateChange(false)
+                    router.push("/addSchoolPro")
+
+
+                }).catch(e => setErr("Cet utilisateur n'existe pas"))
             }
             else {
 
@@ -72,6 +84,8 @@ function Login({ stateChange, setToken, e }) {
 
     return (
         <div>
+
+            
             {isSubmitted && fine && isSubmitSuccessful && <div className="fine">
                 {fine}
             </div>}
@@ -81,11 +95,11 @@ function Login({ stateChange, setToken, e }) {
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <center className={styles.h2}>
-                    Connexion
+                    {school ? <a> Connexion compte Etablissement</a> : e ? <a> Connexion compte Entreprise</a> : <a> Connexion compte Etudiant/Parent</a>}
                 </center>
                 <div className={styles.df}>
                     <label htmlFor="name"> <Person color="#4a00b4" size="20px" /> </label>
-                    <input type="text" {...register("username", { required: true, maxLenght: 5 })} id="username" placeholder={!e ? "Entrez votre Nom" : "Entrez Le Nom d'Entrerise"} />
+                    <input type="text" {...register("username", { required: true, maxLenght: 5 })} id="username" placeholder={!e ? "Entrez votre Nom" : school ? "Entrez Le Sigle de l'école " : "Entrez Le Nom d'Entrerise"} />
 
                 </div>
                 {errors.username && errors.username.type === "required" && (

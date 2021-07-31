@@ -8,8 +8,9 @@ import Select from 'react-select'
 import styles from '../../styles/AddSchool.module.css'
 import { Radio, Field, File, Password, TextArea } from '../FormTools'
 import useModal from '../CustomHooks/useModal'
-import  {Tools, ToolsBefore} from '../CustomHooks/Tools'
+import  {SendData, Tools, ToolsBefore} from '../CustomHooks/Tools'
 import FineModal from '../fineModal'
+import CustomModal from '../customModal'
 
 
 const insertSchool = async(data) => {
@@ -52,6 +53,9 @@ export default function Add({ onSelectChange, onImageChange, onChange, state, on
     const [errors, setErrors] = React.useState({})
     const [visbility, v] = useModal(false)
     const [visbility2, v2] = useModal(false)
+    const [visbility3, v3] = useModal(false)
+    const [visbility4, v4] = useModal(false)
+    const router = useRouter()
 
 
     const handleChangeSelect = (e) => {
@@ -115,16 +119,15 @@ err++
 
         
            if (err == 1) { setErrors({})}
-       console.log(err)
         
         if (err >= 17) {
-            
+          
             if (allowOnlyPicture(state.logoData) && allowOnlyPicture(state.profilData) ) {
             const formData1 = new FormData();
             const formData2 = new FormData();
-            formData1.append("file", state.logoData);
-                formData2.append("file", state.profilData);
-               console.log(state)
+                formData1.append("file", state.logoData, state.sigle + "-" + state.logoName);
+                formData2.append("file", state.profilData, state.sigle + "-" + state.profilName);
+               v4(true)
                 axios.all([
                     axios.post("/add-school", state),
                     axios.post("/upload", formData1),
@@ -132,13 +135,19 @@ err++
                     
 
                             
-                ]).then(res => console.log(res[0],res[1],res[2]))
+                ]).then(res => {
+                        sessionStorage.setItem("schoolToken", res[0].data.token)
+                    sessionStorage.setItem("school", res[0].data.sigle)
+                    sessionStorage.setItem("schoolId", res[0].data.id)
+                } )
                     .catch(err => v(true));
             
+                router.push("/addSchoolPro")
+
                
                 
             } else {
-                alert("Les formats accepter son uniquement les formats d'images")
+                v3(true)
             }
             
         }else{
@@ -216,7 +225,9 @@ err++
                 <div className={styles.dg}> <center> <button type="submit" className="btnPri"> Enregistrer </button> </center>  </div>
 
                 {visbility && <FineModal position={{top: 30, left: "35%" }} onModalChange={v} component={<Tools />} />}
-                {visbility2 && <FineModal position={{ top: 30, left: "35%" }}  onModalChange={v2} component={<ToolsBefore />}/> }
+                {visbility2 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
+                {visbility3 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
+                {visbility4 && <CustomModal onModalChange={v4} component={<SendData > Vos donnés sont encours d'envoi veuillez patienter....</SendData>}/> }
 
         </div>
         </form>

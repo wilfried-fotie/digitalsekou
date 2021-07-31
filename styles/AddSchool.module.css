@@ -91,6 +91,12 @@
     display: none;
 }
 
+.desk p {
+    padding-left: 0!important;
+    padding-right: 0!important;
+    padding-top: 7px!important;
+}
+
 .menu {
     display: none;
 }
@@ -155,7 +161,7 @@
 }
 
 .app {
-    width: 50%;
+    width: 55%;
 }
 
 .links {

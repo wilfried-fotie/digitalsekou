@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form"
 
 
 
-function CreateAccount({ stateChange, setToken, e, data }) {
+function CreateAccount({ stateChange, setToken, e, data}) {
 
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
@@ -141,6 +141,8 @@ function CreateAccount({ stateChange, setToken, e, data }) {
 
     return (
         <div>
+           
+           
             {isSubmitted && fine && isSubmitSuccessful && <div className="fine">
                 {fine}
             </div>}

@@ -29,14 +29,18 @@ function Header({ value,visibleName }) {
 
     const [visbility, v] = useModal(false)
     const [visbility3, v3] = useModal(false)
+    const [visbility1, v1] = useModal(false)
+    const [visbility5, v5] = useModal(false)
     const [visbility4, v4] = useModal(false)
     const [visbility2, v2] = useModal(false)
     const [position, setPosition] = useState(0)
     const [scroll, setScroll] = useState(false)
     const [user, setUser] = React.useState()
     const [entreprise, setEntreprise] = React.useState()
+    const [school, setSchool] = React.useState()
     const [token, setToken] = React.useState()
     const [etoken, setEtoken] = React.useState()
+    const [schoolToken, setSchoolToken] = React.useState()
 
 
     useEffect(() => {
@@ -53,26 +57,20 @@ function Header({ value,visibleName }) {
         })
     }, [])
 
-    React.useEffect(() => {
-        if (value == 4) {
-
-            setEtoken(sessionStorage.getItem("etoken"))
-            setEntreprise(sessionStorage.getItem("entreprise"))
-
-        }
-
-    }, [entreprise])
-
+       
 
     useEffect(() => {
         setToken(sessionStorage.getItem("token"))
         setUser(sessionStorage.getItem("username"))
+        setSchoolToken(sessionStorage.getItem("schoolToken"))
+        setSchool(sessionStorage.getItem("school"))
 
-    }, [token])
+        setEtoken(sessionStorage.getItem("etoken"))
+        setEntreprise(sessionStorage.getItem("entreprise"))
 
 
 
-
+    }, [token || school || entreprise])
 
 
     const handleToken = (e) => {
@@ -82,6 +80,11 @@ function Header({ value,visibleName }) {
     const handleEtoken = (e) => {
         setEtoken(e)
     }
+
+    const handleSchoolToken = (e) => {
+        setSchoolToken(e)
+    }
+
   
 
     return (
@@ -100,8 +103,8 @@ function Header({ value,visibleName }) {
 
                     {value == 1 ? <Link href="/"><a className="active">Acceuil</a></Link> : <Link href="/">Acceuil</Link>}
                     {value == 2 ? <Link href="/Schools"><a className="active">Trouver une école</a></Link> : <Link href="/Schools">Trouver une école</Link>}
-                    {value == 3 ? <Link href="/AddSchool"><a className="active">Ajouter une école</a></Link> : <Link href="/AddSchool">Ajouter une école</Link>}
-                    {value == 4 ? <Link href="/Entreprises"><a className="active">Pour les Entreprises</a></Link> : <Link href="/Entreprises">Pour les Entreprises</Link>}
+                    {value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href="/addSchoolPro"><a className="active"> School Administration</a></Link> : <Link href="/AddSchool"><a className="active">Pour les établissements</a></Link> : schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href="/addSchoolPro"><a > School Administration</a></Link> : <Link href="/AddSchool"><a > Pour les établissements</a></Link>}
+                    {value == 4 ? etoken !== "" && etoken !== undefined && etoken ? <Link href="/StartPub"><a className="active"> Entreprise Administration</a></Link> : <Link href="/Entreprises"><a className="active"> Pour les entreprises</a></Link> : etoken !== "" && etoken !== undefined && etoken ? <Link href="/StartPub"><a > Entreprise Administration</a></Link> : <Link href="/Entreprises"><a > Pour les entreprises</a></Link>  }
 
 
                 </div>
@@ -116,12 +119,23 @@ function Header({ value,visibleName }) {
 
                         <Account user={entreprise} e={true} onTokenChange={setEtoken} /> : <Auth v={v3} e={true} v2={v4} visbility2={visbility4} visbility={visbility3} setToken={handleEtoken} /> 
 
-                        : token !== "" && token !== undefined && token !== null ?
+                        : value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken && schoolToken !== null ? <Account user={school} school={true} onTokenChange={setSchoolToken} /> : <Auth v={v1}  v2={v5} visbility2={visbility5} school={true}  visbility={visbility1} setToken={handleSchoolToken} />  :
+                        
+                        token !== "" && token !== undefined && token !== null ?
                             <Account user={user} onTokenChange={setToken} />
                             :
                             <Auth v={v} v2={v2}  visbility2={visbility2} visbility={visbility} setToken={handleToken} />
                         
                 }
+
+
+
+
+                {/* {value == 4 && etoken !== "" && etoken !== undefined && etoken ? <Account user={entreprise} e={true} onTokenChange={setEtoken} /> : <Auth v={v3} e={true} v2={v4} visbility2={visbility4} visbility={visbility3} setToken={handleEtoken} />}
+                {value == 3 && schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Account user={school} e={true} onTokenChange={setSchoolToken} /> : <Auth v={v1} e={true} v2={v5} visbility2={visbility5} visbility={visbility1} setToken={handleSchoolToken} />}
+                {value == 2 && token !== "" && token !== undefined && token ? <Account user={user} onTokenChange={setToken} /> : <Auth v={v} v2={v2} visbility2={visbility2} visbility={visbility} setToken={handleToken} />}
+                {value == 1 && token !== "" && token !== undefined && token ? <Account user={user} onTokenChange={setToken} /> : <Auth v={v} v2={v2} visbility2={visbility2} visbility={visbility} setToken={handleToken} />}
+ */}
 
             </main>
         </nav >
@@ -136,23 +150,23 @@ export default Header
 
 
 
-export function Auth({ visbility, visbility2, v, v2, setToken, e  }) {
+export function Auth({ visbility, visbility2, v, v2, setToken, e, school = false }) {
     return (
         <div>
             <div className={styles.connect}>
-                <a style={{ color: "#4a00b4" }} onClick={v2}>  Se Connecter</a>
+                <a style={{ color: "#4a00b4" }} className={school ? "btnSecondary" : null } onClick={v2}>  Se Connecter</a>
 
-                <a className="btnPrimary" onClick={v}
-                > Créer Un Compte </a>
+                {school ? null :     <a className="btnPrimary" onClick={v}
+                > Créer Un Compte </a>}
             </div>
             {visbility && <CustomModal onModalChange={v} component={<CreateAccount stateChange={v} setToken={setToken} e={e} />} />}
-            {visbility2 && <CustomModal onModalChange={v2} component={<Login stateChange={v2} setToken={setToken} e={e} />} />}
+            {visbility2 && <CustomModal onModalChange={v2} component={<Login stateChange={v2} setToken={setToken} e={e} school={school}/>} />}
         </div>
     )
 }
 
 
-export function Account({ user, onTokenChange, e }) {
+export function Account({ user, onTokenChange, e ,school= false}) {
     const [visible, setVisible] = useModal(false)
 
     return (
@@ -163,17 +177,19 @@ export function Account({ user, onTokenChange, e }) {
                 <span className={styles.acc} onClick={() => setVisible(true)}> <PersonCircle size={25} color="#fff" /> {user} </span>
             </div>
 
-            {visible && <FineModal onModalChange={setVisible} e={e} component={<Disconnect v={setVisible} onTokenChange={onTokenChange} e={e} />} position={{ top: 90, right: 60 }} />}
+            {visible && <FineModal onModalChange={setVisible} component={<Disconnect v={setVisible} onTokenChange={onTokenChange} e={e} school={ school}/>} position={{ top: 90, right: 60 }} />}
         </div>)
 }
 
 
-export function Disconnect({ v, onTokenChange, e }) {
+export function Disconnect({ v, onTokenChange, e,school }) {
     const [visbility, v1] = useModal(false)
     const token = sessionStorage.getItem("token")
+    const schoolToken = sessionStorage.getItem("schoolToken")
     const entreprise = sessionStorage.getItem("etoken")
     const entrepriseId = sessionStorage.getItem("entrepriseId")
     const userId = sessionStorage.getItem("userId")
+    const schoolId = sessionStorage.getItem("userId")
 
     const [data, setData] = React.useState({})
     const handleDisconnect = () => {
@@ -186,7 +202,14 @@ export function Disconnect({ v, onTokenChange, e }) {
             sessionStorage.removeItem("entrepriseId")
             v(false)
             onTokenChange("")
-        } else {
+        } else if (school) {
+            sessionStorage.removeItem("schoolToken")
+            sessionStorage.removeItem("school")
+            sessionStorage.removeItem("schoolId")
+            v(false)
+            onTokenChange("")
+         }
+        else {
               sessionStorage.removeItem("token")
             sessionStorage.removeItem("username")
             sessionStorage.removeItem("userId")
@@ -208,7 +231,9 @@ export function Disconnect({ v, onTokenChange, e }) {
                 
 
             }).catch(e => console.error(e))
-        } else {
+        }
+      
+        else {
             await axios.get('/users/' + userId, {
                 headers: {
                     Authorization: "Bearer " + token
@@ -229,8 +254,8 @@ export function Disconnect({ v, onTokenChange, e }) {
             <a className={styles.dfss} onClick={handleDisconnect}>
                 <PersonBoundingBox size={20} color="#4a00b4" /> Se Déconnecter</a>
 
-            <a className={styles.dfss} onClick={handleClick}>
-                <LockFill size={20} color="#4a00b4" /> Changer vos informations</a>
+          {school ? null : <a className={styles.dfss} onClick={handleClick}> <LockFill size={20} color="#4a00b4" /> Changer vos informations</a>} 
+                
            { (data !== null && data !== undefined && data) ? visbility && <CustomModal onModalChange={v1} component={<CreateAccount stateChange={v1} e={e} data={data} />} />:
             visbility && <CustomModal onModalChange={v1} component={<CreateAccount stateChange={v1} e={e} data={data} />} />} 
         </div>
