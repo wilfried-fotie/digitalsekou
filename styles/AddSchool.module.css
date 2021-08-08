@@ -9,6 +9,12 @@
     margin-bottom: 20px;
 }
 
+.dg input,
+.dfss input,
+.dg textarea {
+    color: #000!important;
+}
+
 .area {
     width: 100%!important;
     border-color: #4a00b4!important;
@@ -76,6 +82,7 @@
 .left textarea {
     font-family: "Montserrat";
     padding: 10px 20px 10px;
+    color: #000;
 }
 
 .mob .nav {

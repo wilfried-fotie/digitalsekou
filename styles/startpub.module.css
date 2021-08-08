@@ -8,9 +8,58 @@
     font-family: "Montserrat";
 }
 
+.icontainer {
+    padding: 5px 10px 5px;
+    background-color: #4b00b41f;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20%;
+}
+
+.grid>div {
+    margin-bottom: 20%;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pad {
+    margin-top: 5%;
+}
+
 .dg input {
     width: 100%;
     border-bottom: 0 solid white;
+}
+
+.account {
+    margin-left: 20px;
+}
+
+.account span {
+    margin: 0!important;
+}
+
+.end {
+    display: flex;
+    justify-content: space-evenly;
+    width: auto;
+    align-items: center;
+}
+
+.exp {
+    max-width: 60%;
+    padding: 10px 20px 10px;
+}
+
+.pros {
+    max-width: 5%;
+    line-height: 2rem;
 }
 
 .dg {
@@ -83,6 +132,14 @@
     margin-right: 10px;
     height: 20;
     color: #4a00b4!important;
+}
+
+.icon:hover {
+    cursor: pointer;
+}
+
+.ic {
+    margin-right: 10px;
 }
 
 .dgc {

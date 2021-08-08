@@ -11,23 +11,8 @@ import useModal from '../CustomHooks/useModal'
 import  {SendData, Tools, ToolsBefore} from '../CustomHooks/Tools'
 import FineModal from '../fineModal'
 import CustomModal from '../customModal'
+import Loader from 'react-loader-spinner'
 
-
-const insertSchool = async(data) => {
-    // await axios.post('/add-school', data).then(res => {
-    //     console.log(res)
-    //     // sessionStorage.setItem("schoolToken", res.data.etoken)
-    //     // sessionStorage.setItem("school", res.data.username)
-    //     // sessionStorage.setItem("schoolId", res.data.id)
-
-
-    // }).catch(e => console.error("Cet utilisateur existe déjà"))
-
-   
-      
-  
-
-}
 
 const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
 
@@ -54,7 +39,7 @@ export default function Add({ onSelectChange, onImageChange, onChange, state, on
     const [visbility, v] = useModal(false)
     const [visbility2, v2] = useModal(false)
     const [visbility3, v3] = useModal(false)
-    const [visbility4, v4] = useModal(false)
+    const [loader, setLoader] = React.useState(false)
     const router = useRouter()
 
 
@@ -121,28 +106,43 @@ err++
            if (err == 1) { setErrors({})}
         
         if (err >= 17) {
-          
+            
+
+            state.sigle = state.sigle.trim()
+            state.tel = state.tel.trim()
+            state.name = state.name.trim()
+            state.description = state.description.trim()
             if (allowOnlyPicture(state.logoData) && allowOnlyPicture(state.profilData) ) {
-            const formData1 = new FormData();
-            const formData2 = new FormData();
+                const formData1 = new FormData();
+                const formData2 = new FormData();
+                setLoader(true)
                 formData1.append("file", state.logoData, state.sigle + "-" + state.logoName);
                 formData2.append("file", state.profilData, state.sigle + "-" + state.profilName);
-               v4(true)
+
                 axios.all([
                     axios.post("/add-school", state),
                     axios.post("/upload", formData1),
                     axios.post("/upload", formData2)
-                    
-
-                            
-                ]).then(res => {
-                        sessionStorage.setItem("schoolToken", res[0].data.token)
-                    sessionStorage.setItem("school", res[0].data.sigle)
-                    sessionStorage.setItem("schoolId", res[0].data.id)
-                } )
-                    .catch(err => v(true));
+                ]
             
-                router.push("/addSchoolPro")
+            
+          ).then(res => {
+                     sessionStorage.setItem("schoolToken", res[0].data.token)
+                 sessionStorage.setItem("school", res[0].data.sigle)
+              sessionStorage.setItem("schoolId", res[0].data.id)
+              router.push(`/addSchoolPro/${res[0].data.id}`)
+              setLoader(false)
+             } )
+                    .catch(err => {
+                         console.log(err)
+             v(true)
+                         setLoader(false)
+
+                     })
+                
+                
+
+               
 
                
                 
@@ -169,11 +169,11 @@ err++
 
             <div className={styles.left}>
 
-            <Field auto="exp: Institut universitaire...." name="name" onChange={handle} value={state.name} image={<Building size={20} color="#4a00b4" />} >Nom Complet De L'établissement</Field>
+                <Field name="name" auto="exp: Institut universitaire...." onChange={handle} value={state.name} image={<Building size={20} color="#4a00b4" />}>Nom Complet De L'établissement</Field>
                 <span className="error" >
                     {!state.name && errors && errors.name}
                 </span>
-            <Field name="sigle" auto="exp: INSAM" onChange={handle} value={state.cible}>Sigle De L'établissement </Field>
+                <Field name="sigle" auto="exp: INSAM" onChange={handle} value={state.cible}>Sigle De L'établissement </Field>
                 <span className="error" >
                     {!state.sigle && errors && errors.sigle}
                 </span>
@@ -222,12 +222,21 @@ err++
             <TextArea name="description" onChange={handle} value={state.description}>Description De L'établissement </TextArea>
                 <span className="error" >{!state.description && errors && errors.description}</span>
                
-                <div className={styles.dg}> <center> <button type="submit" className="btnPri"> Enregistrer </button> </center>  </div>
+                <div className={styles.dg}>
+                    <button disabled={loader} className="dfss btnPri" >
+                        {loader && <Loader
+                            type="TailSpin"
+                            color="white"
+                            height={20}
+                            width={50}
+                        />}
+
+                        Enregistrer</button>
+                </div>  
 
                 {visbility && <FineModal position={{top: 30, left: "35%" }} onModalChange={v} component={<Tools />} />}
                 {visbility2 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
                 {visbility3 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
-                {visbility4 && <CustomModal onModalChange={v4} component={<SendData > Vos donnés sont encours d'envoi veuillez patienter....</SendData>}/> }
 
         </div>
         </form>

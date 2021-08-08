@@ -10,6 +10,7 @@ import { Display, Lamp, LockFill, PersonBoundingBox, PersonCircle, PersonDash } 
 import FineModal from '../../components/fineModal'
 import axios from 'axios'
 import "../../global"
+import { useRouter } from 'next/router'
 
 
 function useModal(initial) {
@@ -38,9 +39,10 @@ function Header({ value,visibleName }) {
     const [user, setUser] = React.useState()
     const [entreprise, setEntreprise] = React.useState()
     const [school, setSchool] = React.useState()
+    const [schoolId, setSchoolId] = React.useState()
+    const [schoolToken, setSchoolToken] = React.useState()
     const [token, setToken] = React.useState()
     const [etoken, setEtoken] = React.useState()
-    const [schoolToken, setSchoolToken] = React.useState()
 
 
     useEffect(() => {
@@ -64,13 +66,12 @@ function Header({ value,visibleName }) {
         setUser(sessionStorage.getItem("username"))
         setSchoolToken(sessionStorage.getItem("schoolToken"))
         setSchool(sessionStorage.getItem("school"))
+        setSchoolId(sessionStorage.getItem("schoolId"))
 
         setEtoken(sessionStorage.getItem("etoken"))
         setEntreprise(sessionStorage.getItem("entreprise"))
 
-
-
-    }, [token || school || entreprise])
+    }, [token,school,entreprise])
 
 
     const handleToken = (e) => {
@@ -103,7 +104,7 @@ function Header({ value,visibleName }) {
 
                     {value == 1 ? <Link href="/"><a className="active">Acceuil</a></Link> : <Link href="/">Acceuil</Link>}
                     {value == 2 ? <Link href="/Schools"><a className="active">Trouver une école</a></Link> : <Link href="/Schools">Trouver une école</Link>}
-                    {value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href="/addSchoolPro"><a className="active"> School Administration</a></Link> : <Link href="/AddSchool"><a className="active">Pour les établissements</a></Link> : schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href="/addSchoolPro"><a > School Administration</a></Link> : <Link href="/AddSchool"><a > Pour les établissements</a></Link>}
+                    {value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href={`/addSchoolPro/${schoolId}?token=${schoolToken}`}><a className="active"> School Administration</a></Link> : <Link href="/AddSchool"><a className="active">Pour les établissements</a></Link> : schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href={`/addSchoolPro/${schoolId}?token=${schoolToken}`}><a > School Administration</a></Link> : <Link href="/AddSchool"><a > Pour les établissements</a></Link>}
                     {value == 4 ? etoken !== "" && etoken !== undefined && etoken ? <Link href="/StartPub"><a className="active"> Entreprise Administration</a></Link> : <Link href="/Entreprises"><a className="active"> Pour les entreprises</a></Link> : etoken !== "" && etoken !== undefined && etoken ? <Link href="/StartPub"><a > Entreprise Administration</a></Link> : <Link href="/Entreprises"><a > Pour les entreprises</a></Link>  }
 
 
@@ -159,8 +160,8 @@ export function Auth({ visbility, visbility2, v, v2, setToken, e, school = false
                 {school ? null :     <a className="btnPrimary" onClick={v}
                 > Créer Un Compte </a>}
             </div>
-            {visbility && <CustomModal onModalChange={v} component={<CreateAccount stateChange={v} setToken={setToken} e={e} />} />}
-            {visbility2 && <CustomModal onModalChange={v2} component={<Login stateChange={v2} setToken={setToken} e={e} school={school}/>} />}
+            {visbility && <CustomModal onModalChange={v} component={<CreateAccount stateChange={v} setToken={setToken}/>} />}
+            {visbility2 && <CustomModal onModalChange={v2} component={<Login stateChange={v2} setToken={setToken} school={school}/>} />}
         </div>
     )
 }
@@ -168,13 +169,16 @@ export function Auth({ visbility, visbility2, v, v2, setToken, e, school = false
 
 export function Account({ user, onTokenChange, e ,school= false}) {
     const [visible, setVisible] = useModal(false)
-
+  
+    const handleClick = () => {
+        setVisible(true)
+    }
     return (
         <div>
 
             <div >
 
-                <span className={styles.acc} onClick={() => setVisible(true)}> <PersonCircle size={25} color="#fff" /> {user} </span>
+                <span className={styles.acc} onClick={handleClick}> <PersonCircle size={25} color="#fff" /> {user} </span>
             </div>
 
             {visible && <FineModal onModalChange={setVisible} component={<Disconnect v={setVisible} onTokenChange={onTokenChange} e={e} school={ school}/>} position={{ top: 90, right: 60 }} />}
@@ -185,12 +189,10 @@ export function Account({ user, onTokenChange, e ,school= false}) {
 export function Disconnect({ v, onTokenChange, e,school }) {
     const [visbility, v1] = useModal(false)
     const token = sessionStorage.getItem("token")
-    const schoolToken = sessionStorage.getItem("schoolToken")
     const entreprise = sessionStorage.getItem("etoken")
     const entrepriseId = sessionStorage.getItem("entrepriseId")
     const userId = sessionStorage.getItem("userId")
-    const schoolId = sessionStorage.getItem("userId")
-
+    const router = useRouter()
     const [data, setData] = React.useState({})
     const handleDisconnect = () => {
 
@@ -206,6 +208,7 @@ export function Disconnect({ v, onTokenChange, e,school }) {
             sessionStorage.removeItem("schoolToken")
             sessionStorage.removeItem("school")
             sessionStorage.removeItem("schoolId")
+            router.push("/AddSchool")
             v(false)
             onTokenChange("")
          }

@@ -4,6 +4,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    backdrop-filter: blur(1.5px);
+    background-color: #0003;
 }
 
 .container nav {
@@ -34,8 +36,8 @@
 .bar {
     height: 100vh;
     position: fixed;
-    border-left: 10px solid #4a00b4;
-    min-width: 20vw;
+    width: 20vw;
+    border-right: 10px solid #4a00b4;
 }
 
 .bar .span {
@@ -53,9 +55,9 @@
 .active {
     background-color: #4a00b4;
     color: white;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    padding: 10px 20px 10px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding: 10px 30px 10px;
     display: flex;
     align-items: center;
 }
@@ -121,15 +123,26 @@
 }
 
 .article {
-    margin: 20px 20px 10px;
+    margin: 20px 0px 10px;
+    flex: 1;
+    margin-left: 20vw;
 }
 
-.article table thead th {
-    border-bottom: 4px solid orangered!important;
+.article table thead {
+    background-color: #4a00b4;
+}
+
+.article table thead tr:first-child th {
+    color: #fff!important;
+    font-size: .88em;
+}
+
+.article table tbody tr td:first-child {
+    text-align: center;
 }
 
 .article table {
-    width: 75vw;
+    width: 100%;
     margin-bottom: 30px;
 }
 
@@ -146,6 +159,12 @@
     padding: 5px 10px 3px;
 }
 
+.article table tr td:first-child::before {
+    clear: both;
+    content: "#";
+    padding-left: 10px;
+}
+
 .h1 {
     color: #4a00b4!important;
     font-family: "MontserratBold";
@@ -155,9 +174,24 @@
 }
 
 .right {
-    min-width: 75vw;
-    border-left: 1px solid #4a00b4;
+    min-width: 78vw;
     height: 100%;
+}
+
+.ok {
+    z-index: 6;
+    background-color: #fff;
+    box-shadow: #4a00b4 3px 3px 10px;
+    min-width: 30vw;
+    min-height: 40vh;
+    padding: 20px 30px 10px;
+    border-radius: 20px;
+}
+
+.ok form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .dab {

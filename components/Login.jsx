@@ -1,10 +1,11 @@
 import React from 'react'
-import { Lock, Person, BookmarkStar, Telephone } from 'react-bootstrap-icons'
+import { Lock, Person, BookmarkStar, Telephone, EyeSlashFill, EyeFill } from 'react-bootstrap-icons'
 import styles from './Style/CreateAccount.module.css'
 import { useRouter } from "next/router"
 import axios from 'axios'
 import "../global"
 import { useForm } from "react-hook-form"
+import Loader from 'react-loader-spinner'
 
 
 
@@ -15,6 +16,7 @@ function Login({ stateChange, setToken, e ,school}) {
 
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
+    const [loader, setLoader] = React.useState(false)
 
 
     const router = useRouter()
@@ -25,6 +27,10 @@ function Login({ stateChange, setToken, e ,school}) {
 
 
         if (isValid) {
+
+            setLoader(true)
+
+            data.username = data.username.trim()
             if (e !== null && e !== undefined && e) {
 
                 await axios.post('/entreprise', data).then(res => {
@@ -38,7 +44,10 @@ function Login({ stateChange, setToken, e ,school}) {
                     router.push("/StartPub")
 
 
-                }).catch(e => setErr("Cet utilisateur n'existe pas"))
+                }).catch(e => {
+                    setErr("Cet utilisateur n'existe pas")
+                    setLoader(false)
+                })
 
 
             } else if (school) {
@@ -51,16 +60,17 @@ function Login({ stateChange, setToken, e ,school}) {
                     setToken(sessionStorage.getItem("schoolToken"))
                     setFine("Vous êtes connecter avec succes!")
                     stateChange(false)
-                    router.push("/addSchoolPro")
+                    router.push(`/addSchoolPro/${res.data.id}?token=${res.data.schoolToken}`)
 
 
-                }).catch(e => setErr("Cet utilisateur n'existe pas"))
+                }).catch(e => {
+                    setErr("Cet utilisateur n'existe pas")
+                    setLoader(false)
+                })
             }
             else {
 
                 await axios.post('/user', data).then(res => {
-
-
 
                     sessionStorage.setItem("token", res.data.token)
                     sessionStorage.setItem("username", res.data.username)
@@ -68,8 +78,11 @@ function Login({ stateChange, setToken, e ,school}) {
                     setToken(sessionStorage.getItem("token"))
                     setFine("Votre comte est connecter avec succes!")
                     stateChange(false)
-                    // router.push("/Entreprises")
-                }).catch(e => setErr("Cet utilisateur n'existe pas" + e))
+                  
+                }).catch(e => {
+                    setErr("Cet utilisateur n'existe pas")
+                    setLoader(false)
+                })
 
 
             }
@@ -81,6 +94,11 @@ function Login({ stateChange, setToken, e ,school}) {
 
 
     }
+
+    const [state, setState] = React.useState(false)
+    const handleClickShowPassword = () => {
+        setState(s => !s);
+    };
 
     return (
         <div>
@@ -100,7 +118,7 @@ function Login({ stateChange, setToken, e ,school}) {
                 <div className={styles.df}>
                     <label htmlFor="name"> <Person color="#4a00b4" size="20px" /> </label>
                     <input type="text" {...register("username", { required: true, maxLenght: 5 })} id="username" placeholder={!e ? "Entrez votre Nom" : school ? "Entrez Le Sigle de l'école " : "Entrez Le Nom d'Entrerise"} />
-
+                    <EyeSlashFill size={20} color="#FFF"  />
                 </div>
                 {errors.username && errors.username.type === "required" && (
                     <span className="error">Le nom est obligatoire</span>
@@ -112,8 +130,8 @@ function Login({ stateChange, setToken, e ,school}) {
 
                 <div className={styles.df}>
                     <label htmlFor="password"> <Lock color="#4a00b4" size="20px" /> </label>
-                    <input type="password" id="password" aria-invalid={errors.password ? "true" : "false"} {...register("password", { required: true, maxLenght: 9 })} placeholder="Entrez votre mot de passe" />
-
+                    <input type={!state ? "password" : "text"} id="password" aria-invalid={errors.password ? "true" : "false"} {...register("password", { required: true, maxLenght: 9 })} placeholder="Entrez votre mot de passe" />
+                    {!state ? <EyeSlashFill size={20} color="#4a00b4" onClick={handleClickShowPassword} /> : <EyeFill size={20} color="#4a00b4" onClick={handleClickShowPassword} />}
                 </div>
                 {errors.password && errors.password.type === "required" && (
                     <span className="error">Le mot de passe est requis</span>
@@ -124,7 +142,15 @@ function Login({ stateChange, setToken, e ,school}) {
 
 
                 <div className={styles.df}>
-                    <button className="btnPri">Connexion</button>
+                    <button disabled={loader} className="dfss btnPri" >
+                        {loader && <Loader
+                            type="TailSpin"
+                            color="white"
+                            height={20}
+                            width={50}
+                        />}
+
+                        Enregistrer</button>
                 </div>
                 <center style={{ fontSize: ".9em" }}>  <span>mot de passe oublié? <span style={{ color: "#4a00b4" }}>Oui</span></span></center>
 

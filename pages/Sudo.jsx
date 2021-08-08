@@ -487,14 +487,14 @@ export let One = React.memo(function One({ choise, handleChoiseState }) {
 
 
 
-export function Login({ onSetSudoToken, token }) {
+export function Login({ handleSetSudoToken }) {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
 
 
     const onSubmit = data => {
 
-       
+        handleSetSudoToken()
 
     }
 

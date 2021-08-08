@@ -70,6 +70,12 @@ b {
     justify-content: space-between;
 }
 
+.ds {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px
+}
+
 .btnPri {
     padding: 7px 20px 7px;
     background-color: #4a00b4;
@@ -132,6 +138,19 @@ h2 {
     display: flex;
     justify-content: center;
     padding: 20px 30px 10px;
+}
+
+.bb {
+    border-bottom: 2px solid #4a00b4;
+}
+
+.bb input {
+    border: 0px!important;
+    width: 220px;
+}
+
+table {
+    border-collapse: collapse;
 }
 
 .fine {

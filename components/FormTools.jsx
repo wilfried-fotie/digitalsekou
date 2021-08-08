@@ -1,33 +1,59 @@
 import React from "react"
 import { BoxSeam, EyeFill, EyeSlashFill, ImageAlt, Lock, LockFill, NodeMinus } from 'react-bootstrap-icons'
-import {  useController } from "react-hook-form"
+import {  Controller, useController, useForm } from "react-hook-form"
+import Select from 'react-select'
 
 import styles from '../styles/AddSchool.module.css'
 
 
 
-export function FieldValidate({ auto, children, name, control, type = "text", min = 4, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+export function FieldValidate({ auto, children, name, r=true, control, type = "text", min = 3, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
     
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
     formState: {touchedFields, dirtyFields}} = useController({name,control,rules:{required: true, minLength: min, maxLength: max},defaultValue:""})
-    return <div className={styles.dg}>
+    return <div  className={ r? "dfss": styles.dg}>
 
         <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
-        <div>  <input type={type} placeholder={auto} {...inputProps} ref={ref}  id={name} />   </div>
+        <div>  <input type={type}  placeholder={auto} {...inputProps} ref={ref}  id={name} />   </div>
 
     </div>
 }
 
+export function PasswordValidate({  children, name, r = true, control, type = "text", min = 8, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
 
-export function Field({ auto, children, name, type = "text", value, onChange, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+    const { field: { ref, ...inputProps },
+        fieldState: { invalid, isTouched, isDirty },
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true, minLength: min, maxLength: max }, defaultValue: "" })
+   
+    const [state, setState] = React.useState(false)
+    const handleClickShowPassword = () => {
+        setState(s => !s);
+    };
 
-    return <div className={styles.dg}>
+    return (
+        <div className={r ? "dfss" : styles.dg}>
+            <div> <label htmlFor={name} className="dfs">   {image}{children}</label> </div>
+            <div className="df">
+               
+                <input name={name} id={name} type={state ? "text" : "password"} placeholder="mot de passe" className={styles.password} {...inputProps}/>
+                
+
+                    {!state ? <EyeSlashFill size={20} color="#4a00b4" onClick={handleClickShowPassword} /> : <EyeFill size={20} color="#4a00b4" onClick={handleClickShowPassword} />}
+               
+            </div>
+        </div>
+    )
+}
+
+export function Field({ auto, children, r = false,name, type = "text", value, onChange, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+
+    return (<div className={r ? "dfss" : styles.dg}>
 
         <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
         <div>  <input type={type} placeholder={auto} value={value} onChange={onChange} name={name} id={name} />   </div>
 
-    </div>
+    </div>)
 }
 
 
@@ -100,3 +126,19 @@ export function Radio({ children, name, data, onChange, image = <BoxSeam size={2
     )
 }
 
+
+
+export function Selector({ options,r=false,  children, name, control,  image = <NodeMinus size={30} color="#4a00b4" /> }) {
+    const { field: { ref, ...inputProps },
+        fieldState: { invalid, isTouched, isDirty },
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true }})
+
+    
+    return <div className={r ? "dfss" : styles.dg}>
+
+        <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
+        <div>  <Select options={options} {...inputProps} ref={ref} name={name}
+            classNamePrefix="select" /></div>
+
+    </div>
+}

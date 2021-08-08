@@ -1,10 +1,11 @@
 import React from 'react'
-import { Lock, Person, BookmarkStar, Telephone, AspectRatio } from 'react-bootstrap-icons'
+import { Lock, Person, BookmarkStar, Telephone, AspectRatio, EyeSlashFill, EyeFill } from 'react-bootstrap-icons'
 import styles from './Style/CreateAccount.module.css'
 import { useRouter } from "next/router"
 import axios from 'axios'
 import "../global"
 import { useForm } from "react-hook-form"
+import Loader from 'react-loader-spinner'
 
 
 
@@ -15,6 +16,7 @@ function CreateAccount({ stateChange, setToken, e, data}) {
 
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
+    const [loader, setLoader] = React.useState(false)
     const token = sessionStorage.getItem("token")
     const etoken = sessionStorage.getItem("etoken")
     const router = useRouter()
@@ -36,7 +38,9 @@ function CreateAccount({ stateChange, setToken, e, data}) {
             if (e !== null && e !== undefined && e) {
 
                 if (data && data !== undefined && data !== "") {
-
+                    formData.username = formData.username.trim()
+                    formData.tel = formData.tel.trim()
+                    setLoader(true)
                     await axios.put('/entreprises/' + entrepriseId, formData, {
                         headers: {
                             Authorization: "Bearer " + etoken
@@ -51,11 +55,16 @@ function CreateAccount({ stateChange, setToken, e, data}) {
                         stateChange(false)
                         // router.push("/Entreprises")
 
-                    }).catch(e => setErr("Ancien Mot de passe incorrect"))
-
+                    }).catch(e =>{
+                        setLoader(false)
+                        
+                     setErr("Ancien Mot de passe incorrect")
+                })
 
                 } else {
-
+                    formData.username = formData.username.trim()
+                    formData.tel = formData.tel.trim()
+                    setLoader(true)
                     await axios.post('/add-entreprise', formData).then(res => {
                         sessionStorage.setItem("etoken", res.data.etoken)
                         sessionStorage.setItem("entreprise", res.data.username)
@@ -65,8 +74,11 @@ function CreateAccount({ stateChange, setToken, e, data}) {
                         stateChange(false)
                         router.push("/StartPub")
 
-                    }).catch(e => setErr("Cet utilisateur existe déjà"))
-
+                    }).catch(e =>{
+                        setLoader(false)
+                        
+                     setErr("Cet utilisateur existe déjà")
+                })
                 }
 
 
@@ -77,7 +89,9 @@ function CreateAccount({ stateChange, setToken, e, data}) {
 
                 if (data && data !== undefined && data !== "") {
 
-
+                    formData.username = formData.username.trim()
+                    formData.tel = formData.tel.trim()
+                    setLoader(true)
                      await axios.put('/users/' + userId, formData, {
                         headers: {
                             Authorization: "Bearer " + token
@@ -92,8 +106,11 @@ function CreateAccount({ stateChange, setToken, e, data}) {
                         stateChange(false)
                         // router.push("/Entreprises")
 
-                    }).catch(e => setErr("Ancien Mot de passe incorrect"))
-
+                    }).catch(e =>{
+                        setLoader(false)
+                        
+                     setErr("Ancien Mot de passe incorrect")
+                })
                 
 
 
@@ -102,9 +119,9 @@ function CreateAccount({ stateChange, setToken, e, data}) {
 
 
 
-
-
-
+                    formData.username = formData.username.trim()
+                    formData.tel = formData.tel.trim()
+                    setLoader(true)
                     await axios.post('/add-user', formData).then(res => {
                         sessionStorage.setItem("token", res.data.token)
                         sessionStorage.setItem("username", res.data.username)
@@ -120,8 +137,11 @@ function CreateAccount({ stateChange, setToken, e, data}) {
 
                         // router.push("/Entreprises")
 
-                    }).catch(e => setErr("Cet utilisateur existe déja" + e))
-
+                    }).catch(e =>{
+                        setLoader(false)
+                        
+                     setErr("Cet utilisateur existe déja")
+                })
 
 
 
@@ -138,7 +158,10 @@ function CreateAccount({ stateChange, setToken, e, data}) {
 
 
     }
-
+    const [state, setState] = React.useState(false)
+    const handleClickShowPassword = () => {
+        setState(s => !s);
+    };
     return (
         <div>
            
@@ -181,7 +204,8 @@ function CreateAccount({ stateChange, setToken, e, data}) {
 
                 {data && data.password && <div><div className={styles.df}>
                     <label htmlFor="oldpassword"> <Lock color="#4a00b4" size="20px" /> </label>
-                    <input type="password" id="oldpassword" {...register("oldpassword", { required: true, minLenght: 6 })} placeholder="Entrez l'ancien mot de passe" />
+                    <input type={!state ? "password" : "text"} id="oldpassword" {...register("oldpassword", { required: true, minLenght: 6 })} placeholder="Entrez l'ancien mot de passe" />
+                    {!state ? <EyeSlashFill size={20} color="#4a00b4" onClick={handleClickShowPassword} /> : <EyeFill size={20} color="#4a00b4" onClick={handleClickShowPassword} />}
 
                 </div>
                     {errors.oldpassword && errors.oldpassword.type === "required" && (
@@ -194,9 +218,16 @@ function CreateAccount({ stateChange, setToken, e, data}) {
                 }
                 <div className={styles.df}>
                     <label htmlFor="password"> <Lock color="#4a00b4" size="20px" /> </label>
-                    <input type="password" id="password"  {...register("newpassword", { required: (data && data !== undefined && data !== "") ? false : true, maxLenght: 9 })} placeholder={data !== undefined && data ? "Entrez votre nouveau mot de passe" : "Entrez votre mot de passe"} />
+                   
+                    
+ <div className="bb">
+                        <input type={!state ? "password" : "text"} id="password"  {...register("newpassword", { required: (data && data !== undefined && data !== "") ? false : true, maxLenght: 9 })} placeholder={data !== undefined && data ? "Entrez votre nouveau mot de passe" : "Entrez votre mot de passe"} />
+                    {!state ? <EyeSlashFill size={20} color="#4a00b4" onClick={handleClickShowPassword} /> : <EyeFill size={20} color="#4a00b4" onClick={handleClickShowPassword} />}
 
-                </div>
+                   </div>
+
+                    </div>
+              
                 {errors.password && errors.password.type === "required" && (
                     <span className="error">Le mot de passe est requis</span>
                 )}
@@ -245,7 +276,15 @@ function CreateAccount({ stateChange, setToken, e, data}) {
                 }
 
                 <div className={styles.df}>
-                    <button className="btnPri">Enregistrer</button>
+                    <button disabled={loader}  className="dfss btnPri" >
+                        {loader && <Loader
+                            type="TailSpin"
+                            color="white"
+                            height={20}
+                            width={50}
+                        />}
+                    
+                        Enregistrer</button>
                 </div>
             </form>
 

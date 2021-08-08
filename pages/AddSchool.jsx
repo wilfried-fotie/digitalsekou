@@ -59,15 +59,6 @@ function useChecked(initial) {
 function AddSchool() {
 
 
-    const [result, uploader] = useDisplayImage();
-    const d = new Date()
-    const dateOfDay = d.getFullYear().toFixed() + "-" + d.getMonth().toFixed() + "-" + d.getDay().toFixed()
-
-
-
-
-
-
     const app = {
         logo: "",
         logoName: "",
@@ -94,7 +85,7 @@ function AddSchool() {
 
     const handleChange = (e) => {
         const name = e.target.name
-        const value = e.target.value.trim()
+        const value = e.target.value
 
         name == "sigle" ? value.toUpperCase() : value
         setData(s => {
@@ -142,28 +133,6 @@ function AddSchool() {
                 
             }
 
-
-// const data = new FormData();
-//     data.append('file', this.uploadInput.files[0]);
-//     data.append('filename', this.fileName.value);
-
-//     fetch('http://localhost:8000/upload', {
-//       method: 'POST',
-//       body: data,
-//     }).then((response) => {
-//       response.json().then((body) => {
-//         this.setState({ imageURL: `http://localhost:8000/${body.file}` });
-//       });
-//     });
-
-
-            // setData(s => {
-            //     return {
-            //         ...s,
-            //         [name]: URL.createObjectURL(e.target.files[0])
-            //     }
-            // });
-       //}
     }
     const handleSelectChange = (e) => {
         
