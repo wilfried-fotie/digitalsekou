@@ -8,9 +8,11 @@ import "slick-carousel/slick/slick-theme.css"
 import { Binoculars, Check, Facebook, Globe, Google, Linkedin, PersonBoundingBox } from 'react-bootstrap-icons'
 import Footer from './Template/footer';
 import Link from 'next/link';
+import { fetchEntreprisesData, fetchUsersData } from '../Model/getter';
 
 
-export default function Home() {
+
+export default function Home({userData,entrepriseData}) {
   return (
     <div className={styles.container}>
 
@@ -23,7 +25,12 @@ export default function Home() {
           href="/favicon.ico" />
       </Head>
 
-      <Header value="1" />
+      <Header 
+      value="1" 
+      entrepriseData={entrepriseData}
+      userData={userData}
+
+      />
 
       <main className={styles.main} >
 
@@ -215,4 +222,27 @@ export default function Home() {
       <Footer />
     </div >
   )
+}
+
+
+
+
+
+export async function getServerSideProps() {
+
+
+    const userData = await fetchUsersData()
+    const entrepriseData = await fetchEntreprisesData();
+
+    return {
+        props: {
+            userData,
+            entrepriseData
+
+
+        },
+    };
+
+
+
 }

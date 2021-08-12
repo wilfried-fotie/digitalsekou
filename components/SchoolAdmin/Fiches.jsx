@@ -1,8 +1,7 @@
 import React from 'react'
-import { AlignMiddle, Back, Bookmark, Briefcase, Cash, DoorClosed, KanbanFill, Pen, Pencil, Trash } from 'react-bootstrap-icons'
+import { AlignMiddle, Back, Bookmark, Briefcase, Cash, CashCoin, DoorClosed, KanbanFill, Pen, Pencil, Trash } from 'react-bootstrap-icons'
 import { useForm } from 'react-hook-form'
 import Loader from 'react-loader-spinner'
-import Select from 'react-select'
 import style from '../../styles/sudo.module.css'
 import styles from '../../styles/startpub.module.css'
 import { SchoolContext, useModal } from '../../pages/addSchoolPro/[id]'
@@ -45,14 +44,14 @@ export function Home({ filieres, specialities}) {
             <a className="btnPri" onClick={handleClick} style={{ marginRight: "20px" }}>Ajouter Une Spécialité</a>
             <a className="btnPri" onClick={handleClick2} ref={position}>Ajouter Une Filière</a>
         </div>
-        <div style={{ marginTop: "50px" }}>
+        <div style={{ marginTop: "30px" }}>
 
             <div className="df" style={{ borderBottom: "2px solid #4a00b4" }}>
-                <span className={state == 1 ? styles.active2 : styles.span} onClick={() => { setState(1) }}> <KanbanFill size={20} color={state == 1 ? "#fff" : "#4a00b4"} /> <span className={state == 1 ? styles.acticon : styles.icon}  > Spécialités </span> </span>
+                <span className={state == 1 ? styles.active2 : styles.span} onClick={() => { setState(1) }}> <KanbanFill className="mr" size={20} color={state == 1 ? "#fff" : "#4a00b4"} /> <span className={state == 1 ? styles.acticon : styles.icon}  > Spécialités </span> </span>
 
                 <hr />
 
-                <span className={state == 2 ? styles.active2 : styles.span} onClick={() => { setState(2) }}> <KanbanFill size={20} color={state == 2 ? "#fff" : "#4a00b4"} /><span className={state == 2 ? styles.acticon : styles.icon} >Filières </span></span>
+                <span className={state == 2 ? styles.active2 : styles.span} onClick={() => { setState(2) }}> <KanbanFill className="mr" size={20} color={state == 2 ? "#fff" : "#4a00b4"} /><span className={state == 2 ? styles.acticon : styles.icon} >Filières </span></span>
 
             </div>
             <div className={styles.left}>
@@ -83,15 +82,16 @@ export function AddSpeciality({filieres,dispacth}) {
     const options = filieres.map(e => ({ value: e.name, label: e.name }))
     const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onTouched" })
     const [loader, setLoader] = React.useState(false)
-    const schoolData = React.useContext(SchoolContext)
 
+    const schoolData = React.useContext(SchoolContext).data
+   
     const onSubmit = React.useCallback(
         async (data) => {
 
             if (isValid) {
                 setLoader(true)
                 
-                const dataToSend = { name: data.name, fil: data.fil.value, schoolId: schoolData.schoolData.school.id}
+                const dataToSend = { name: data.name, fil: data.fil.value,prix: data.prix + " FRCFA", schoolId: schoolData.schoolData.school.id}
                 await axios.post('/add-speciality', dataToSend)
                     .then(res => {
                         setErr()
@@ -129,6 +129,14 @@ export function AddSpeciality({filieres,dispacth}) {
                     <span className="error">Le nom de la spécialité est obligatoire</span>
                 )}
                 {errors.name && errors.name.type === "minLength" && (
+                    <span className="error"> ce champ doit faire au moiuns trois caracteres</span>
+                )}
+
+                <FieldValidate name="prix" r={false} type="number" image={<CashCoin color="#4a00b4" size="20px" />} auto="Entrez le montant de la spécialité" control={control} >Nom de la filière</FieldValidate>
+                {errors.prix && errors.prix.type === "required" && (
+                    <span className="error">Le prix de la spécialité est obligatoire</span>
+                )}
+                {errors.prix && errors.prix.type === "minLength" && (
                     <span className="error"> ce champ doit faire au moiuns trois caracteres</span>
                 )}
 
@@ -190,7 +198,7 @@ export function AddFiliaire({dispacth}) {
     const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onChange" })
     const [loader, setLoader] = React.useState(false)
     
-    const schoolData = React.useContext(SchoolContext)
+    const schoolData = React.useContext(SchoolContext).data
     const onSubmit = React.useCallback(
         async(data) => {
             
@@ -263,10 +271,10 @@ export function AddFiliaire({dispacth}) {
 
 
 
-export function Delete({ v, id, k, state,dispacth,spe,dispacth2}) {
+export function Delete({ v, id, k, state, dispacth, spe, dispacth2 }) {
     let Token = sessionStorage.getItem("schoolToken")
-    let val = k !== undefined ? k : state[id].k
-    console.log(val)
+    let val = k !== undefined ? k : state[id] && state[id].k
+
     const [fine, setFine] = React.useState()
     const [error, setError] = React.useState()
     const handleCancel = () => {
@@ -357,9 +365,9 @@ export function Edit({v,id,k,dispacth,state,spe ,filieres}) {
     const [loader, setLoader] = React.useState(false)
     const [state1, setState1] = React.useState()
     let def = { label: state[id].fil, value: state[id].fil }
+    let def2 = { label: options[0].value, value: options[0].value }
     let val = k !== undefined ? k : state[id].k
-    console.log(val)
-    const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onTouched", defaultValues: { name: state[id].name, fil: def }})
+    const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onTouched", defaultValues: { name: state[id].name, prix: state[id].prix || state[id].price, fil: def || options[0] || options[id - 1]}})
     let Token = sessionStorage.getItem("schoolToken")
     const onSubmit = React.useCallback(
         async (data) => {
@@ -438,7 +446,7 @@ return (
 
            
           
-            <FieldValidate name="name" r={false} image={<Pencil color="#4a00b4" size="20px" />} auto="Entrez le nom de la filière" control={control} >Nom de la filière</FieldValidate>
+            <FieldValidate name="name" r={false} image={<Pencil color="#4a00b4" size="20px" />} auto="Entrez le nom de la filière" control={control} >Nom de la spécialité</FieldValidate>
             {errors.name && errors.name.type === "required" && (
                 <span className="error">Le nom de la spécialité est obligatoire</span>
             )}
@@ -447,12 +455,11 @@ return (
             )}
           
           
-            {spe &&
-                <Selector name="fil" r={false} control={control} image={<Bookmark color="#4a00b4" size="20px" />} options={options}>Selectionner la filière correspondante</Selector>
-
-            
+            {spe && 
+                <Selector name="fil" r={false}  control={control} image={<Bookmark color="#4a00b4" size="20px" />} options={options}>Selectionner la filière correspondante</Selector>
 }
-
+            {spe && <FieldValidate name="prix" r={false}  max="1000000000000" image={<CashCoin color="#4a00b4" size="20px" />} auto="Entrez le montant de la spécialité" control={control} >Prix de la spécialité</FieldValidate>
+              }
             <center style={{ padding: "5px 20px 10px" }}>
             <button disabled={loader} className="dfss btnPri" >
                 {loader && <Loader
@@ -481,7 +488,6 @@ export function Tab({ value, spe = true, dispacth,state,dispacth2,filieres}) {
     const [getkForDel, setGetkForDel] = React.useState()
     const [getkForMod, setGetkForMod] = React.useState()
 
-
     const handleClick = (id,k) => {
         v3(true)
         setGetIdForDel(id)
@@ -505,11 +511,15 @@ export function Tab({ value, spe = true, dispacth,state,dispacth2,filieres}) {
                     <th>Id</th>
                         <th>Nom de la {!spe ? "filière" : "spécialité"}</th>
                         {spe && <th>Filière</th>}
+                        {spe && <th>Prix</th>}
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {value.map((e, f) => <Tr key={f} spe={spe} k={f} value={e} filieres={filieres} onDelete={handleClick} onEdit={handleClick2} />)}
+                    {value.map((e, f) => {
+                       
+                       return  <Tr key={f} spe={spe} k={f} value={e} filieres={filieres} onDelete={handleClick} onEdit={handleClick2} />}
+                    )} 
                 </tbody>
               
 
@@ -526,21 +536,30 @@ export function Tab({ value, spe = true, dispacth,state,dispacth2,filieres}) {
 
 
 export function Tr({ k, value, spe, filieres, onDelete, onEdit }) {
-    console.log(filieres,value)
+    let fil_value = null
+    if (spe) {
+            const fil = value.filiaire_id
+        fil_value = filieres.find((item) => item.id == fil)
+        
+                        
+       }
+
+    
     return (<>
         <tr>
             <td>{k + 1}</td>
             <td>{value.name}</td>
-            {spe && <td>{value.fil}</td>}
+            {spe && <td>{value.fil || (fil_value && fil_value.name)}</td>}
+            {spe && <td>{value.price || value.prix}</td>}
             <td className="dfss"> <a className={style.disagree} onClick={() => {
-                onEdit(k , value.id !== 1 ? value.id : value.k)
+                onEdit(k , value.id !== 1 ? value.id : value.k || 1)
 
 
             }}>
                 <Pen size={20} color="#ffff" className={style.icon} /> Modifier</a>
                 <a className={style.agree} onClick={() => {
 
-                    onDelete(k , value.id !== 1 ? value.id : value.k)
+                    onDelete(k , value.id !== 1 ? value.id : value.k || 1)
 
                 }}>  <Trash size={20} color="#ffff" className={style.icon} /> Supprimer</a></td>
 

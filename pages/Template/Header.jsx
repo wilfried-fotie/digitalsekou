@@ -11,6 +11,7 @@ import FineModal from '../../components/fineModal'
 import axios from 'axios'
 import "../../global"
 import { useRouter } from 'next/router'
+import { fetchEntreprisesData, fetchUsersData } from '../../Model/getter'
 
 
 function useModal(initial) {
@@ -26,8 +27,7 @@ function useModal(initial) {
 
 
 
-function Header({ value,visibleName }) {
-
+function Header({ value, visibleName, userData, entrepriseData}) {
     const [visbility, v] = useModal(false)
     const [visbility3, v3] = useModal(false)
     const [visbility1, v1] = useModal(false)
@@ -71,7 +71,7 @@ function Header({ value,visibleName }) {
         setEtoken(sessionStorage.getItem("etoken"))
         setEntreprise(sessionStorage.getItem("entreprise"))
 
-    }, [token,school,entreprise])
+    }, [token,school,entreprise,user])
 
 
     const handleToken = (e) => {
@@ -116,14 +116,14 @@ function Header({ value,visibleName }) {
 
                     value == 4 ? etoken !== "" && etoken !== undefined && etoken ?
 
-                       
 
-                        <Account user={entreprise} e={true} onTokenChange={setEtoken} /> : <Auth v={v3} e={true} v2={v4} visbility2={visbility4} visbility={visbility3} setToken={handleEtoken} /> 
+
+                        <Account user={entreprise} e={true} onTokenChange={setEtoken} userData={userData} entrepriseData={entrepriseData} /> : <Auth v={v3} e={true} v2={v4} visbility2={visbility4} visbility={visbility3} setToken={handleEtoken} />
 
                         : value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken && schoolToken !== null ? <Account user={school} school={true} onTokenChange={setSchoolToken} /> : <Auth v={v1}  v2={v5} visbility2={visbility5} school={true}  visbility={visbility1} setToken={handleSchoolToken} />  :
                         
                         token !== "" && token !== undefined && token !== null ?
-                            <Account user={user} onTokenChange={setToken} />
+                                <Account user={user} onTokenChange={setToken} userData={userData} entrepriseData={entrepriseData}/>
                             :
                             <Auth v={v} v2={v2}  visbility2={visbility2} visbility={visbility} setToken={handleToken} />
                         
@@ -160,14 +160,14 @@ export function Auth({ visbility, visbility2, v, v2, setToken, e, school = false
                 {school ? null :     <a className="btnPrimary" onClick={v}
                 > Créer Un Compte </a>}
             </div>
-            {visbility && <CustomModal onModalChange={v} component={<CreateAccount stateChange={v} setToken={setToken}/>} />}
-            {visbility2 && <CustomModal onModalChange={v2} component={<Login stateChange={v2} setToken={setToken} school={school}/>} />}
+            {visbility && <CustomModal onModalChange={v} component={<CreateAccount stateChange={v} e={e} setToken={setToken}/>} />}
+            {visbility2 && <CustomModal onModalChange={v2} component={<Login stateChange={v2} e={e} setToken={setToken} school={school}/>} />}
         </div>
     )
 }
 
 
-export function Account({ user, onTokenChange, e ,school= false}) {
+export function Account({ user, onTokenChange, e, school = false, userData, entrepriseData}) {
     const [visible, setVisible] = useModal(false)
   
     const handleClick = () => {
@@ -181,22 +181,21 @@ export function Account({ user, onTokenChange, e ,school= false}) {
                 <span className={styles.acc} onClick={handleClick}> <PersonCircle size={25} color="#fff" /> {user} </span>
             </div>
 
-            {visible && <FineModal onModalChange={setVisible} component={<Disconnect v={setVisible} onTokenChange={onTokenChange} e={e} school={ school}/>} position={{ top: 90, right: 60 }} />}
+            {visible && <FineModal onModalChange={setVisible} component={<Disconnect v={setVisible} userData={userData} entrepriseData={entrepriseData} onTokenChange={onTokenChange} e={e} school={ school}/>} position={{ top: 90, right: 60 }} />}
         </div>)
 }
 
 
-export function Disconnect({ v, onTokenChange, e,school }) {
+export function Disconnect({ v, onTokenChange, e, school, userData, entrepriseData }) {
     const [visbility, v1] = useModal(false)
     const token = sessionStorage.getItem("token")
     const entreprise = sessionStorage.getItem("etoken")
-    const entrepriseId = sessionStorage.getItem("entrepriseId")
-    const userId = sessionStorage.getItem("userId")
+    const entrepriseId = parseInt(sessionStorage.getItem("entrepriseId"))
+    const userId = parseInt(sessionStorage.getItem("userId"))
     const router = useRouter()
     const [data, setData] = React.useState({})
     const handleDisconnect = () => {
 
-      
 
         if (e !== null && e !== undefined && e)  {
             sessionStorage.removeItem("etoken")
@@ -225,31 +224,26 @@ export function Disconnect({ v, onTokenChange, e,school }) {
         v1(true)
         
         if (e !== null && e !== undefined && e) {
-            await axios.get('/entreprises/' + entrepriseId, {
-                headers: {
-                    Authorization: "Bearer " + entreprise
-                }
-            }).then(res => {
-                setData(res.data)
+            if (!entrepriseData.error) {
+               
+                setData(entrepriseData.entreprises[entrepriseId - 1])
+}
                 
-
-            }).catch(e => console.error(e))
+                
         }
       
         else {
-            await axios.get('/users/' + userId, {
-                headers: {
-                    Authorization: "Bearer " + token
-                }
-            }).then(res => {
-                
-                setData(res.data)
-            }).catch(e => console.error(e))
+            if (!userData.error) {
+
+                setData(userData.users[userId - 1])
+
+            }
  
         }
 
 
     },[])
+    
 
 
     return (
@@ -264,3 +258,6 @@ export function Disconnect({ v, onTokenChange, e,school }) {
         </div>
     )
 }
+
+
+

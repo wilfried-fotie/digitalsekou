@@ -7,18 +7,20 @@ import { useRouter } from "next/router"
 import useChangeBool from '../../components/handleBool'
 import FineModal from '../../components/fineModal'
 import CustomModal from '../../components/customModal'
-import { Editor } from '@tinymce/tinymce-react';
 import { useForm } from 'react-hook-form'
 import { FieldValidate, PasswordValidate } from '../../components/FormTools'
 import styles from '../../styles/startpub.module.css'
 import Loader from "react-loader-spinner";
-import {  fetchAssocFil, fetchFilieres, fetchSchoolData, fetchSpecialities } from "../../Model/getter"
+import { fetchPositions, fetchTypes, fetchFilieres, fetchSchoolData, fetchSpecialities } from "../../Model/getter"
 import { Account } from '../Template/Header'
 import { SiteWeb } from '../../components/SchoolAdmin/web'
 import Welcome from '../../components/SchoolAdmin/Welcome'
 import { Home } from '../../components/SchoolAdmin/Fiches'
 import Abonner from '../../components/SchoolAdmin/Abonner'
 import AddSchool from '../AddSchool'
+import { schoolReducer } from '../../Reducer/schoolPro'
+import Notif from '../../components/SchoolAdmin/notif'
+import Stats from '../../components/SchoolAdmin/Stats'
 
 
 const useIsomorphicLayoutEffect =
@@ -123,30 +125,44 @@ export function ControllerBuilder({ submitData, err }) {
 export const SchoolContext = React.createContext({})
 
 
-const schoolReducer = (state, action) => {
-    switch (action.type) {
-        case "read":
 
-            return state;
-        case "delete":
-            break;
-        case "update":
-            break;
 
-        default:
-            return new Error("Mouf");
-    }
-}
-
-export default function Controller({ schoolData, fils, specialities}) {
+export default function Controller({ schoolData, fils, specialities, types,positions }) {
   
     const [schoolId, setSchoolId] = React.useState()
     const [schoolToken, setSchoolToken] = React.useState()
     const router = useRouter()
     const [err, setErr] = React.useState()
-    const [school, setSchool] = React.useState([])
-    const [data, dispacth] = React.useReducer(schoolReducer, { schoolData })
-  
+    const schoolReducer = React.useCallback((state, action) => {
+        switch (action.type) {
+            case "delete":
+
+                break;
+            case "update":
+                let newState = { ...state.schoolData.school, name: "New Value" }
+                state.schoolData.school = newState
+               
+                return { ...state}
+                
+
+            default:
+                return [...state];
+        }
+
+    }, [])
+   
+    
+    const [data, dispacth] = React.useReducer(schoolReducer, { schoolData, positions, types, fils, specialities})
+   
+console.log(dispacth)
+
+
+
+    const value = React.useMemo(() => ({ data, dispacth }),[data,dispacth])
+
+    // console.log(schoolValue.dispacth({ type: "update" }))
+
+
 
 
 
@@ -178,9 +194,9 @@ export default function Controller({ schoolData, fils, specialities}) {
 
     return (
         <>
-            {(schoolToken && schoolToken !== "" && schoolToken !== undefined && dataError !== true && !dataError)
+            {(schoolToken && schoolToken !== "" && schoolToken !== undefined && dataError !== true && !dataError )
                 ?
-                <SchoolContext.Provider value={data}>
+                <SchoolContext.Provider value={value}>
                     <Dasboard filieres={fils} specialities={specialities}/>
                 </SchoolContext.Provider>
                 :
@@ -204,7 +220,7 @@ export function Dasboard({ filieres, specialities}) {
     const [visbility, v] = useModal(false)
 
     const school = React.useContext(SchoolContext)
-    const dataSchool = school.schoolData.school
+    const dataSchool = school.data.schoolData.school
     const [schoolToken, setSchoolToken] = React.useState()
     const user = sessionStorage.getItem("school")
 
@@ -255,10 +271,10 @@ export function Dasboard({ filieres, specialities}) {
 
                             {level == 1 && <Welcome />}
                             {level == 2 && <Home filieres={filieres} specialities={specialities} />}
-                            {level == 3 && <SiteWeb />}
+                            {level == 3 && <SiteWeb filieres={filieres} specialities={specialities}/>}
                             {level == 4 && <Abonner />}
-                            {level == 5 && <Home />}
-                            {level == 6 && <SiteWeb />}
+                            {level == 5 && <Notif/>}
+                            {level == 6 && <Stats />}
                         </div>
 
                     </article>
@@ -320,10 +336,13 @@ export function ProMode() {
 export  async function getServerSideProps ({ params, query}) {
   
   const token = query.token
-      
-    const schoolData = await fetchSchoolData(params.id, token);
-    const fils = await fetchFilieres();
-    const specialities = await fetchSpecialities();
+    const id = parseInt(params.id)
+    const fils = await fetchFilieres(id);
+    const specialities = await fetchSpecialities(id);
+    const types = await fetchTypes(id);
+    const positions = await fetchPositions(id);
+    const schoolData = await fetchSchoolData(id, token);
+
 
 
     return {
@@ -331,7 +350,8 @@ export  async function getServerSideProps ({ params, query}) {
             schoolData,
             fils,
             specialities,
-            
+            types,
+            positions
             
         },
     };

@@ -67,7 +67,6 @@
     align-items: center;
     grid-template-rows: 2fr 2fr;
     grid-gap: 1fr;
-    border: 1px solid #4a00b4;
     border-bottom: 3px solid #4a00b4;
     padding: 10px 10px 0px;
     color: #000;
@@ -99,6 +98,11 @@
 .bar .span {
     color: rgb(204, 202, 202);
     padding: 20px 20px 10px;
+    display: flex;
+    align-items: center;
+}
+
+.span {
     display: flex;
     align-items: center;
 }

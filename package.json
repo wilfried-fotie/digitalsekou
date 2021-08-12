@@ -8,19 +8,26 @@
     "start": "next start"
   },
   "dependencies": {
+    "@draft-js-plugins/static-toolbar": "^4.1.1",
     "@hookform/resolvers": "^2.6.0",
     "@tinymce/tinymce-react": "^3.12.6",
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.5.0",
+    "draftjs-to-html": "^0.9.1",
+    "jsonwebtoken": "^8.5.1",
     "next": "^10.0.4",
     "react": "17.0.2",
     "react-bootstrap-icons": "^1.5.0",
     "react-dom": "17.0.2",
+    "react-draft-wysiwyg": "^1.14.7",
     "react-hook-form": "^7.10.1",
     "react-loader-spinner": "^4.0.0",
     "react-select": "^4.3.1",
     "react-slick": "^0.28.1",
+    "react-whatsapp": "^0.2.1",
     "slick-carousel": "^1.8.1",
+    "suneditor": "^2.41.3",
+    "suneditor-react": "^3.3.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {

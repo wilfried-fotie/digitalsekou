@@ -204,9 +204,10 @@ function CreateAccount({ stateChange, setToken, e, data}) {
 
                 {data && data.password && <div><div className={styles.df}>
                     <label htmlFor="oldpassword"> <Lock color="#4a00b4" size="20px" /> </label>
+                    <div className="bb">
                     <input type={!state ? "password" : "text"} id="oldpassword" {...register("oldpassword", { required: true, minLenght: 6 })} placeholder="Entrez l'ancien mot de passe" />
                     {!state ? <EyeSlashFill size={20} color="#4a00b4" onClick={handleClickShowPassword} /> : <EyeFill size={20} color="#4a00b4" onClick={handleClickShowPassword} />}
-
+                    </div>
                 </div>
                     {errors.oldpassword && errors.oldpassword.type === "required" && (
                         <span className="error">Le mot de passe est requis</span>

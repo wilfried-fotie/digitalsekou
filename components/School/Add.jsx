@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { BoundingBox, Building, EyeFill, EyeSlashFill, GeoAlt, GeoAltFill, ImageAlt, NodeMinus, TelephoneFill } from 'react-bootstrap-icons'
+import { BoundingBox, Building, EyeFill, EyeSlashFill, GeoAlt, GeoAltFill, ImageAlt, LockFill, NodeMinus, TelephoneFill } from 'react-bootstrap-icons'
 import { useRouter } from "next/router"
 import axios from 'axios'
 import "../../global"
@@ -130,7 +130,7 @@ err++
                      sessionStorage.setItem("schoolToken", res[0].data.token)
                  sessionStorage.setItem("school", res[0].data.sigle)
               sessionStorage.setItem("schoolId", res[0].data.id)
-              router.push(`/addSchoolPro/${res[0].data.id}`)
+              router.push(`/addSchoolPro/${res[0].data.id}?token=${res[0].data.token}`)
               setLoader(false)
              } )
                     .catch(err => {
@@ -182,7 +182,7 @@ err++
                     {!state.tel && errors && errors.tel}
                 </span>
 
-                <Password name="password" onChange={handle} value={state.password} image={<Building size={20} color="#4a00b4" />}>Entrez un mot de passse</Password>
+                <Password name="password" onChange={handle} value={state.password} image={<LockFill size={20} color="#4a00b4" />}>Entrez un mot de passse</Password>
                 <span className="error" >
                     {!state.password && errors && errors.password || state.password.length < 8 && errors.password}
                     

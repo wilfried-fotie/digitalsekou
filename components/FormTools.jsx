@@ -1,5 +1,5 @@
 import React from "react"
-import { BoxSeam, EyeFill, EyeSlashFill, ImageAlt, Lock, LockFill, NodeMinus } from 'react-bootstrap-icons'
+import { BoxSeam, EyeFill, EyeSlashFill, ImageAlt, Lock, LockFill, NodeMinus, PencilSquare } from 'react-bootstrap-icons'
 import {  Controller, useController, useForm } from "react-hook-form"
 import Select from 'react-select'
 
@@ -7,11 +7,11 @@ import styles from '../styles/AddSchool.module.css'
 
 
 
-export function FieldValidate({ auto, children, name, r=true, control, type = "text", min = 3, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+export function FieldValidate({ auto, children, name, r=true, control, type = "text", min = 3,def="", max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
     
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
-    formState: {touchedFields, dirtyFields}} = useController({name,control,rules:{required: true, minLength: min, maxLength: max},defaultValue:""})
+    formState: {touchedFields, dirtyFields}} = useController({name,control,rules:{required: true, minLength: min, maxLength: max},defaultValue: def})
     return <div  className={ r? "dfss": styles.dg}>
 
         <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
@@ -20,7 +20,7 @@ export function FieldValidate({ auto, children, name, r=true, control, type = "t
     </div>
 }
 
-export function PasswordValidate({  children, name, r = true, control, type = "text", min = 8, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+export function PasswordValidate({  children, name, r = true, newp = false, control, old=false,  min = 8, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
 
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
@@ -36,7 +36,7 @@ export function PasswordValidate({  children, name, r = true, control, type = "t
             <div> <label htmlFor={name} className="dfs">   {image}{children}</label> </div>
             <div className="df">
                
-                <input name={name} id={name} type={state ? "text" : "password"} placeholder="mot de passe" className={styles.password} {...inputProps}/>
+                <input name={name} id={name} type={state ? "text" : "password"} placeholder= {old ? "ancien mot de passe" : newp ? "nouveau mot de passe" : "mot de passe"} className={styles.password} {...inputProps}/>
                 
 
                     {!state ? <EyeSlashFill size={20} color="#4a00b4" onClick={handleClickShowPassword} /> : <EyeFill size={20} color="#4a00b4" onClick={handleClickShowPassword} />}
@@ -67,7 +67,48 @@ export function TextArea({ children, name, value, onChange }) {
     </div>
 }
 
+export function TextAreaValidate({ children,size = 10, name,min=3,max="1000",image, control,def="" }) {
+    const { field: { ref, ...inputProps },
+        fieldState: { invalid, isTouched, isDirty },
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true, minLength: min, maxLength: max }, defaultValue: def })
 
+    return <div>
+
+        <div> <label htmlFor={name} className="dfs">
+            <PencilSquare size={20} color="#4a00b4"/>
+            {children}</label> </div>
+        <div>  <textarea rows={size} className={styles.area}
+            {...inputProps}
+            ref={ref} name={name} id={name} />   </div>
+
+    </div>
+}
+
+export function FileValidate({ children, name,  multiple = false, def="", r= true, control }) {
+    const { field: { ref, ...inputProps },
+        fieldState: { invalid, isTouched, isDirty },
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true } })
+
+    return <div className={styles.dg}>
+        <div className="dfs">
+            <ImageAlt size={20} color="#4a00b4" />
+            <label htmlFor={name}>{children}</label>
+            
+        </div>
+        {def && <img src={def} height="50px" />}
+        <div>
+            <input type="file" name={name} id={name + "Data"}
+                accept="image/*"
+                multiple={multiple == true ? multiple : null}
+                {...inputProps}
+                ref={ref}
+            />
+
+        </div>
+    </div>
+}
+    
+    
 export function File({ children, name, onChange, multiple = false }) {
     return <div className={styles.dg}>
         <div className="dfs">
@@ -117,7 +158,7 @@ export function Radio({ children, name, data, onChange, image = <BoxSeam size={2
                 <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
             <div className={styles.checkbox}>
 
-                    {data.map(e => <div key={e}> <input type="radio" name={name} id={e} defaultChecked={e == "Non" || e == "Privé"} onChange={onChange} /><label htmlFor={e}>{e}</label></div>)}
+                    {data.map(e => <div key={e}> <input type="radio" name={name}  id={e} defaultChecked={e == "Non" || e == "Privé"} onChange={onChange} /><label htmlFor={e}>{e}</label></div>)}
      
 
             </div>
@@ -126,19 +167,38 @@ export function Radio({ children, name, data, onChange, image = <BoxSeam size={2
     )
 }
 
+export function RadioValidate({ children, name, r = true, control, data, image = <BoxSeam size={20} color="#4a00b4" /> }) {
 
-
-export function Selector({ options,r=false,  children, name, control,  image = <NodeMinus size={30} color="#4a00b4" /> }) {
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
-        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true }})
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true}})
+    return <>
 
-    
+        <div className={styles.border}>
+            <div>
+                <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
+           
+
+            <div style={{paddingTop: r? "20px" : null}} className={ r? "dfss": styles.checkbox}>
+                {data.map(e => <div key={e}> <input type="radio" {...inputProps} ref={ref}  name={name} id={e} defaultChecked={e == "Non" || e == "Privé"}  /><label htmlFor={e}>{e}</label></div>)}
+
+
+            </div>
+        </div>
+    </>
+}
+
+export function Selector({ options,r=false, mult=false, def = {},children, name, control,  image = <NodeMinus size={30} color="#4a00b4" /> }) {
+    const { field: { ref, ...inputProps },
+        fieldState: { invalid, isTouched, isDirty },
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true },defaultValue:def})
+//   console.log(def)
     return <div className={r ? "dfss" : styles.dg}>
 
         <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
-        <div>  <Select options={options} {...inputProps} ref={ref} name={name}
+        <div>  <Select options={options} defaultValue={def} isMulti={mult} {...inputProps} ref={ref} name={name}
             classNamePrefix="select" /></div>
 
     </div>
 }
+
