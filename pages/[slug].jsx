@@ -12,15 +12,15 @@ import Header from './Template/Header'
 
 function ViewSchool({ school, positions, specialities, fils,abo }) {
     const data = school.school
-    const spe = [...specialities.specialities]
-    const filieres = [...fils.filieres]
+    const spe = specialities ? [...specialities.specialities] : []
+    const filieres = fils ? [...fils.filieres] : []
     const [message, setMessage] = React.useState(true)
     const [abonnement, setAbonnement] = React.useState(false)
     const [userId, setuserId] = React.useState(false)
     React.useEffect(() => {
     setuserId(sessionStorage.getItem("userId"))
 },[userId])
-    const tab = abo.abo.abo
+    const tab = abo ? abo.abo.abo : []
     const handleClickSuscribe = () => {
         if (sessionStorage.getItem("userId")) {
             axios.post("/abonnement", { userId: parseInt(sessionStorage.getItem("userId")), schoolId: data.id}).then(res => setAbonnement(true)).catch(e=> console.log(e))
@@ -97,7 +97,7 @@ function ViewSchool({ school, positions, specialities, fils,abo }) {
 
                                     
 
-                                        <div>
+                                        <div style={{marginTop: "30px"}}>
                                         <Link href={"https://wa.me/237" + data.tel}><a className="btnSecondary">Nous Contacter</a></Link>
                                         {abonnement || tab.includes(parseInt(userId)) ? <a style={{ marginLeft: "20px", padding: "6px 15px 5px" }} onClick={() => alert("veuillez nous écrire les raison de votre choix")} className="btnSecondary">Se Désabonner <Bell size={15} color="#4a00b4" /> </a> : <a style={{ marginLeft: "20px", padding: "6px 15px 5px" }} onClick={handleClickSuscribe} className="btnPrimary">Abonner-vous <Bell size={15} color="#FFF" /> </a>}
                                         
@@ -107,7 +107,7 @@ function ViewSchool({ school, positions, specialities, fils,abo }) {
                                     </div>
                                    
                                     <div className={styles.digi}>
-                                        <center style={{ display: "flex" }}> <GeoAlt size={20} color="#4a00b4" /> {positions.positions.map(e => e.position + ", ")}</center> <br />
+                                        <center style={{ display: "flex" }}> <GeoAlt size={20} color="#4a00b4" /> {positions && positions.positions.map(e => e.position + ", ")}</center> <br />
                                         <center style={{ display: "flex" }}><TelephoneFill size={20} color="#4a00b4" /> {data.tel} </center>
 
                                     </div>
@@ -216,14 +216,16 @@ export function Tr({ value }) {
 
 export async function getServerSideProps({ params}) {
 
+    if (params.slug == "") {
+    return
+}
 
-    const school = await fetchSchoolSlugData(params.slug);
-  
-    const positions = await fetchPositions(school.error == false ? school.school.id :null);
-    const types = await fetchTypes(school.error == false? school.school.id : null);
-    const specialities = await fetchSpecialities(school.error == false? school.school.id : null);
-    const fils = await fetchFilieres(school.error == false ? school.school.id : null);
-    const abo = await fetchAbonnement(school.error == false ? school.school.id : null)
+    const school =  await fetchSchoolSlugData(params.slug);
+    const positions = !school.error && school.school.id   ? await fetchPositions(school.school.id ) :null ;
+    const types = !school.error && school.school.id ?  await fetchTypes(school.school.id ) : null;
+    const specialities = !school.error && school.school.id ?  await fetchSpecialities( school.school.id ) : null;
+    const fils = !school.error && school.school.id ?  await fetchFilieres(school.school.id ) : null;
+    const abo = !school.error && school.school.id ?  await fetchAbonnement(school.school.id ) : null
 
  return {
             props: {

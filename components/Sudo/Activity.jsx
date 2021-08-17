@@ -68,7 +68,7 @@ export default function Activity({ choise, handleChoiseState }) {
 
               
 
-                {(schoolDemande == []) &&   <table>
+                <table>
                     <thead>
                         <tr>
                             <th>id</th><th>Date de création</th><th>Nom de l'établissement</th><th>Actions</th>
@@ -79,9 +79,9 @@ export default function Activity({ choise, handleChoiseState }) {
 
                         {schoolDemande.map((e, f) => <Tr key={f} id={f} value={e} onSubmit={handleSubmit} onDelete={handleClick} />)}
                     </tbody>
-                </table>}
+                </table>
                 
-                {schoolDemande !== [] && <center className="h1">Aucune Entreprise à valider</center> }
+         
 
             </div>
             {visbility3 && <CustomModal onModalChange={v3} component={<Verif1 />} />}

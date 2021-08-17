@@ -12,7 +12,7 @@ import { fetchEntreprisesData, fetchUsersData } from '../Model/getter';
 
 
 
-export default function Home({userData,entrepriseData}) {
+export default function Home() {
   return (
     <div className={styles.container}>
 
@@ -27,9 +27,7 @@ export default function Home({userData,entrepriseData}) {
 
       <Header 
       value="1" 
-      entrepriseData={entrepriseData}
-      userData={userData}
-
+      
       />
 
       <main className={styles.main} >
@@ -228,21 +226,5 @@ export default function Home({userData,entrepriseData}) {
 
 
 
-export async function getServerSideProps() {
 
 
-    const userData = await fetchUsersData()
-    const entrepriseData = await fetchEntreprisesData();
-
-    return {
-        props: {
-            userData,
-            entrepriseData
-
-
-        },
-    };
-
-
-
-}
