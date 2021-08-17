@@ -37,7 +37,11 @@
     height: 100vh;
     position: fixed;
     width: 20vw;
-    border-right: 10px solid #4a00b4;
+    border-right: 4px solid #4a00b4;
+}
+
+.btnSpace {
+    margin-bottom: 5%;
 }
 
 .bar .span {
@@ -73,6 +77,28 @@
     margin-right: 5px;
 }
 
+.disagree2 {
+    background-color: rgb(231, 72, 9);
+    color: white;
+    border-radius: 20px;
+    border: 2px solid inherit;
+    padding: 5px 10px 5px;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.disagree3 {
+    background-color: green;
+    color: white;
+    border-radius: 20px;
+    border: 2px solid inherit;
+    padding: 5px 10px 5px;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
 .dg {
     display: flex;
     flex-direction: column;
@@ -82,8 +108,8 @@
 
 .dfw {
     display: grid;
-    grid-template-columns: 2fr 2fr 2fr;
-    grid-template-rows: 2fr 2fr 2fr;
+    grid-template-columns: 2fr 2fr;
+    grid-template-rows: 2fr 2fr 2fr 2fr;
     gap: 20px;
 }
 
@@ -119,7 +145,7 @@
 .end {
     display: flex;
     justify-content: flex-end;
-    margin: 5px 5px 0px;
+    margin: 5px 5px 5%;
 }
 
 .article {
@@ -135,10 +161,6 @@
 .article table thead tr:first-child th {
     color: #fff!important;
     font-size: .88em;
-}
-
-.article table tbody tr td:first-child {
-    text-align: center;
 }
 
 .article table {
@@ -159,9 +181,8 @@
     padding: 5px 10px 3px;
 }
 
-.article table tr td:first-child::before {
+.article table thead tr td:first-child::before {
     clear: both;
-    content: "#";
     padding-left: 10px;
 }
 

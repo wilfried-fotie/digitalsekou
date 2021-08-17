@@ -27,7 +27,7 @@ function useModal(initial) {
 
 
 
-function Header({ value, visibleName, userData, entrepriseData}) {
+function Header({ value, visibleName, userData, entrepriseData, normal=true}) {
     const [visbility, v] = useModal(false)
     const [visbility3, v3] = useModal(false)
     const [visbility1, v1] = useModal(false)
@@ -90,10 +90,10 @@ function Header({ value, visibleName, userData, entrepriseData}) {
 
     return (
         <nav >
-            <main className={!scroll ? styles.main : styles.fixed} >
+         {normal &&   <main className={!scroll ? styles.main : styles.fixed} >
 
                 <div className="logos">
-                    <Link href="/"><a className="logo">  <Image src="/logo.svg" alt="Digital Education Logo" width={50} height={50} /></a></Link>
+                    <Link href="/"><a className="logo">  <Image src="/logo.png" alt="Digital Education Logo" width={65} height={50} /></a></Link>
                     <Link href="/"><a>{!scroll && !visibleName ? <span className="log"><img src="/log.svg" alt="" /> </span> : null}</a></Link>
 
                 </div>
@@ -139,7 +139,32 @@ function Header({ value, visibleName, userData, entrepriseData}) {
  */}
 
             </main>
+            }
+       
+            
+            {!normal && 
+            
+
+               
+                <main style={{padding: "10px 40px 5px", borderBottom: "2px solid grey"}} className={ !scroll ? styles.main : styles.fixed}>
+                
+                <Link href="/Schools"><a>{scroll || !visibleName ? <span className="log"><img src="/log.svg" alt="" /> </span> : null}</a></Link>
+
+<div> </div>
+               { token !== "" && token !== undefined && token !== null ?
+                <Account user={user} onTokenChange={setToken} userData={userData} entrepriseData={entrepriseData} />
+                :
+                <Auth v={v} v2={v2} visbility2={visbility2} visbility={visbility} setToken={handleToken} />
+
+                }
+         
+            </main>
+        
+            }
+       
+       
         </nav >
+       
 
 
     )

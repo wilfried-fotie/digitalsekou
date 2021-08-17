@@ -32,6 +32,28 @@ export const fetchPositions = async (id) => await axios.get('/custom-positions/'
         error: true,
         positions: null,
     }),
+);
+    
+export const fetchAllTypes = async () => await axios.get('/types')
+    .then(res => ({
+        error: false,
+        types: res.data,
+    }))
+    .catch(() => ({
+        error: true,
+        types: null,
+    }),
+    );
+
+export const fetchAllPositions = async () => await axios.get('/positions')
+    .then(res => ({
+        error: false,
+        positions: res.data,
+    }))
+    .catch(() => ({
+        error: true,
+        positions: null,
+    }),
     );
 
 export const fetchTypes = async (id) => await axios.get('/custom-types/' + id)
@@ -78,14 +100,7 @@ export const fetchEntreprisesData = async function () {
 
 export const fetchAllSchoolData = async function () {
 
-    return await axios.get(`/schools/`,
-        {
-            headers: {
-                Authorization: "Bearer " + token
-            }
-
-        }
-    )
+    return await axios.get(`/schools`)
         .then(res => ({
             error: false,
             school: res.data,
@@ -115,5 +130,61 @@ export const fetchSchoolData = async function (id, token) {
         .catch((e) => ({
             error: true,
             school: null,
+        }))
+}
+
+
+
+
+
+export const fetchSchoolSlugData = async function (slug) {
+
+    return await axios.get(`/schools/get/${slug}`)
+        .then(res => ({
+            error: false,
+            school: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            school: null,
+        }))
+}
+
+export const fetchAbonnement = async function (id) {
+    return await axios.get(`/abonnement/${id}`)
+        .then(res => ({
+            error: false,
+            abo: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            abo: null,
+        }))
+}
+
+    
+export const fetSchoolAbo = async function (id) {
+    return await axios.get(`/schoolAbonnement/${id}`)
+        .then(res => ({
+            error: false,
+            abo: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            abo: null,
+        }))
+}
+
+    
+
+    export const fetSchoolMessages = async function (id) {
+        return await axios.get(`/message/${id}`)
+        .then(res => ({
+            error: false,
+            mes: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            mes: null,
         }))
 }

@@ -134,7 +134,7 @@ err++
               setLoader(false)
              } )
                     .catch(err => {
-                         console.log(err)
+                         null
              v(true)
                          setLoader(false)
 
@@ -177,7 +177,7 @@ err++
                 <span className="error" >
                     {!state.sigle && errors && errors.sigle}
                 </span>
-                <Field name="tel" auto="exp: 678 55 02 04" image={<TelephoneFill size={20} color="#4a00b4" />} tel={true} onChange={handle} value={state.tel}>Ajouter Le Numéro de Téléphone</Field>
+                <Field name="tel" auto="exp: 678550204" type="number" image={<TelephoneFill size={20} color="#4a00b4" />} tel={true} onChange={handle} value={state.tel}>Ajouter Le Numéro de Téléphone (sans espaces)</Field>
                 <span className="error">
                     {!state.tel && errors && errors.tel}
                 </span>

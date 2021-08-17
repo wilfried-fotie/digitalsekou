@@ -4,8 +4,12 @@
     box-shadow: #4a00b4 3px 3px 10px;
     min-width: 30vw;
     min-height: 40vh;
+    max-width: 95vw;
+    max-height: 90vh;
     padding: 20px 30px 10px;
     border-radius: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .app {

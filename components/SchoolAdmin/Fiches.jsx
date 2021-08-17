@@ -11,12 +11,7 @@ import "../../global"
 import axios from "axios"
 
 
-function init(init) {
-    return [...init.val]
-}
-function init2(init) {
-    return [...init.valSpe]
-}
+
 
 
 export function Home({ filieres, specialities}) {
@@ -24,10 +19,16 @@ export function Home({ filieres, specialities}) {
     const [visbility3, v3] = useModal(false)
     const [visbility, v] = useModal(false)
     const position = React.useRef(null)
-    let val = filieres.filieres
-    let valSpe = specialities.specialities
-    const [fil, dispacth] = React.useReducer(reducer, { val }, init)
-    const [spe, dispacth2] = React.useReducer(reducer, { valSpe }, init2)
+    const context = React.useContext(SchoolContext)
+    let fil = context.data.filieres
+    let spe = context.data.spe
+    let school = context.data.schoolData.school
+    
+    // const [fil, dispacth] = React.useReducer(reducer, context.data.fils.filieres)
+    // const [spe, dispacth2] = React.useReducer(reducer, context.data.fils.specialities)
+
+    const dispacth = context.dispacth
+    const dispacth2 = context.dispacth
 
     const handleClick = (pos) => {
         v3(true)
@@ -36,13 +37,17 @@ export function Home({ filieres, specialities}) {
     const handleClick2 = (pad) => {
         v(true)
     }
+
+    const handleAlert = () => {
+        alert("Cette fonctionnalité est réservé à la version pro")
+    }
     return (<>
         <div className={styles.pad}>
             
       </div>
         <div className={style.end}>
-            <a className="btnPri" onClick={handleClick} style={{ marginRight: "20px" }}>Ajouter Une Spécialité</a>
-            <a className="btnPri" onClick={handleClick2} ref={position}>Ajouter Une Filière</a>
+            <a className="btnPri" onClick={!school.pro ? handleAlert : handleClick } style={{ marginRight: "20px" }}>Ajouter Une Spécialité</a>
+            <a className="btnPri" onClick={!school.pro ? handleAlert : handleClick2} ref={position}>Ajouter Une Filière</a>
         </div>
         <div style={{ marginTop: "30px" }}>
 
@@ -96,7 +101,7 @@ export function AddSpeciality({filieres,dispacth}) {
                     .then(res => {
                         setErr()
                         setFine("Cette spécialité a été  ajouter avec succes!")
-                        dispacth({ type: "ADD", data: { ...dataToSend, k: res.data.id } })
+                        dispacth({ type: "ADD", name: "spe",data: { ...dataToSend, k: res.data.id } })
 
 
                     })
@@ -165,29 +170,7 @@ export function AddSpeciality({filieres,dispacth}) {
     )
 }
 
-const reducer = (state, action) => {
-    switch (action.type) {
-        case "ADD":
-            
-             state.push({...action.data})
-            return [...state]
-        case "DELETE":
-            let num = action.id
-            state.splice(num,1)
-            return [...state]
-        case "UPDATE":
-            state[action.id].name = action.value
-            if (state[action.id].fil) {
-                state[action.id].fil = action.fil
-            } 
-            return [...state]
-       
-        default:
-            throw new Error("Cette action n'existe pas")
-        
-    }
-    
-}
+
 
 
 
@@ -211,7 +194,7 @@ export function AddFiliaire({dispacth}) {
                     .then(res => {
                         setErr()
                         setFine("Cette filiaire a été  ajouter avec succes!")
-                        dispacth({ type: "ADD", data: {  name: data.fil, id: schoolData.schoolData.school.id ,k: res.data.id }})
+                        dispacth({ type: "ADD", name: "filieres",data: {  name: data.fil, id: schoolData.schoolData.school.id ,k: res.data.id }})
                        
                     
                     })
@@ -294,7 +277,7 @@ export function Delete({ v, id, k, state, dispacth, spe, dispacth2 }) {
                 setError()
                 setFine("Suppression réussi")
             
-                dispacth({ type: "DELETE", id: id })
+                dispacth({ type: "DELETE", name: "spe", id: id })
                 v(false)
             }
             )
@@ -319,8 +302,10 @@ export function Delete({ v, id, k, state, dispacth, spe, dispacth2 }) {
                     setFine("Suppression réussi")
                     
 
-                    dispacth({ type: "DELETE", id: id })
-                    res.data !== null ? res.data.map(e => dispacth2({ type: "DELETE", name: e.name })) : null
+                    dispacth({ type: "DELETE", name: "filieres", id: id })
+                    res.data !== null ? res.data.map(e => dispacth({ type: "DELETE", name: "spe", payload: e.name })) : null
+                    
+
                     v(false)
                 }
                 )
@@ -364,10 +349,13 @@ export function Edit({v,id,k,dispacth,state,spe ,filieres}) {
     const [fine, setFine] = React.useState("")
     const [loader, setLoader] = React.useState(false)
     const [state1, setState1] = React.useState()
+  
+
+
     let def = { label: state[id].fil, value: state[id].fil }
-    let def2 = { label: options[0].value, value: options[0].value }
+    // let def2 = { label: options[0].value, value: options[0].value }
     let val = k !== undefined ? k : state[id].k
-    const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onTouched", defaultValues: { name: state[id].name, prix: state[id].prix || state[id].price, fil: def || options[0] || options[id - 1]}})
+    const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onTouched", defaultValues: { name: state[id].name, prix: state[id].prix || state[id].price, fil:  def || options[0] || options[id - 1]}})
     let Token = sessionStorage.getItem("schoolToken")
     const onSubmit = React.useCallback(
         async (data) => {
@@ -375,7 +363,7 @@ if(isValid){
             if (spe) {
                 setLoader(true)
 
-                await axios.put(`/speciality/${val}`, data,
+                await axios.put(`/speciality/${val}`,  {...data, fil: data.fil.value},
                     {
                         headers: {
                             Authorization: "Bearer " + Token
@@ -387,8 +375,7 @@ if(isValid){
                         setErr("")
                         setFine("MIS A JOUR réussi")
     
-
-                        dispacth({ type: "UPDATE", id: id, value: data.name,fil: data.fil.value })
+                        dispacth({ type: "UPDATE", name:"spe",id: id, value: data.name,fil: data.fil.value,prix: data.prix })
                         v(false)
                     }
                     )
@@ -412,7 +399,9 @@ if(isValid){
                     .then(() => {
                         setErr("")
                         setFine("MIS A JOUR réussi")
-                        dispacth({ type: "UPDATE", id: id, value: data.name })
+                        dispacth({ type: "UPDATE", name: "filieres", id: id, value: data.name })
+                        dispacth({ type: "Not Defined Action", name: "spe"})
+                        // dispacth({ type: "No Specified", name: "spe"})
                         v(false)
                     }
                     )
@@ -433,7 +422,6 @@ if(isValid){
 return (
     <>
         <form onSubmit={handleSubmit(onSubmit)}>
-
 
             {err && isSubmitted && !isSubmitting && isValid && <div className="error">
                 {err}
@@ -456,7 +444,7 @@ return (
           
           
             {spe && 
-                <Selector name="fil" r={false}  control={control} image={<Bookmark color="#4a00b4" size="20px" />} options={options}>Selectionner la filière correspondante</Selector>
+                <Selector name="fil" r={false}   control={control} image={<Bookmark color="#4a00b4" size="20px" />} options={options}>Selectionner la filière correspondante</Selector>
 }
             {spe && <FieldValidate name="prix" r={false}  max="1000000000000" image={<CashCoin color="#4a00b4" size="20px" />} auto="Entrez le montant de la spécialité" control={control} >Prix de la spécialité</FieldValidate>
               }
@@ -479,7 +467,7 @@ return (
 
 
 
-export function Tab({ value, spe = true, dispacth,state,dispacth2,filieres}) {
+export function Tab({ value, spe = true,pre=true, dispacth,state,dispacth2,filieres}) {
 
     const [visbility3, v3] = useModal(false)
     const [visbility, v] = useModal(false)
@@ -503,23 +491,44 @@ export function Tab({ value, spe = true, dispacth,state,dispacth2,filieres}) {
 
     }
 
+    let fil_value = React.useContext(SchoolContext).data.filieres
+    let spe2 = React.useContext(SchoolContext).data.spe
+
+    const newArray = spe2.map(s => {
+
+        const fil = s.name
+
+        const res = fil_value.filter(i => i.id == s.filiaire_id)
+
+        return { name: fil,id: s.id,k: s.k, prix: s.price, fil: res.map(e => e.name)[0] }
+
+    })
+
+
     return (
         <>
+  
             <table>
                 <thead>
                     <tr>
-                    <th>Id</th>
+                        {pre && <th>Id</th>}
                         <th>Nom de la {!spe ? "filière" : "spécialité"}</th>
                         {spe && <th>Filière</th>}
                         {spe && <th>Prix</th>}
-                        <th>Actions</th>
+                    {pre && <th>Actions</th>}    
                     </tr>
                 </thead>
                 <tbody>
-                    {value.map((e, f) => {
+
+                    {spe ? newArray.map((e, f) => <Tr key={f} spe={spe} k={f} value={e} pre={pre} value2={value} filieres={filieres} onDelete={handleClick} onEdit={handleClick2} />)
+                    
+                        : value.map((e, f) => <Tr key={f} spe={spe} k={f} value={e} value2={value} pre={pre}  filieres={filieres} onDelete={handleClick} onEdit={handleClick2} />)
+                    }
+
+                    {/* {value.map((e, f) => {
                        
                        return  <Tr key={f} spe={spe} k={f} value={e} filieres={filieres} onDelete={handleClick} onEdit={handleClick2} />}
-                    )} 
+                    )}  */}
                 </tbody>
               
 
@@ -535,23 +544,18 @@ export function Tab({ value, spe = true, dispacth,state,dispacth2,filieres}) {
 
 
 
-export function Tr({ k, value, spe, filieres, onDelete, onEdit }) {
-    let fil_value = null
-    if (spe) {
-            const fil = value.filiaire_id
-        fil_value = filieres.find((item) => item.id == fil)
-        
-                        
-       }
+export function Tr({ k, value, value2, spe,  onDelete, onEdit,pre }) {
 
+   
     
     return (<>
+        
         <tr>
-            <td>{k + 1}</td>
+            {pre && <td>{k + 1}</td>}
             <td>{value.name}</td>
-            {spe && <td>{value.fil || (fil_value && fil_value.name)}</td>}
-            {spe && <td>{value.price || value.prix}</td>}
-            <td className="dfss"> <a className={style.disagree} onClick={() => {
+            {spe && <td>{value.fil || value2[k].fil}</td>}
+            {spe && <td>{value2[k].prix || value.prix }</td>}
+          {pre &&  <td className="dfss"> <a className={style.disagree} onClick={() => {
                 onEdit(k , value.id !== 1 ? value.id : value.k || 1)
 
 
@@ -562,6 +566,7 @@ export function Tr({ k, value, spe, filieres, onDelete, onEdit }) {
                     onDelete(k , value.id !== 1 ? value.id : value.k || 1)
 
                 }}>  <Trash size={20} color="#ffff" className={style.icon} /> Supprimer</a></td>
+            }
 
         </tr></>)
 }

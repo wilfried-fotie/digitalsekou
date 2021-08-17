@@ -20,11 +20,11 @@ export function FieldValidate({ auto, children, name, r=true, control, type = "t
     </div>
 }
 
-export function PasswordValidate({  children, name, r = true, newp = false, control, old=false,  min = 8, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
+export function PasswordValidate({  children, name, r = true, newp = false,req=true, control, old=false,  min = 8, max = 100, image = <NodeMinus size={30} color="#4a00b4" /> }) {
 
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
-        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true, minLength: min, maxLength: max }, defaultValue: "" })
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: req, minLength: min, maxLength: max }, defaultValue: "" })
    
     const [state, setState] = React.useState(false)
     const handleClickShowPassword = () => {
@@ -84,10 +84,10 @@ export function TextAreaValidate({ children,size = 10, name,min=3,max="1000",ima
     </div>
 }
 
-export function FileValidate({ children, name,  multiple = false, def="", r= true, control }) {
+export function FileValidate({ children, name, multiple = false, def = "", r = true, control, edit = true }) {
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
-        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true } })
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: edit } })
 
     return <div className={styles.dg}>
         <div className="dfs">
@@ -109,12 +109,14 @@ export function FileValidate({ children, name,  multiple = false, def="", r= tru
 }
     
     
-export function File({ children, name, onChange, multiple = false }) {
+export function File({ children, name, def = "", r = true, onChange, multiple = false }) {
     return <div className={styles.dg}>
         <div className="dfs">
             <ImageAlt size={20} color="#4a00b4" />
             <label htmlFor={name}>{children}</label>
         </div>
+        {def && <img src={def} height="50px" />}
+
         <div>
             <input type="file" name={name} id={name + "Data"}
                 accept="image/*"
@@ -149,17 +151,19 @@ export function Password({ children, name, value, onChange, image = <LockFill si
 }
 
 
-export function Radio({ children, name, data, onChange, image = <BoxSeam size={20} color="#4a00b4" /> }){
+export function Radio({ children, name, r = true, data,value, onChange, image = <BoxSeam size={20} color="#4a00b4" /> }){
     return (
         <>
             
             <div className={styles.border}>
-            <div>
-                <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
-            <div className={styles.checkbox}>
+            <div >
+                    <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
+                <div style={{ paddingTop: r ? "20px" : null }} className={r ? "dfss" : styles.checkbox}>
+                
 
-                    {data.map(e => <div key={e}> <input type="radio" name={name}  id={e} defaultChecked={e == "Non" || e == "Privé"} onChange={onChange} /><label htmlFor={e}>{e}</label></div>)}
-     
+                    {data.map(e => <div key={e}> <input type="radio" value={e} onChange={onChange} name={name} id={e} defaultChecked={e==value} onChange={onChange} /><label htmlFor={e}>{e}</label></div>)}
+    
+
 
             </div>
             </div>
@@ -188,15 +192,17 @@ export function RadioValidate({ children, name, r = true, control, data, image =
     </>
 }
 
-export function Selector({ options,r=false, mult=false, def = {},children, name, control,  image = <NodeMinus size={30} color="#4a00b4" /> }) {
+export function Selector({ options,r=false, mult=false, def = [],children, name, control,  image = <NodeMinus size={30} color="#4a00b4" /> }) {
+    const newDef = []
+    def.map(e => newDef.push({ value: e.position || e.types || e, label: e.position || e.types || e}))
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
-        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true },defaultValue:def})
-//   console.log(def)
+        formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true }, defaultValue: newDef})
+    
     return <div className={r ? "dfss" : styles.dg}>
 
         <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
-        <div>  <Select options={options} defaultValue={def} isMulti={mult} {...inputProps} ref={ref} name={name}
+        <div>  <Select options={options} defaultValue={newDef} isMulti={mult} {...inputProps} ref={ref} name={name}
             classNamePrefix="select" /></div>
 
     </div>

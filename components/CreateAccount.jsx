@@ -192,7 +192,7 @@ function CreateAccount({ stateChange, setToken, e, data}) {
                 )}
                 <div className={styles.df}>
                     <label htmlFor="tel">  <Telephone color="#4a00b4" size="20px" /> </label>
-                    <input type="text" id="tel"  {...register("tel", { required: (data && data !== undefined && data !== "") ? false : true, minLenght: 5 })}  placeholder="Entrez votre numéro Whatsapp" />
+                    <input type="number" id="tel"  {...register("tel", { required: (data && data !== undefined && data !== "") ? false : true, minLenght: 5 })}  placeholder="Entrez votre numéro Whatsapp" />
 
                 </div>
                 {errors.tel && errors.tel.type === "required" && (

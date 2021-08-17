@@ -1,23 +1,48 @@
 import Image from 'next/image'
 import styles from '../../styles/Search.module.css'
-import { Bell, GeoAlt } from 'react-bootstrap-icons'
+import { Bell, FileWordFill, GeoAlt, GeoAltFill, LayersFill, PieChartFill } from 'react-bootstrap-icons'
 
 
 import React from 'react'
 import Link from 'next/link'
+import { Markup } from 'interweave'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
-export default function Result() {
+export default function Result({ school, positions,type }) {
+const router = useRouter()
+    const p = positions.filter(i => i.school_id == school.id)
+
+    const handleClick = (e) => {
+        e.preventDefault()
+        axios.put("/addStatSchool/" + school.id).then(r => null).catch(r => null)
+        router.push("/" + school.sigle)
+    }
     return (
-        <div className={styles.res}>
-            <div className={styles.df}>
-                <Image src="/téléchargement.jpeg" height={200} width={200} />
 
-                <div className={styles.app} > <Link href="/ViewSchool"><a> <h2>Institut Universitaire de l'estuaire (INSAM)</h2></a></Link>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore, suscipit! Atque eum optio distinctio velit earum ad ducimus dolores error? Quo fuga corrupti fugit, culpa distinctio ullam commodi veritatis libero!
+        <div className={styles.res}>
+            <div className="dfss">
+
+                <div className="dfss" style={{maxWidth: "20%"}}>
+                    <img style={{maxWidth: "100px",maxHeight: "75px"}} src={"/" + school.sigle + "-" + school.logo} />
+                </div>
+                <div>
+                </div>
+
+                <div className={styles.app} >
+                    <Link href={"/" + school.sigle} ><span className="h2 a" onClick={handleClick} style={{ color: "#4a00b4" }}> {school.name} </span></Link> <br />
+           
+<p>
+                    { <Markup content={school.description.substr(0, 200) + " ..."} />}
                     </p>
-                    <a className="btnPri">Abonner-vous <Bell size={15} color="#FFF"/> </a>
-                    <div className={styles.res}> <GeoAlt /> <a >Bafoussam, Douala, N'Djamena, Gabon, Yaoundé</a></div>
+                 
+                    {/*    <div >
+                        <PieChartFill size={20} color="#4a00b4" />  Status: {school.status}
+
+                    </div> */}
+                    
+
+                    <div className="dfs"> <GeoAltFill color="#4a00b4" size={20} /> <span>{p.map(e => e.position + ", ")}</span></div>
                 </div></div>
         </div>
     )

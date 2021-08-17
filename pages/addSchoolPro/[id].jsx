@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect } from 'react'
-import { ArrowLeft,  Lock,  Person, PersonCircle,  DisplayFill, FileRuled, Pen, DoorClosed, Briefcase, Cash,  KanbanFill, AlignMiddle, Link, ChevronRight, HouseFill, BellFill, BarChartFill, Joystick, } from 'react-bootstrap-icons'
+import { ArrowLeft,  Lock,  Person, PersonCircle,  DisplayFill, FileRuled, Pen, DoorClosed, Briefcase, Cash,  KanbanFill, AlignMiddle, Link, ChevronRight, HouseFill, BellFill, BarChartFill, Joystick, TrophyFill, } from 'react-bootstrap-icons'
 import style from '../../styles/sudo.module.css'
 import "../../global"
 import axios from "axios"
@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form'
 import { FieldValidate, PasswordValidate } from '../../components/FormTools'
 import styles from '../../styles/startpub.module.css'
 import Loader from "react-loader-spinner";
-import { fetchPositions, fetchTypes, fetchFilieres, fetchSchoolData, fetchSpecialities } from "../../Model/getter"
+import { fetchPositions, fetchTypes, fetchFilieres, fetchSchoolData, fetchSpecialities, fetSchoolAbo, fetSchoolMessages } from "../../Model/getter"
 import { Account } from '../Template/Header'
 import { SiteWeb } from '../../components/SchoolAdmin/web'
 import Welcome from '../../components/SchoolAdmin/Welcome'
@@ -21,6 +21,7 @@ import AddSchool from '../AddSchool'
 import { schoolReducer } from '../../Reducer/schoolPro'
 import Notif from '../../components/SchoolAdmin/notif'
 import Stats from '../../components/SchoolAdmin/Stats'
+import Notification from '../../components/SchoolAdmin/Notification'
 
 
 const useIsomorphicLayoutEffect =
@@ -127,34 +128,98 @@ export const SchoolContext = React.createContext({})
 
 
 
-export default function Controller({ schoolData, fils, specialities, types,positions }) {
+export default function Controller({ schoolData, fils, specialities, types,positions,abo ,mes}) {
   
     const [schoolId, setSchoolId] = React.useState()
     const [schoolToken, setSchoolToken] = React.useState()
     const router = useRouter()
     const [err, setErr] = React.useState()
+    const users = abo.abo
     const schoolReducer = React.useCallback((state, action) => {
         switch (action.type) {
-            case "delete":
+           
+            case "ADD":
+                const newSatate = [...state[action.name]]
+                 
+                newSatate.push({ ...action.data })
+                let finish = { ...state, [action.name]: newSatate }
 
-                break;
-            case "update":
-                let newState = { ...state.schoolData.school, name: "New Value" }
-                state.schoolData.school = newState
+                return finish
+            case "ADDSPE":
+                const newSatate2 = [...state[action.name]]
+
+                newSatate2.push({ ...action.data })
+                finish = { ...state, [action.name]: newSatate2 }
                
-                return { ...state}
-                
 
+                return finish
+            case "DELETE":
+                 const delState = [...state[action.name]]
+                let num = action.id
+                delState.splice(num, 1)
+                if (delState.payload) {
+                    num = delState.payload
+                }
+                finish = { ...state, [action.name]: delState }
+                return finish
+           
+            case "UPDATESCHOOL":
+                const upSchoolState = state[action.name]
+                upSchoolState.school = action.value
+
+                finish = { ...state, [action.name]: upSchoolState }
+                return finish
+            case "UPDATENewArray":
+                 const upState2 = [...state[action.name]]
+
+                upState2[action.id].name = action.value
+                upState2[action.id].fil = action.fil
+                upState2[action.id].prix = action.prix
+
+
+                finish = { ...state, [action.name]: upState2 }
+
+                return finish
+           
+            case "UPDATE":
+                 const upState = [...state[action.name]]
+
+                upState[action.id].name = action.value
+                if (upState[action.id].fil) {
+                    upState[action.id].fil = action.fil
+                    upState[action.id].prix = action.prix
+                }
+
+                finish = { ...state, [action.name]: upState }
+
+                return finish
             default:
-                return [...state];
+
+                const defState = [...state[action.name]]
+
+                finish = { ...state, [action.name]: defState }
+
+                return finish
         }
 
     }, [])
    
-    
-    const [data, dispacth] = React.useReducer(schoolReducer, { schoolData, positions, types, fils, specialities})
+    const spe = [...specialities.specialities]
+    const filieres = [...fils.filieres]
+
+  
+    const newArray = spe.map(s => {
+
+        const fil = s.name
+
+        const res = filieres.filter(i => i.id == s.filiaire_id)
+
+        return { name: fil, id: s.id, k: s.k, prix: s.price, fil: res.map(e => e.name)[0] }
+
+    })
+
+    const [data, dispacth] = React.useReducer(schoolReducer, { schoolData, positions, types, filieres, spe, newArray, users,mes})
    
-console.log(dispacth)
 
 
 
@@ -220,9 +285,9 @@ export function Dasboard({ filieres, specialities}) {
     const [visbility, v] = useModal(false)
 
     const school = React.useContext(SchoolContext)
-    const dataSchool = school.data.schoolData.school
+    const dataSchool = school.data.schoolData && school.data.schoolData.school
     const [schoolToken, setSchoolToken] = React.useState()
-    const user = sessionStorage.getItem("school")
+    const user = React.useContext(SchoolContext).data.schoolData.school.sigle
 
     return (
         <>
@@ -231,7 +296,6 @@ export function Dasboard({ filieres, specialities}) {
 
 
                 <div className={styles.flex}>
-
                     <aside>
                         <div className={style.bar}>
                             <span className={level == 0 ? style.active : style.span} onClick={(e) => {
@@ -269,11 +333,12 @@ export function Dasboard({ filieres, specialities}) {
 
                         <div className={style.right}>
 
+                          
                             {level == 1 && <Welcome />}
-                            {level == 2 && <Home filieres={filieres} specialities={specialities} />}
+                            {level == 2 &&   <Home filieres={filieres} specialities={specialities} />}
                             {level == 3 && <SiteWeb filieres={filieres} specialities={specialities}/>}
                             {level == 4 && <Abonner />}
-                            {level == 5 && <Notif/>}
+                            {level == 5 && <Notification/>}
                             {level == 6 && <Stats />}
                         </div>
 
@@ -288,7 +353,8 @@ export function Dasboard({ filieres, specialities}) {
 
 export function ForPro() {
     const [visbility, v] = useModal(false)
-   
+    const school = React.useContext(SchoolContext).data.schoolData.school
+
     const handleChange = () => {
         v(false)
     }
@@ -297,7 +363,7 @@ export function ForPro() {
 
         <>
             <div>
-                <a className="btnPri" onClick={handleChange}>Passer Pro</a>
+                {school.demande ? <a className="btnPri" onClick={handleChange}>  Demande en cours... </a> : school.pro ? <a className={styles.wa}> <TrophyFill color="green" size={20} /> Bravo!! Vous êtes pro  </a> : <a className="btnPri" onClick={handleChange}> Passer Pro </a> }
             </div>
 
             {visbility && <FineModal position={{ top: 30, left: "35%", width: "30%" }} onModalChange={v} component={<ProMode />} />}
@@ -306,19 +372,27 @@ export function ForPro() {
 }
 
 export function ProMode() {
+
+    const school = React.useContext(SchoolContext).data.schoolData.school
+    const dispacth = React.useContext(SchoolContext).dispacth
+    const handleSubmit = () => {
+      
+        axios.put(`/demande/${school.id}`, { demande: true }).then(r => null).catch(e => null)
+        dispacth({ type: "UPDATESCHOOL", name: "schoolData", id: school.id, value: {...school,demande: !school.demande} })
+    }
     return (
         <>
             <div >
                 <a>Passer Pro et Vous aurez les avantages liés aux pros</a>
                 <p>
-                    Pour passer pro il faudrait Faire un depot à un numéro et attendre et pouvoir passer pro.
+                    Pour passer pro il faudrait Faire un depot à un numéro et après validation vous passer pro.
 
                 </p>
                 <p>
                     Si Vous avez effectuer le depot alors valider votre demande en cliquant SUR LE BOUTON <br />
 
                 </p>
-                <center><a className="btnPri">Valider La Demande</a></center>
+                <center><a className="btnPri" onClick={handleSubmit}>Valider La Demande</a></center>
             </div>
 
 
@@ -342,6 +416,8 @@ export  async function getServerSideProps ({ params, query}) {
     const types = await fetchTypes(id);
     const positions = await fetchPositions(id);
     const schoolData = await fetchSchoolData(id, token);
+    const abo = await fetSchoolAbo(id)
+    const mes = await fetSchoolMessages(id)
 
 
 
@@ -351,7 +427,9 @@ export  async function getServerSideProps ({ params, query}) {
             fils,
             specialities,
             types,
-            positions
+            positions,
+            abo,
+            mes
             
         },
     };

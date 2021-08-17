@@ -2,128 +2,30 @@ import React from 'react'
 import { SchoolContext} from "../../pages/addSchoolPro/[id]"
 import Preview from '../School/Preview'
 import styles from '../../styles/startpub.module.css'
-import { Bookmark, BoundingBox, Building, Dice5Fill, DisplayFill, GeoAltFill, ImageFill, LockFill, TelephoneFill } from 'react-bootstrap-icons'
+import { Bookmark, BoundingBox, BrightnessAltLowFill, BrightnessHighFill, BrightnessLowFill, Building, CheckCircle, Dice5Fill, DisplayFill, GeoAltFill, ImageFill, LockFill, TelephoneFill } from 'react-bootstrap-icons'
 import { useForm } from 'react-hook-form'
-import { FieldValidate, FileValidate, PasswordValidate, Radio, RadioValidate, Selector, TextAreaValidate } from '../FormTools'
+import { FieldValidate, FileValidate, PasswordValidate, Radio, RadioValidate, Selector, TextAreaValidate,File, TextArea } from '../FormTools'
 import ArticleEditor from '../../pages/editor'
+import WebsitePreview from '../School/WebsitePreview'
+import axios from 'axios'
+import draftToHtml from 'draftjs-to-html';
+import useModal from '../CustomHooks/useModal'
+import Loader from 'react-loader-spinner'
+import CustomModal from '../customModal'
+import FineModal from '../fineModal'
 
 
-export function SiteWeb({ filieres, specialities }) {
+export function SiteWeb() {
 
 
 
 
-    const app = {
-        logo: "",
-        logoName: "",
-        logoData: "",
-        sigle: "",
-        tel: "",
-        name: "",
-        description: "",
-        password: "",
-        status: "Privé",
-        type: [],
-        multiple: "Non",
-        outro: "...",
-        profil: "",
-        profilName: "",
-        profilData: "",
-        position: [],
-
-    }
-
-
-    const school = React.useContext(SchoolContext)
-    const schoolDispach = school.dispacth
-    const dataSchool = school.data.schoolData.school
-    const [data, setData] = React.useState(dataSchool)
     const [state, setState] = React.useState(1)
-
-    const handleChange = (e) => {
-        const name = e.target.name
-        const value = e.target.value
-
-        name == "sigle" ? value.toUpperCase() : value
-        setData(s => {
-            return {
-                ...s,
-                [name]: value
-            }
-        }
-        )
-    }
-    const handleCheckChange = (e) => {
-        const name = e.target.name
-        const value = e.target.id
-        setData(s => {
-            return {
-                ...s,
-                [name]: value
-            }
-        }
-        )
-    }
-
-    const handleImageChange = (e) => {
-        const name = e.target.name
-        const id = e.target.id
-
-        if (e.target.files && e.target.files[0]) {
-
-
-            let reader = new FileReader();
-            reader.readAsDataURL(e.target.files[0]);
-            reader.onload = (ev) => {
-                setData(s => {
-                    return {
-                        ...s,
-                        [name]: ev.target.result,
-                        [id]: e.target.files[0],
-                        [name + "Name"]: e.target.files[0].name
-
-
-                    }
-                });
-            };
-
-        }
-
-
-    }
-    const handleSelectChange = (e) => {
-
-        setData(s => {
-            return {
-                ...s,
-                position: [...e]
-            }
-        }
-        )
-    }
-    const handleSelectStatusChange = (e) => {
-
-        setData(s => {
-            return {
-                ...s,
-                type: s.multiple == "Oui" ? [...e] : [e]
-            }
-        }
-        )
-    }
-
-
-
-
-    const handleClickTest = React.useCallback((e) => {
-        
-        schoolDispach({ type: "update",payload: {name: e.target.value}})
-    },[schoolDispach])
 
     return (
         <>
             <div style={{ marginTop: "30px" }}>
-                {JSON.stringify(filieres,specialities)}
+               
             <div className="df" style={{ borderBottom: "2px solid #4a00b4" }}>
                     <span className={ state == 1 ? styles.active2 : styles.span} onClick={() => { setState(1) }}> <DisplayFill className="mr"  size={20} color={state == 1 ? "#fff" : "#4a00b4"} /> <span className={state == 1 ? styles.acticon : styles.icon}  > Visualiation </span> </span>
 
@@ -132,23 +34,17 @@ export function SiteWeb({ filieres, specialities }) {
                     <span className={state == 2 ? styles.active2 : styles.span} onClick={() => { setState(2) }}> <Dice5Fill className="mr" size={20} color={state == 2 ? "#fff" : "#4a00b4"} /><span className={state == 2 ? styles.acticon : styles.icon} >Modifier </span></span>
 
             </div>
-            <div className={styles.left}>
+                <div  className={styles.left}>
 
                     
-                    <center>{state == 1 && <Preview data={data} />} </center>
+                    <center>{state == 1 && <WebsitePreview/>} </center>
 
 
             </div>
-            <div className={styles.right}>
+                
+                <div  className={styles.right}>
 
-                    {/* <center>{state == 2 && <Add
-                    onChange={handleChange}
-                    onImageChange={handleImageChange}
-                    state={data}
-                    onSelectChange={handleSelectChange}
-                    onSelectStatusChange={handleSelectStatusChange}
-                    onStatusCheckedChange={handleCheckChange}
-                />} </center> */}
+                 
                     <center>{state == 2 && <ModSchool
                   
                     
@@ -164,28 +60,135 @@ export function SiteWeb({ filieres, specialities }) {
     )
 }
 
+const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
+
+const allowOnlyPicture = (filename) => {
+
+    let ext = (filename).split(".", -1)[1]
+    if (ALLOWED_EXTENSIONS.includes(ext)) {
+        return true
+    }
+    return false
+
+}
+
+
 
 export function ModSchool() {
     const schoolData = React.useContext(SchoolContext)
     
 
     const data = schoolData.data.schoolData.school
+    const position = schoolData.data.positions.positions
+    const types = schoolData.data.types.types
+    const dispacth = schoolData.dispacth
+  
 
-    const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onTouched", defaultValues: {data} })
+    const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onChange", defaultValues: { data} })
     const [err, setErr] = React.useState("")
     const [state, setState] = React.useState("")
+    const [succes, setSucces] = useModal(false)
+    const [stateOutro, setStateOutro] = React.useState("")
+    const [data2, setData2] = React.useState({
+        logo: "",
+        logoName: "",
+        logoData: "",
+        profil: "",
+        profilName: "",
+        profilData: "",})
+    const [checked, setChecked] = React.useState({ multiple: data.multiple, status: data.status, description: data.pro ? null : data.description })
     const [fine, setFine] = React.useState("")
     const [loader, setLoader] = React.useState(false)
     const options = [{ value: "Bafoussam", label: "Bafoussam" }, { value: "Yaounde", label: "Yaoundé" }, { value: "Douala", label: "Douala" }, { value: "Bertoua", label: "Bertoua" }, { value: "Garoua", label: "Garoua" }, { value: "Limbe", label: "Limbe" }]
     const options2 = [{ value: "Supérieur", label: "Supérieur (Universités, Institut)" }, { value: "Secondaire", label: "Secondaire (Collèges, Lycées)" }, { value: "Primaire", label: "Primaire" }, { value: "maternelle", label: "maternelle" }, , { value: "crêche", label: "crêche" }]
 
-    const onSubmit = (d)=>{
-    
+    const onSubmit = (d) => {
+        setLoader(true)
+        const dataToUpload = {
+            ...d, description: data.pro ? draftToHtml(state.body) : checked.description || data.description , logo: data2.logoName || data.logo, profil: data2.profilName || data.profil , multiple: checked.multiple || data.multiple, status: checked.status || data.status
+            , data2, outro: draftToHtml(stateOutro.body) || data.outro,
+
+        }
+        
+        const formData2 = new FormData();
+        const formData1 = new FormData();
+
+        if (allowOnlyPicture(dataToUpload.data2.logoName) ) {
+            formData1.append("file", dataToUpload.data2.logoData, data.sigle + "-" + data2.logoName);
+
+        }
+
+        if (allowOnlyPicture(dataToUpload.data2.profilName)) {
+            formData2.append("file", dataToUpload.data2.profilData, data.sigle + "-" + data2.profilName);
+        }
+        axios.all([
+            axios.put("/schools/" + sessionStorage.getItem('schoolId'), dataToUpload),
+            data2.logoData && axios.post("/upload", formData1),
+            data2.profilData && axios.post("/upload", formData2),
+ 
+        ])
+            .then(r => {
+                dispacth({ type: "UPDATESCHOOL", name: "schoolData", id: data.id, value: dataToUpload })
+            setSucces(true)
+            
+            })
+            .catch(r => null)
+            .finally(setLoader(false))
+         
+
+
 }
 
     
+    const handleImageChange = (e) => {
+        const name = e.target.name
+        const id = e.target.id
+
+        if (e.target.files && e.target.files[0]) {
+
+
+            let reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = (ev) => {
+                setData2(s => {
+                    return {
+                        ...s,
+                        [name]: ev.target.result,
+                        [id]: e.target.files[0],
+                        [name + "Name"]: e.target.files[0].name
+
+
+                    }
+                });
+            };
+
+        }
+
+    }
+    
+
+   
+    const handleChange = (e => {
+        let name = e.target.name
+        setChecked(s=> ({...s, [name]: e.target.value }))
+        
+
+    
+    }
+        )
+    
+ 
+    
    const handleEditorContent = (content) => {
        setState(s => ({
+            ...s,
+            body: content,
+            articleUpdated: true
+        }));
+   }
+    
+    const handleEditorContentOutro = (content) => {
+        setStateOutro(s => ({
             ...s,
             body: content,
             articleUpdated: true
@@ -207,7 +210,6 @@ export function ModSchool() {
                 {fine && isSubmitted && !isSubmitting && isValid && <div className="fine">
                     {fine}
                 </div>}
-
       
             <FieldValidate name="name" r={false} def={data.name} image={<Building color="#4a00b4" size="20px" />} auto="Entrez le nom de la spécilaité" control={control} >Nom Complet De L'établissement</FieldValidate>
         {errors.name && errors.name.type === "required" && (
@@ -228,7 +230,7 @@ export function ModSchool() {
                 <span className="error"> ce champ doit faire au moins trois caracteres</span>
             )}
             
-                <FieldValidate name="tel" r={false} control={control} def={data.tel} image={<TelephoneFill size={20} color="#4a00b4" />} tel={true} >Ajouter Le Numéro de Téléphone</FieldValidate>
+                <FieldValidate name="tel" r={false} control={control} type="number" def={data.tel} image={<TelephoneFill size={20} color="#4a00b4" />} tel={true} >Ajouter Le Numéro de Téléphone</FieldValidate>
             {errors.tel && errors.tel.type === "required" && (
                 <span className="error">ce champ est obligatoire</span>
             )}
@@ -237,33 +239,12 @@ export function ModSchool() {
             )}
 
             
-                <PasswordValidate name="oldPassword" r={false} old={true} control={control} image={<LockFill size={20} color="#4a00b4" />}>Entrez l'ancien mot de passse</PasswordValidate>
-                {errors.oldPassword && errors.oldPassword.type === "required" && (
-                    <span className="error">ce champ est obligatoire</span>
-                )}
-                {errors.oldPassword && errors.oldPassword.type === "minLength" && (
-                    <span className="error"> ce champ doit faire au moins huit caracteres</span>
-                )}
+                        
+                <File name="logo" def={data2.logo || "/" + data.sigle + "-" + data.logo} onChange={handleImageChange}>Importer Le Logo</File>
+               
 
 
-            <PasswordValidate name="password" r={false} newp={true}  control={control} image={<LockFill size={20} color="#4a00b4" />}>Entrez le nouveau mot de passse</PasswordValidate>
-            {errors.password && errors.password.type === "required" && (
-                <span className="error">ce champ est obligatoire</span>
-            )}
-            {errors.password && errors.password.type === "minLength" && (
-                <span className="error"> ce champ doit faire au moins huit caracteres</span>
-            )}
-
-
-            <FileValidate name="logo" r={false} def={"/" + data.sigle + "-" + data.logo} control={control}  >Importer Le Logo</FileValidate>
-            {errors.logo && errors.logo.type === "required" && (
-                <span className="error">ce champ est obligatoire</span>
-            )}
-            {errors.logo && errors.logo.type === "minLength" && (
-                <span className="error"> ce champ doit faire au moins trois caracteres</span>
-            )}
-
-            <Selector mult={true} name="position"  r={false} control={control} image={<GeoAltFill color="#4a00b4" size="20px" />} options={options}>Selectionner les positions de votre établissement</Selector>
+            <Selector mult={true} name="positions" def={position}  r={false} control={control} image={<GeoAltFill color="#4a00b4" size="20px" />} options={options}>Selectionner les positions de votre établissement</Selector>
 
             {errors.position && errors.position.type === "required" && (
                 <span className="error">Ce champ est obligatoire</span>
@@ -272,20 +253,20 @@ export function ModSchool() {
                 <span className="error"> il doit faire au moins trois caracteres</span>
             )}
 
-            <RadioValidate name="status" control={control} def={data.status} data={["Privé", "Public"]} >Status de l' établissement public ou privé? </RadioValidate>
+                <Radio onChange={handleChange} value={data.status} name="status"  data={["Privé", "Public"]} >Status de l' établissement public ou privé? </Radio>
             {errors.status && errors.status.type === "required" && (
                 <span className="error">Ce champ est obligatoire</span>
             )}
           
 
-            <RadioValidate name="multiple" control={control} def={data.multiple} image={<BoundingBox size={20} color="#4a00b4" />} data={["Non", "Oui"]}>Votre nom d' établissement est-il
-                utiliser pour plusieurs types d'etablissements ( exp: Lycées,Universités etc...) à la fois ? </RadioValidate>
+                <Radio onChange={handleChange} name="multiple" data={["Oui ", "Non"]} value={data.multiple}  image={<BoundingBox size={20} color="#4a00b4" />} data={["Non", "Oui"]}>Votre nom d' établissement est-il
+                utiliser pour plusieurs types d'etablissements ( exp: Lycées,Universités etc...) à la fois ? </Radio>
             {errors.multiple && errors.multiple.type === "required" && (
                 <span className="error">Ce champ est obligatoire</span>
             )}
           
 
-            <Selector mult={data.multiple === "Oui" ? true : false} name="type" r={false}  control={control} image={<GeoAltFill color="#4a00b4" size="20px" />} options={options2}>{data.multiple === "Non" ? "De quel niveau est votre établissement" : "De quels niveaux sont vos établissements"}</Selector>
+            <Selector mult={checked.multiple === "Oui" ? true : false} name="type" r={false} def={types}  control={control} image={<GeoAltFill color="#4a00b4" size="20px" />} options={options2}>{data.multiple === "Non" ? "De quel niveau est votre établissement" : "De quels niveaux sont vos établissements"}</Selector>
 
             {errors.type && errors.type.type === "required" && (
                 <span className="error">Ce champ est obligatoire</span>
@@ -294,24 +275,45 @@ export function ModSchool() {
                 <span className="error"> il doit faire au moins trois caracteres</span>
             )}
 
-                <FileValidate name="profil" r={false} def={"/" + data.sigle + "-" +data.profil} control={control}  >Importer Le profil</FileValidate>
-            {errors.profil && errors.profil.type === "required" && (
-                <span className="error">ce champ est obligatoire</span>
-            )}
-            {errors.profil && errors.profil.type === "minLength" && (
-                <span className="error"> ce champ doit faire au moins trois caracteres</span>
-            )}
+                
+                <File name="profil" def={data2.profil || "/" + data.sigle + "-" + data.profil} onChange={handleImageChange}>Importer Le Logo</File>
+
+
+              
 
                
 
                 <div className="editor">
-                    <ArticleEditor
+                    <div className="dfs" style={{ marginBottom: "50px" }}>
+                        <BrightnessHighFill size={ 20} color="#4a00b4"/>  Description De L'établissement
+
+                    </div>
+                    {data.pro && <ArticleEditor
                         handleContent={handleEditorContent}
                         edit={true}
-                        
+                        className="editor"
                         state={data.description}
+                    />}
+                    {!data.pro && 
+                        <TextArea value={checked.description} onChange={handleChange} name="description" def={data.description}>Sigle De L'établissement </TextArea>
+                    }
+                </div>
+                
+                <div style={{marginTop: "20px"}}>
+                    <div className="dfs" style={{ marginBottom: "50px" }}>
+                      <BrightnessLowFill size={20} color="#4a00b4"/>  Ajouter autres choses (Exp: RCCM,numérode compte,pour les insriptions etc..)
+
+                    </div>
+             {data.pro  &&     <ArticleEditor
+                        handleContent={handleEditorContentOutro}
+                        edit={true}
+                        state={data.outro}
+                        className="editor"
                     />
-</div>
+                    }
+
+                    {!data.pro && <p> <span className="error"> Réserver pour les pros</span> </p>}
+                </div>
                 
 
             <center style={{ padding: "5px 20px 10px" }}>
@@ -328,70 +330,7 @@ export function ModSchool() {
             </form>
 
 
-{/*             
-            <span className="error" >
-                {!state.sigle && errors && errors.sigle}
-            </span>
-            <span className="error">
-                {!state.tel && errors && errors.tel}
-            </span>
-
-            <span className="error" >
-                {!state.password && errors && errors.password || state.password.length < 8 && errors.password}
-
-            </span>
-
-            <File name="logo" onChange={handleImage}>Importer Le Logo</File>
-            <span className="error" >
-                {!state.logo && errors && errors.logo}
-            </span>
-
-            <div className={styles.dg}>
-                <span className="dfs"> <GeoAltFill size={20} color="#4a00b4" /> Selectionner les villes dans lesquelles vous êtes situer</span>
-                <Select isMulti options={options} value={state.position} name="position"
-                    classNamePrefix="select" onChange={handleChangeSelect} />
-            </div>
-            <span className="error" >
-                {!!state.position && errors && errors.position}
-            </span>
-
-
-
-            <Radio name="status" data={["Privé", "Public"]} onChange={handleCheckChange}  >Status de l' établissement public ou privé? </Radio>
-
-            <span className="error" >{!state.status && errors && errors.status}</span>
-            <Radio name="multiple" image={<BoundingBox size={20} color="#4a00b4" />} data={["Non", "Oui"]} onChange={handleCheckChange} >Votre nom d' établissement est-il
-                utiliser pour plusieurs types d'etablissements ( exp: Lycées,Universités etc...) à la fois ? </Radio>
-            <span className="error">{!state.multiple && errors && errors.multiple}</span>
-            <div className={styles.dg}>
-                <span className={styles.ds}>{state.multiple === "Non" ? "De quel niveau est votre établissement" : "De quels niveaux sont vos établissements"} </span>
-                <Select isMulti={state.multiple === "Oui" ? true : false} options={optionType} value={state.type} name="type"
-                    onChange={handleSelectStatusChange} />
-            </div>
-            <span className="error" >{!!state.type && errors && errors.type}</span>
-
-            <File name="profil" onChange={handleImage}>Importer Une Image de Profil</File>
-            <span className="error">{!state.profil && errors && errors.profil}</span>
-            <TextArea name="description" onChange={handle} value={state.description}>Description De L'établissement </TextArea>
-            <span className="error" >{!state.description && errors && errors.description}</span>
-
-            <div className={styles.dg}>
-                <button disabled={loader} className="dfss btnPri" >
-                    {loader && <Loader
-                        type="TailSpin"
-                        color="white"
-                        height={20}
-                        width={50}
-                    />}
-
-                    Enregistrer</button>
-            </div> */}
-
-
-
-
-
-            
+            {succes && <FineModal position={{ top: 30, left: "35%" }} component={<div color="green"> <center> <CheckCircle size={40} color="green" /> </center><br />  Les données on étés mis à jour avec succes!!</div>} onModalChange={setSucces} />}
         </div>
         </>)
 }

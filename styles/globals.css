@@ -62,6 +62,11 @@ b {
     color: black;
 }
 
+.digi {
+    text-align: left!important;
+    padding: 20px 10px 20px;
+}
+
 .op {
     z-index: 10000;
 }
@@ -102,6 +107,7 @@ b {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    scroll-behavior: smooth;
     --main-color: #000000aa;
     --primary-color: #4a00b4;
 }
@@ -175,6 +181,11 @@ a {
     font-family: "Montserrat"!important;
 }
 
+ol,
+ul {
+    text-align: left!important;
+}
+
 select,
 option {
     border: 0!important;
@@ -220,6 +231,11 @@ button {
     font-size: x-large;
     font-weight: bold;
     color: black;
+    font-family: "MontserratBold";
+}
+
+.a:hover {
+    cursor: pointer;
 }
 
 .h1 {
@@ -278,8 +294,12 @@ input {
 }
 
 .input__row {
-    background-color: #f5f1ee;
+    background-color: #c6a9ee;
     padding: 0.5em 2em;
+}
+
+.beta-mode {
+    cursor: not-allowed;
 }
 
 .time {
@@ -331,12 +351,6 @@ input {
     bottom: 0;
     opacity: 0.06;
     background: url(http://res.cloudinary.com/keiwo/image/upload/v1498803497/whatsapp-bg_dpw6kf.png);
-}
-
-.editor {
-    max-height: 60vh!important;
-    min-height: 55vh!important;
-    overflow: auto;
 }
 
 .editor-class {

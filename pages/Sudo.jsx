@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowLeft, BarChart, CursorFill, Bell, Building, CartX, Check, ChevronCompactLeft, Clipboard, Disc, Exclude, Eye, Flower1, Gear, Link, Lock, LockFill, Person, PersonCircle, SuitDiamond, Trash, } from 'react-bootstrap-icons'
+import { ArrowLeft, BarChart, CursorFill, Bell, Building, CartX, Check, ChevronCompactLeft, Clipboard, Disc, Exclude, Eye, Flower1, Gear, Link, Lock, LockFill, Person, PersonCircle, SuitDiamond, Trash, Whatsapp, } from 'react-bootstrap-icons'
 import styles from '../components/Style/CreateAccount.module.css'
 import style from '../styles/sudo.module.css'
 import "../global"
@@ -8,9 +8,22 @@ import { useRouter } from "next/router"
 import useChangeBool from '../components/handleBool'
 import FineModal from '../components/fineModal'
 import CustomModal from '../components/customModal'
-import Select from 'react-select'
 
 import { useForm } from 'react-hook-form'
+import { useLayoutEffect } from 'react'
+import { useEffect } from 'react'
+import { FieldValidate, PasswordValidate } from '../components/FormTools'
+import Loader from 'react-loader-spinner'
+import { fetchAllSchoolData } from '../Model/getter'
+import Activity from '../components/Sudo/Activity'
+import Entreprises from '../components/Sudo/entreprises'
+import Schools from '../components/Sudo/Schools'
+import Abonner from '../components/Sudo/Abonner'
+import Notifications from '../components/Sudo/Notifications'
+import Stats from '../components/Sudo/Stats'
+
+const useIsomorphicLayoutEffect =
+    typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 
 export function useModal(initial) {
@@ -26,34 +39,263 @@ export function useModal(initial) {
 
 
 
+export function ControllerBuilder({ submitData, err }) {
+    const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isValid } } = useForm({ mode: "onTouched" })
+
+    const router = useRouter()
+    const [loader, setLoader] = React.useState(false)
+
+    const onSubmit = async (data) => {
+        if (isValid) {
+            setLoader(true)
+            await submitData(data)
+
+            setLoader(false)
+        }
+        if (!isSubmitSuccessful) {
+            setLoader(false)
+
+        }
+
+    }
+    return (
+        <>
+            <main className={style.main}>
+
+                <div className={style.ok}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+
+                        <center>  <a > Connexion Compte Etablissements</a></center>
+
+                        {err && isSubmitted && isValid && <div className="error">
+                            {err}
+                        </div>}
+                        <FieldValidate name="username" image={<Person color="#4a00b4" size="20px" />} auto="Entrez le sigle de votre établissement" control={control} />
+                        {errors.username && errors.username.type === "required" && (
+                            <span className="error">Le sigle est obligatoire</span>
+                        )}
+
+                        {errors.sigle && errors.sigle.type === "minLenght" && (
+                            <span >La valeur trop court</span>
+                        )}
+
+                        <PasswordValidate name="password" image={<Lock color="#4a00b4" size="20px" />} auto="Entrez le sigle de votre établissement" control={control} />
+                        {errors.password && errors.password.type === "required" && (
+                            <span className="error">Le mot de passe est obligatoire</span>
+                        )}
+
+                        {errors.password && errors.password.type === "minLenght" && (
+                            <span >Le mot de passe à au moins 8 caractère</span>
+                        )}
+
+                        <div className="dfss">
+                            <center>  <button disabled={loader} className="dfss btnPri" >
+                                {loader && <Loader
+                                    type="TailSpin"
+                                    color="white"
+                                    height={20}
+                                    width={50}
+                                />}
+
+                                Enregistrer</button></center>
+                        </div>
+
+                        <center style={{ fontSize: ".9em" }}>  <span>mot de passe oublié? <span style={{ color: "#4a00b4" }}>Oui</span></span></center>
+
+                    </form>
+                </div> </main>
+
+        </>
+    )
+
+}
+
+export const SudoContext = React.createContext({})
 
 
-export function Sudo() {
+export default function Controller({ schools }) {
 
-    const [sudoToken, setSudoToken] = React.useState("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYyNTk4MDI5NSwianRpIjoiYWFlY2U0NmYtYjA5ZS00OTU2LWE4YzMtZDdiOTBiNTg4ZDY3IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2MjU5ODAyOTUsImV4cCI6MTYyNTk4MTE5NX0.hz0L4rWi93ochvOpcCOF4OTZyRh8ocdIGRqyt-Yszkc")
-    React.useEffect(() => {
-        sessionStorage.setItem("sudoToken",sudoToken)
-        let tok = sessionStorage.getItem("sudoToken")
-        setSudoToken(tok)
-    }, [sudoToken])
+    const [schoolId, setSchoolId] = React.useState()
+    const [schoolToken, setSchoolToken] = React.useState()
+    const [err, setErr] = React.useState()
+    const router = useRouter()
 
 
 
+
+    const schoolReducer = React.useCallback((state, action) => {
+        switch (action.type) {
+
+            case "ADD":
+                const newSatate = [...state[action.name]]
+
+                newSatate.push({ ...action.data })
+                let finish = { ...state, [action.name]: newSatate }
+
+                return finish
+            case "ADDSPE":
+                const newSatate2 = [...state[action.name]]
+
+                newSatate2.push({ ...action.data })
+                finish = { ...state, [action.name]: newSatate2 }
+
+
+                return finish
+            case "DELETE":
+                const delState = [...state[action.name]]
+                let num = action.id
+                delState.splice(num, 1)
+                if (delState.payload) {
+                    num = delState.payload
+                }
+                finish = { ...state, [action.name]: delState }
+                return finish
+
+            case "UPDATESCHOOL":
+                const upSchoolState = state[action.name]
+                upSchoolState.school = action.value
+
+                finish = { ...state, [action.name]: upSchoolState }
+                return finish
+            case "UPDATENewArray":
+                const upState2 = [...state[action.name]]
+
+                upState2[action.id].name = action.value
+                upState2[action.id].fil = action.fil
+                upState2[action.id].prix = action.prix
+
+
+                finish = { ...state, [action.name]: upState2 }
+
+                return finish
+
+            case "UPDATE":
+                const upState = [...state[action.name]]
+
+                upState[action.id] = action.value
+                if (upState[action.id].fil) {
+                    upState[action.id].fil = action.fil
+                    upState[action.id].prix = action.prix
+                }
+
+                finish = { ...state, [action.name]: upState }
+
+                return finish
+            default:
+
+                const defState = [...state[action.name]]
+
+                finish = { ...state, [action.name]: defState }
+
+                return finish
+        }
+
+    }, [])
+
+
+
+    useIsomorphicLayoutEffect(() => {
+
+
+        setSchoolToken(sessionStorage.getItem("sudoToken"))
+        setSchoolId(sessionStorage.getItem("sudo"))
+    }, [])
+
+    const handleSubmit = async(data) => {
+        await axios.post("/sudo", data).then( (res) => {
+
+            sessionStorage.setItem("sudoToken", res.data.token)
+            sessionStorage.setItem("sudo", res.data.id)
+            setSchoolToken(res.data.token)
+
+            
+            router.push(`/Sudo?token=${res.data.token}`)
+
+
+        }).catch(e => setErr("Cet utilisateur n'existe pas"))
+    }
+
+    const [data, dispacth] = React.useReducer(schoolReducer, { ...schools})
+
+    const value = React.useMemo(() => ({ data, dispacth }), [data, dispacth])
 
     return (
         <>
-            {sudoToken && sudoToken != undefined && sudoToken !== ""
+            {(schoolToken && schoolToken !== "" && schoolToken !== undefined )
                 ?
-                <Dasboard />
+               
+                <SudoContext.Provider value={value}>
+                        <Dasboard />
+                </SudoContext.Provider>
+                
                 :
-
-                <main className={style.main}>   <div className={style.ok}>  <Login onSetSudoToken={setSudoToken} token={sudoToken} /> </div> </main>
+                <ControllerBuilder submitData={handleSubmit} err={err} />
+                
             }
         </>
     )
 }
 
-export default Sudo
+
+export async function getServerSideProps({ params, query }) {
+
+    const token = query.token
+    
+    const schools = await fetchAllSchoolData()
+
+
+    return {
+        props: {
+            schools,
+         
+
+        },
+    };
+
+
+
+}
+
+
+
+
+
+
+// export async function getServerSideProps({ params }) {
+
+//     const token = query.token
+//     const id = parseInt(params.id)
+//     const fils = await fetchFilieres(id);
+//     const specialities = await fetchSpecialities(id);
+//     const types = await fetchTypes(id);
+//     const positions = await fetchPositions(id);
+//     const schoolData = await fetchSchoolData(id, token);
+//     const abo = await fetSchoolAbo(id)
+//     const mes = await fetSchoolMessages(id)
+
+
+
+//     return {
+//         props: {
+//             schoolData,
+//             fils,
+//             specialities,
+//             types,
+//             positions,
+//             abo,
+//             mes
+
+//         },
+//     };
+
+
+
+// }
+
+
+
+
+
 
 
 export function Connect() {
@@ -90,6 +332,7 @@ export function Dasboard() {
 
     const router = useRouter()
     const [level, setLevel] = React.useState(1)
+
     const [choise, handleChoiseState] = useChangeBool(true)
     const [visbility, v] = useModal(false)
 
@@ -118,7 +361,7 @@ export function Dasboard() {
                             <span className={level == 2 ? style.active : style.span} onClick={() => { setLevel(2) }}> <Building size={20} color={level == 2 ? "#fff" : "#4a00b4"} className={level == 2 ? style.acticon : style.icon} /> Entreprises </span>
                             <span className={level == 3 ? style.active : style.span} onClick={() => { setLevel(3) }}> <SuitDiamond size={20} color={level == 3 ? "#fff" : "#4a00b4"} className={level == 3 ? style.acticon : style.icon} /> Etablissements </span>
                             <span className={level == 4 ? style.active : style.span} onClick={() => { setLevel(4) }}> <PersonCircle size={20} color={level == 4 ? "#fff" : "#4a00b4"} className={level == 4 ? style.acticon : style.icon} /> Parents/Élève </span>
-                            <span className={level == 5 ? style.active : style.span} onClick={() => { setLevel(5) }}> <Bell size={20} color={level == 5 ? "#fff" : "#4a00b4"} className={level == 5 ? style.acticon : style.icon} /> Notifications </span>
+                            {/* <span className={level == 5 ? style.active : style.span} onClick={() => { setLevel(5) }}> <Bell size={20} color={level == 5 ? "#fff" : "#4a00b4"} className={level == 5 ? style.acticon : style.icon} /> Notifications </span> */}
                             <span className={level == 6 ? style.active : style.span} onClick={() => { setLevel(6) }}> <BarChart size={20} color={level == 6 ? "#fff" : "#4a00b4"} className={level == 6 ? style.acticon : style.icon} /> Statistiques </span>
 
                         </div>
@@ -132,7 +375,7 @@ export function Dasboard() {
                             <span className={level == 2 ? style.h1 : style.no} > Entreprises </span>
                             <span className={level == 3 ? style.h1 : style.no} >  Etablissements </span>
                             <span className={level == 4 ? style.h1 : style.no} >  Parents/Élève </span>
-                            <span className={level == 5 ? style.h1 : style.no} >Envoyer Des Notifications </span>
+                            {/* <span className={level == 5 ? style.h1 : style.no} >Envoyer Des Notifications </span> */}
                             <span className={level == 6 ? style.h1 : style.no} > Statistiques </span>
 
                             <Connect />
@@ -141,12 +384,12 @@ export function Dasboard() {
 
                         <div className={style.right}>
 
-                            {level == 1 && <One choise={choise} handleChoiseState={handleChoiseState} />}
-                            {level == 2 && <Deux />}
-                            {level == 3 && <Trois />}
-                            {level == 4 && <Quatre />}
-                            {level == 5 && <Cinq />}
-                            {level == 6 && <Six />}
+                            {level == 1 && <Activity choise={choise} handleChoiseState={handleChoiseState} />}
+                            {level == 2 && <Entreprises />}
+                            {level == 3 && <Schools />}
+                            {level == 4 && <Abonner />}
+                            {/* {level == 5 && <Notifications />} */}
+                            {level == 6 && <Stats />}
                         </div>
 
                     </article>
@@ -159,66 +402,115 @@ export function Dasboard() {
 
 
 
-export function Deux() {
-
-    const [visbility3, v3] = useModal(false)
-
-    const [position, setPosition] = React.useState({})
-
-
-    const handleClick = (pos) => {
-        v3(true)
-      
-        setPosition({
-            top: (pos.current.offsetHeight) + "px",
-            left: pos.current.offsetHeight + "px"
-
-        })
-    }
-
-    return (
-        <>
-            <div className={style.end}>
-                <a className="btnPri">Ajouter</a>
-            </div>
-
-
-
-            <table>
-                <thead>
-                    <th>#id</th><th>Liste des Entreprises</th><th>Actions</th>
-
-                </thead>
-                <tbody>
-
-                    {[1, 2, 3, 4, 5, 6, 7].map((e, f) => <Test2 key={f} id={e} onDelete={handleClick} />)}
-                </tbody>
-            </table>
-            {visbility3 && <CustomModal onModalChange={v3} position={position} component={<Verif1 />} />}
-        </>
-    )
-}
-
-
 
 export function Verif() {
+    const router = useRouter()
+    const [visible, v] = useModal(false)
+    const handleDisconnect = () => {
+        sessionStorage.removeItem("sudoToken")
+        sessionStorage.removeItem("sudo")
+        router.push("/")
+    }
+
+    const handleChangePassWord = () => {
+        v(true)
+    }
     return (
         <>
             <div className={style.dg}>
 
 
-                <a className="dfss">
-                    <Link size={20} color="#4a00b4" className={style.icon} /> Se Déconnecter</a>
+                <a onClick={handleDisconnect} className="dfss">
+                    <Link size={20} color="#4a00b4"  className={style.icon} /> Se Déconnecter</a>
 
-                <a className="dfss">
+                <a onClick={handleChangePassWord} className="dfss">
                     <LockFill size={20} color="#4a00b4" className={style.icon} /> Changer de mot de passe</a>
 
 
 
             </div>
+            {visible && <CustomModal onModalChange={v} component={<ChangePasse />} />}
         </>
     )
 }
+
+
+
+export function ChangePasse() {
+
+    const [err, setErr] = React.useState()
+    const [fine, setFine] = React.useState()
+    const [loader, setLoader] = React.useState(false)
+    const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onTouched"})
+
+  
+  
+    const onSubmit =  (data) => {
+        console.log(isValid)
+        if (isValid) {
+            axios.put("/sudo", {...data,username: "admin"}, {
+                headers: {
+                    Authorization: "Bearer " + sessionStorage.getItem("sudoToken")
+                }
+
+            }).then(res=> setFine("Modification éffectuer avec succès")).catch(rres=> setErr("Une erreur est survenu veuillez réessayer")).finally(setLoader(false))
+    }
+}
+
+
+    return (
+        <div>
+
+
+            {isSubmitted && fine && isSubmitSuccessful && <div className="fine">
+                {fine}
+            </div>}
+            {err && isSubmitted && isValid && <div className="error">
+                {err}
+            </div>}
+
+            <form onSubmit={handleSubmit(onSubmit)}>
+                
+                <PasswordValidate name="oldpassword" r={false} control={control} image={<LockFill size={20} color="#4a00b4" />} old={true} >Ancien mot de passe</PasswordValidate>
+                {errors.oldpassword && errors.oldpassword.type === "required" && (
+                    <span className="error">ce champ est obligatoire</span>
+                )}
+                {errors.oldpassword && errors.oldpassword.type === "minLength" && (
+                    <span className="error"> ce champ doit faire au moins trois caracteres</span>
+                )}
+
+                <PasswordValidate name="password" r={false} control={control} image={<LockFill size={20} color="#4a00b4" />} newp={true} >Nouveau mot de passe</PasswordValidate>
+       
+                {errors.password && errors.password.type === "required" && (
+                    <span className="error">Le mot de passe est requis</span>
+                )}
+                {errors.password && errors.password.type === "minLength" && (
+                    <span className="error">Le mot de passe doit faire au moins 8 caracteres</span>
+                )}
+
+
+                <div className={styles.df}>
+                    <button  className="dfss btnPri" >
+                        {loader && <Loader
+                            type="TailSpin"
+                            color="white"
+                            height={20}
+                            width={50}
+                        />}
+
+                        Enregistrer</button>
+                </div>
+                <center style={{ fontSize: ".9em" }}>  <span>mot de passe oublié? <span style={{ color: "#4a00b4" }}>Oui</span></span></center>
+
+            </form>
+
+        </div>
+    )
+}
+
+
+
+
 
 export function Verif1() {
     return (
@@ -235,239 +527,8 @@ export function Verif1() {
 
 
 
-export function Trois() {
-    const [visbility3, v3] = useModal(false)
-
-    const [position, setPosition] = React.useState({})
 
 
-    const handleClick = (pos) => {
-        v3(true)
-        
-        setPosition({
-            top: (pos.current.offsetHeight) + "px",
-            left: pos.current.offsetHeight + "px"
-
-        })
-    }
-
-    return (
-        <>
-            <div className={style.end}>
-                <a className="btnPri">Ajouter</a>
-            </div>
-
-
-
-            <table>
-                <thead>
-                    <th>#id</th><th>Liste des Etablissements</th><th>Actions</th>
-
-                </thead>
-                <tbody>
-
-                    {[1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7].map((e, f) => <Test2 key={f} id={e} onDelete={handleClick} />)}
-                </tbody>
-            </table>
-            {visbility3 && <CustomModal onModalChange={v3} position={position} component={<Verif1 />} />}
-        </>
-    )
-}
-
-
-export function Quatre() {
-    const [visbility3, v3] = useModal(false)
-
-    const [position, setPosition] = React.useState({})
-
-
-    const handleClick = (pos) => {
-        v3(true)
-        
-        setPosition({
-            top: (pos.current.offsetHeight) + "px",
-            left: pos.current.offsetHeight + "px"
-
-        })
-    }
-
-    return (
-        <>
-            <div className={style.end}>
-                <a className="btnPri">Ajouter</a>
-            </div>
-
-
-
-            <table>
-                <thead>
-                    <th>#id</th><th colSpan={2}>Liste des Parents et Élèves</th><th>Actions</th>
-
-                </thead>
-                <tbody>
-
-                    {[1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7].map((e, f) => <Test3 key={f} id={e} onDelete={handleClick} />)}
-                </tbody>
-            </table>
-            {visbility3 && <CustomModal onModalChange={v3} position={position} component={<Verif1 />} />}
-        </>
-    )
-}
-
-
-export function App() {
-    const [editorState, setEditorState]  = React.useState("")
-    return (
-        <>
-           
-            
-            <Editor
-                editorState={editorState}
-                toolbarClassName="toolbarClassName"
-                wrapperClassName="wrapperClassName"
-                editorClassName="editorClassName"
-                onEditorStateChange={(e) => setEditorState(e.target.value)}
-            />;
-
-        </>
-    );
-}
-
-export function Cinq() {
-
-    const options = [{ value: "Bafoussam", label: "Wilfried" }, { value: "Yaounde", label: "Toi" }, { value: "Doula", label: "Moi" }, { value: "Bertoua", label: "Elles" }, { value: "Garoua", label: "Vous" }, { value: "Limbe", label: "Nous" }]
-
-    return (
-        <>
-            <div className={style.dfp}>
-                <Select isMulti options={options} name="position" className="basic-multi-select op"
-                    classNamePrefix="select" />
-                <div >
-                    {/* <App /> */}
-                    <center className={style.dab}> <a className="btnSecondary">Envoyer Le Message<CursorFill size={20} color="#4a00b4" /></a></center>
-                </div>
-            </div>
-        </>
-    )
-}
-export function Six() {
-    return (
-        <>
-
-            <div className={style.dfw}>
-                {[{
-                    label: "Lorem ipsum dolor, sit amet",
-                    val: 124
-                }, {
-                    label: "Lorem ipsum dolor, sit ",
-                    val: 421
-                }, {
-                    label: "Lorem ipsum dolor, sit amet",
-                    val: 1234
-                }, {
-                    label: "Lorem ipsum dolor",
-                    val: 45
-                }, {
-                    label: "Lorem ipsum dolor, sit amet",
-                    val: 30
-                }, {
-                    label: "Lorem ipsum dolor",
-                    val: 110
-                }].map(e => <Card text={e.label} val={e.val} inc={<Exclude size={30} color="#4a00b4" />} />)}
-            </div>
-
-        </>
-    )
-}
-
-
-export function Card({ text, val, inc }) {
-    return (
-        <>
-            <div className={style.ca}>
-                <div>
-                    <center>   {inc}</center>
-                </div>
-                <div className={style.txt}>
-                    {text}
-                </div>
-                <div className={style.val}>
-                    {val}
-                </div>
-            </div>
-        </>
-    )
-}
-
-
-export let One = React.memo(function One({ choise, handleChoiseState }) {
-
-    const [visbility3, v3] = useModal(false)
-
-    const [position, setPosition] = React.useState({})
-
-
-    const handleClick = (pos) => {
-        v3(true)
-        
-        setPosition({
-            top: (pos.current.offsetHeight) + "px",
-            left: pos.current.offsetHeight + "px"
-
-        })
-    }
-
-    return (
-        <>
-            <div className={style.choose}>
-                <span className={choise ? style.act : style.noact} onClick={() => { handleChoiseState(choise) }}> <Clipboard className={style.icon} size={20} color="#4a00b4" /> Publicités </span>
-                <span className={choise ? style.noact : style.act} onClick={() => { handleChoiseState(!choise) }}> <Building className={style.icon} size={20} color="#4a00b4" /> Etablissement Pro</span>
-            </div>
-
-            <div className={!choise ? style.no : null}>
-                <div className={style.end}>
-                    <a className="btnPri">Ajouter</a>
-                </div>
-
-
-
-                <table>
-                    <thead>
-                        <th>#id</th><th>Nom ou Description Entreprises</th><th>Actions</th>
-
-                    </thead>
-                    <tbody>
-
-                        {[1, 2, 3, 4, 5, 6, 7].map((e, f) => <Test key={f} id={e} onDelete={handleClick} />)}
-                    </tbody>
-                </table>
-            </div>
-            {visbility3 && <CustomModal onModalChange={v3} position={position} component={<Verif1 />} />}
-            <div className={choise ? style.no : null}>
-
-                <div className={style.end}>
-                    <a className="btnPri">Ajouter</a>
-                </div>
-
-
-
-                <table>
-                    <thead>
-                        <th>#id</th><th>Nom ou Description Etablissements</th><th>Actions</th>
-
-                    </thead>
-                    <tbody>
-
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9].map((e, f) => <Test key={f} id={e} onDelete={handleClick} />)}
-                    </tbody>
-                </table>
-            </div>
-
-
-        </>
-    )
-}
-)
 
 
 
@@ -523,39 +584,7 @@ export function Login({ handleSetSudoToken }) {
     )
 }
 
-export function Test({ id, onDelete }) {
-    const refIci = React.useRef(null)
-    return (<>
-        <tr ref={refIci}>
-            <td>#{id}</td>
-            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
-            <td className="dfss"> <a className={style.disagree}>
-                <Check size={20} color="#ffff" className={style.icon} /> Accepter</a>
-                <a className={style.agree} onClick={() => {
 
-                    onDelete(refIci)
-
-                }}>  <Trash size={20} color="#ffff" className={style.icon} /> Supprimer</a></td>
-
-        </tr>    </>)
-}
-
-export function Test2({ id, onDelete }) {
-    const refIci = React.useRef(null)
-    return (<>
-        <tr ref={refIci}>
-            <td>#{id}</td>
-            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
-            <td className="dfss"> <a className={style.disagree}>
-                <Eye size={20} color="#ffff" className={style.icon} /> Voir la page</a>
-                <a className={style.agree} onClick={() => {
-
-                    onDelete(refIci)
-
-                }}>  <Trash size={20} color="#ffff" className={style.icon} /> Supprimer</a></td>
-
-        </tr>    </>)
-}
 
 export function Test3({ id, onDelete }) {
     const refIci = React.useRef(null)
@@ -565,25 +594,8 @@ export function Test3({ id, onDelete }) {
             <td>Lorem ipsum </td>
             <td>+237 678 61 56 77 </td>
             <td className="dfss">
-                {/*<a className={style.disagree}>
-                 <Eye size={20} color="#ffff" className={style.icon} /> Voir la page</a> */}
-                <a className={style.agree} onClick={() => {
-
-                    onDelete(refIci)
-
-                }}>  <Trash size={20} color="#ffff" className={style.icon} /> Supprimer</a></td>
-
-        </tr>    </>)
-}
-
-export function Test4({ id, onDelete }) {
-    const refIci = React.useRef(null)
-    return (<>
-        <tr ref={refIci}>
-            <td>#{id}</td>
-            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
-            <td className="dfss"> <a className={style.disagree}>
-                <Eye size={20} color="#ffff" className={style.icon} /> Voir la page</a>
+                <a className={style.disagree3}>
+                 <Whatsapp color="#FFF" size={20}  className={style.icon} /> écrire whatsapp</a>
                 <a className={style.agree} onClick={() => {
 
                     onDelete(refIci)

@@ -74,8 +74,7 @@ function Upload() {
     const [data, setData] = React.useState()
     const onSubmit = (data) => {
         setData(data)
-        console.log(errors)
-        console.log(data)
+     
     }
     return (
         <div>

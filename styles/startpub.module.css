@@ -8,6 +8,53 @@
     font-family: "Montserrat";
 }
 
+.card {
+    padding: 10px 20px 5px;
+    margin: 10px 20px 5px;
+    background-color: #4a00b4;
+    color: white;
+    width: 25vw;
+    border-radius: 20px;
+}
+
+.dgs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.wa {
+    padding: 8px 7px 5px;
+    background-color: green;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.del {
+    padding: 8px 7px 5px;
+    background-color: red;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wraper {
+    padding: 20px 30px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(219, 250, 193);
+    margin: 10px 10%;
+}
+
 .icontainer {
     padding: 5px 10px 5px;
     background-color: #4b00b41f;

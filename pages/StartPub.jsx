@@ -4,6 +4,7 @@ import { Building, ImageAlt, NodeMinus, TelephoneFill, BarChart, Pen, Display, P
 import Preview from '../components/School/Preview'
 import { Connect, Six, App } from "./Sudo"
 import { useRouter } from "next/router"
+import Stats from '../components/Sudo/Stats'
 
 
 
@@ -136,7 +137,7 @@ export function Stat() {
             <center className="dfss"> <div className={styles.h1}> Statistiques </div> <Connect /> </center>
 
 
-            <Six />
+            Quelchosose ococo
 
         </div>)
 }
@@ -144,8 +145,7 @@ export function Offer() {
     return (
         <div>
             <center className="dfss"> <div className={styles.h1}> Ajouter Des Offres </div> <Connect /> </center>
-
-            <App />
+Statistiques Ici
 
 
 
