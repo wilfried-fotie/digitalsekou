@@ -49,7 +49,7 @@ export function useModal(initial) {
 
 
 
-export function ControllerBuilder({ submitData, err }) {
+export function ControllerBuilder({ submitData, err ,e=false}) {
     const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isValid } } = useForm({ mode: "onTouched" })
 
     const router = useRouter()
@@ -80,16 +80,16 @@ export function ControllerBuilder({ submitData, err }) {
                     {err && isSubmitted && isValid && <div className="error">
                         {err}
                     </div>}
-                    <FieldValidate name="username" image={<Person color="#4a00b4" size="20px" />} auto="Entrez le sigle de votre établissement" control={control} />
+                        <FieldValidate name="username" image={<Person color="#4a00b4" size="20px" />} auto={!e ? "Entrez le sigle de votre établissement" : "Entre le nom d'entreprise"} control={control} />
                     {errors.username && errors.username.type === "required" && (
-                        <span className="error">Le sigle est obligatoire</span>
+                            <span className="error">{e ? "Le sigle est obligatoire" : "Le Nom d'entreprise est obligatoire"}</span>
                     )}
 
                     {errors.sigle && errors.sigle.type === "minLenght" && (
                         <span >La valeur trop court</span>
                     )}
 
-                    <PasswordValidate name="password" image={<Lock color="#4a00b4" size="20px" />} auto="Entrez le sigle de votre établissement" control={control} />
+                    <PasswordValidate name="password" image={<Lock color="#4a00b4" size="20px" />}  control={control} />
                     {errors.password && errors.password.type === "required" && (
                         <span className="error">Le mot de passe est obligatoire</span>
                     )}
@@ -165,9 +165,24 @@ export default function Controller({ schoolData, fils, specialities, types,posit
            
             case "UPDATESCHOOL":
                 const upSchoolState = state[action.name]
+                const upSchoolStatePosition = state["positions"]
+                const upSchoolStateType = action.value.types
                 upSchoolState.school = action.value
+               
+                const dolor = { positions: [] }
+                const dolorPosition = { types: [] }
+                action.value.positions.map(e => {
+                    dolor.positions.push({position: e.value })
+                })
+                
+                action.value.multiple !== "Non" ? action.value.type.map(e => {
+                    dolorPosition.types.push({ types: e.value })
+                }) : null
 
-                finish = { ...state, [action.name]: upSchoolState }
+
+
+                finish = { ...state, [action.name]: upSchoolState, positions: dolor, types: action.value.multiple == "Non" ? { types: [action.value.type.value] } : dolorPosition }
+
                 return finish
             case "UPDATENewArray":
                  const upState2 = [...state[action.name]]
@@ -177,6 +192,8 @@ export default function Controller({ schoolData, fils, specialities, types,posit
                 upState2[action.id].prix = action.prix
 
 
+                
+
                 finish = { ...state, [action.name]: upState2 }
 
                 return finish
@@ -184,10 +201,10 @@ export default function Controller({ schoolData, fils, specialities, types,posit
             case "UPDATE":
                  const upState = [...state[action.name]]
 
-                upState[action.id].name = action.value
-                if (upState[action.id].fil) {
-                    upState[action.id].fil = action.fil
-                    upState[action.id].prix = action.prix
+                if (upState[action.id].name = "spe") {
+                    upState[action.id].name = action.value
+                    upState[action.id].description = action.description
+                    upState[action.id].price = action.price
                 }
 
                 finish = { ...state, [action.name]: upState }
@@ -205,27 +222,18 @@ export default function Controller({ schoolData, fils, specialities, types,posit
     }, [])
    
     const spe = [...specialities.specialities]
-    const filieres = [...fils.filieres]
+   
 
   
-    const newArray = spe.map(s => {
+  
 
-        const fil = s.name
-
-        const res = filieres.filter(i => i.id == s.filiaire_id)
-
-        return { name: fil, id: s.id, k: s.k, prix: s.price, fil: res.map(e => e.name)[0] }
-
-    })
-
-    const [data, dispacth] = React.useReducer(schoolReducer, { schoolData, positions, types, filieres, spe, newArray, users,mes})
+    const [data, dispacth] = React.useReducer(schoolReducer, { schoolData, positions, types, spe, users,mes})
    
 
 
 
     const value = React.useMemo(() => ({ data, dispacth }),[data,dispacth])
 
-    // console.log(schoolValue.dispacth({ type: "update" }))
 
 
 
@@ -262,7 +270,7 @@ export default function Controller({ schoolData, fils, specialities, types,posit
             {(schoolToken && schoolToken !== "" && schoolToken !== undefined && dataError !== true && !dataError )
                 ?
                 <SchoolContext.Provider value={value}>
-                    <Dasboard filieres={fils} specialities={specialities}/>
+                    <Dasboard specialities={specialities}/>
                 </SchoolContext.Provider>
                 :
                 <ControllerBuilder submitData={handleSubmit} err={err} />
@@ -277,7 +285,7 @@ export default function Controller({ schoolData, fils, specialities, types,posit
 
 
 
-export function Dasboard({ filieres, specialities}) {
+export function Dasboard({  specialities}) {
     
     const router = useRouter()
     const [level, setLevel] = React.useState(1)
@@ -335,8 +343,8 @@ export function Dasboard({ filieres, specialities}) {
 
                           
                             {level == 1 && <Welcome />}
-                            {level == 2 &&   <Home filieres={filieres} specialities={specialities} />}
-                            {level == 3 && <SiteWeb filieres={filieres} specialities={specialities}/>}
+                            {level == 2 &&   <Home specialities={specialities} />}
+                            {level == 3 && <SiteWeb  specialities={specialities}/>}
                             {level == 4 && <Abonner />}
                             {level == 5 && <Notification/>}
                             {level == 6 && <Stats />}

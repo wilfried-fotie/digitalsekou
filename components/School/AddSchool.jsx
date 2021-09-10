@@ -119,7 +119,7 @@ function AddSchool() {
                         ...s,
                         [name]: ev.target.result,
                         [id]: e.target.files[0],
-                        [name + "Name"]: e.target.files[0].name
+                        [name + "Name"]: e.target.files[0].name.replaceAll(" ", "").replaceAll("(", "").replaceAll("'", "").replaceAll('"', "").replaceAll(")", "").replaceAll("'", "")
 
 
                     }

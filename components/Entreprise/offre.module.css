@@ -1,0 +1,203 @@
+.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px 5px;
+    border-bottom: 4px solid #4a00b4;
+    border-radius: 20px;
+    transition: all .2s;
+}
+
+.imageFill {
+    max-height: 40vh;
+}
+
+.width {
+    max-width: 60vw!important;
+}
+
+.end {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    margin: 2% 20px 20px;
+    gap: 3%;
+}
+
+.table th {
+    padding: 10px 20px 10px;
+}
+
+.table table {
+    width: 100%;
+}
+
+.dfss {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.dfssb {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 2px solid grey;
+    border-radius: 10px;
+}
+
+.table table td:nth-child(2) {
+    min-width: 20vw;
+}
+
+.table td {
+    padding: 10px 40px 10px;
+}
+
+.table {
+    margin-top: 5%;
+}
+
+.table table tr:nth-child(even) {
+    background-color: #d4d4d4;
+}
+
+.table .border,
+.activeborder {
+    border: 2px solid;
+    padding: 10px 20px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 20%;
+}
+
+.border {
+    border: 2px solid;
+    padding: 10px 20px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 20%;
+}
+
+.activeborder2,
+.activeborder0,
+.activeborder {
+    border: 2px solid #4a00b4!important;
+}
+
+.dfr {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.dg {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.border2,
+.activeborder2 {
+    border: 2px solid;
+    padding: 10px 20px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 20%;
+}
+
+.border0,
+.activeborder0 {
+    border: 2px solid;
+    padding: 10px 20px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    width: 20%;
+}
+
+.act {
+    border: 2px solid #4a00b4;
+    padding: 20px 40px 10px;
+    border-radius: 20px;
+}
+
+.actp {
+    border: 2px solid #4a00b4;
+    padding: 20px 40px 10px;
+    border-radius: 20px;
+    width: 40%;
+}
+
+.inactive {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav {
+    width: 100%;
+    padding: 10px 40px 10px;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 30px;
+}
+
+.anim {
+    width: 90%;
+}
+
+@keyframes kam {
+    from {
+        transform: translateY(20px)
+    }
+    to {
+        transform: translateY(0px);
+        transition: transform 1s;
+    }
+}
+
+.img {
+    max-height: 300px;
+    max-width: 60vw;
+}
+
+.testAnim {
+    animation: kam .2s ease-out;
+}
+
+.logo {
+    max-width: 150px;
+}
+
+.offer {
+    border: 2px solid #4a00b4;
+    border-radius: 20px;
+    min-height: 300px;
+    margin: 0px 10% 10px;
+    padding: 20px 40px 10px;
+}
+
+.aff {
+    border: 2px solid #4a00b4;
+    border-radius: 20px;
+    max-height: 50vh;
+    margin: 0px 10% 10px;
+    padding: 20px 40px 10px;
+    overflow-y: auto;
+}
+
+.view {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}

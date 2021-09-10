@@ -15,11 +15,16 @@ export default class ArticleEditor extends Component {
 
 
         this.state = {
-            editorState: this.props.edit ? EditorState.createWithContent(
+            editorState:
+                
+                this.props.edit ?
+                EditorState.createWithContent(
                 ContentState.createFromBlockArray(
-                    convertFromHTML(this.props.state)
+                     convertFromHTML(this.props.state) 
                 )
-            ) : EditorState.createEmpty(),
+                    ) :
+                    
+                    EditorState.createEmpty(),
         }
 
         // this.state = {
@@ -56,8 +61,9 @@ export default class ArticleEditor extends Component {
 
     render() {
         const { editorState } = this.state;
+        const {height} = this.props.height || "auto"
         return (
-            <div className="editor">
+            <div className="editor" style={{ height: height }}>
             <Editor
                 editorState={editorState}
                 defaultEditorState={this.props.state}

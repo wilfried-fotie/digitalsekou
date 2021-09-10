@@ -16,7 +16,7 @@ const router = useRouter()
     const handleClick = (e) => {
         e.preventDefault()
         axios.put("/addStatSchool/" + school.id).then(r => null).catch(r => null)
-        router.push("/" + school.sigle)
+        router.push("/site/" + school.sigle)
     }
     return (
 

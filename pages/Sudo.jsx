@@ -446,7 +446,6 @@ export function ChangePasse() {
   
   
     const onSubmit =  (data) => {
-        console.log(isValid)
         if (isValid) {
             axios.put("/sudo", {...data,username: "admin"}, {
                 headers: {

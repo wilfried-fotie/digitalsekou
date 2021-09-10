@@ -11,10 +11,9 @@ import { Tab } from '../SchoolAdmin/Fiches'
 function WebsitePreview() {
 
     const data = React.useContext(SchoolContext).data.schoolData.school
-    const filieres = React.useContext(SchoolContext).data.filieres
     const positions = React.useContext(SchoolContext).data.positions.positions
+    const types = React.useContext(SchoolContext).data.types
     const spe = React.useContext(SchoolContext).data.spe
-    const newArray = React.useContext(SchoolContext).data.newArray
     const [choise, handleChoiseState] = useChangeBool(true)
     const [fixed, setFixed] = React.useState(false)
 
@@ -65,15 +64,16 @@ function WebsitePreview() {
                                             <Link href={"https://wa.me/237" + data.tel}><a id="contact" className="btnPrimary">Nous Contacter</a></Link>
                                         </div>
                                     </div>
-                                    <img src={"/" + data.sigle + "-" + data.profil} className={styles.profil} />
-                                </div>
-                                <center style={{ display: "flex" }}> <GeoAlt size={20} color="#4a00b4" /> {positions.map(e => e.position + ", ")}</center> <br />
+                                {data.profil.substring(data.profil.lastIndexOf(".")) == ".mp4" || data.profil.substring(data.profil.lastIndexOf(".")) == ".MP4" ? <video src={"/" + data.sigle + "-" + data.profil} width="40%" controls>La vidéo n'as pas pu se charger</video> : <img height="250px" src={"/" + data.sigle + "-" + data.profil} alt="image de profil"/> }
+                            </div>
+                        
+                            <center style={{ display: "flex" }}> <GeoAlt size={20} color="#4a00b4" /> {positions.map(e => e.position + ", ")}</center> <br />
                                 <center style={{ display: "flex" }}><TelephoneFill size={20} color="#4a00b4" /> {data.tel} </center>
                               {data.pro && <div id="spe">
                                 
                              
                                     <center className="h2">Nos Spécialités</center>
-                                    <div style={{marginTop: "30px" }}>
+                                    <div className="pad">
                                         <Tab value={spe} pre={false}/>
                                    </div>
                                 <div className={styles.outro}>

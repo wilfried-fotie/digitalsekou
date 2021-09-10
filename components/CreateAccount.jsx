@@ -6,13 +6,14 @@ import axios from 'axios'
 import "../global"
 import { useForm } from "react-hook-form"
 import Loader from 'react-loader-spinner'
+import { AccountContext } from '../pages/Template/Header'
 
 
 
 
 
 
-function CreateAccount({ stateChange, setToken, e, data}) {
+function CreateAccount({ stateChange, setToken, e}) {
 
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
@@ -22,7 +23,10 @@ function CreateAccount({ stateChange, setToken, e, data}) {
     const router = useRouter()
     const entrepriseId = sessionStorage.getItem("entrepriseId")
     const userId = sessionStorage.getItem("userId")
+    const data = React.useContext(AccountContext).data
 
+    console.log(data)
+    
     
 
     // const router = useRouter()
@@ -72,7 +76,7 @@ function CreateAccount({ stateChange, setToken, e, data}) {
                         setToken(sessionStorage.getItem("etoken"))
                         setFine("Votre comte à été créer avec succes!")
                         stateChange(false)
-                        router.push("/StartPub")
+                        router.push(`/StartPub?id=${res.data.id}&token=${res.data.etoken}`)
 
                     }).catch(e =>{
                         setLoader(false)
@@ -238,41 +242,42 @@ function CreateAccount({ stateChange, setToken, e, data}) {
 
                 {(e !== null && e !== undefined && e) ?
 
-
-                    <div>
-                        <div className={styles.df}>
-                            <label htmlFor="activity"> <AspectRatio color="#4a00b4" size="20px" /> </label>
-                            <input type="text" {...register("activity", { required: (data && data !== undefined && data !== "") ? false : true, maxLenght: 5 })} id="activity" placeholder="Secteur d'activité" />
-
-                        </div>
-                        {errors.activity && errors.activity.type === "required" && (
-                            <span className="error">Le secteur d'activité est obligatoire</span>
-                        )}
-
-                        {errors.activity && errors.activity.type === "maxLenght" && (
-                            <span >La valeur trop longue</span>
-                        )}
-
-
-                    </div>
+null
 
 
                     :
 
-                    <div className={styles.df}>
-                        <div className={styles.dfss}>
+
+                   <div className={styles.df}> 
+  <div className={styles.dfss}>
                             <label htmlFor="select"> <BookmarkStar color="#4a00b4" size="20px" /> </label>
                             <label htmlFor="select"> Status</label>
 
+                    
                         </div>
-                        <select name="select" id="status"  {...register("status", { required: (data && data !== undefined && data !== "") ? false : true })} >
-                            <option value="student">Élève</option>
-                            <option value="parent">Parent D'Élève</option>
-                        </select>
+
+                    <div className={styles.dg}>
+                       
+                        <div className="dfs">
+                            <input type="radio" name="status" id="eleve" value="eleve" {...register("status", { required: (data && data !== undefined && data !== "") ? false : true })} />
+                            <label htmlFor="eleve">Élève</label>
+
+                        </div>
+
+
+                        <div className="dfs">
+                                <input type="radio" name="status" id="parent" value="parent" {...register("status", { required: (data && data !== undefined && data !== "") ? false : true })}/>
+                         <label htmlFor="parent">Parent D'Élève</label>
+                         
+                        </div>
+
+                       
+                    
                         {errors.status && errors.status.type === "required" && (
                             <span className="error">Le status est requis</span>
                         )}
 
+                        </div>
                     </div>
                 }
 

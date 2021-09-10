@@ -7,9 +7,7 @@ function Stats() {
     const school = React.useContext(SchoolContext).data.schoolData.school
     const users = React.useContext(SchoolContext).data.users
     const spe = React.useContext(SchoolContext).data.spe
-    const fils = React.useContext(SchoolContext).data.filieres
 
-console.log(school)
     return (
     <>
    {school.pro &&     <div>
@@ -20,7 +18,6 @@ console.log(school)
             
             </div>
         <div className="dfss">
-                <Card text={"Nombres de filières"} value={fils.length} />
                 <Card text={"Nombres de spécialités"} value={spe.length} />
 
             </div>

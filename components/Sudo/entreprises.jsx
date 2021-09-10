@@ -29,7 +29,6 @@ function Entreprises() {
     })
 
     const handleSubmit = React.useCallback(async (id, index) => {
-        alert("y")
         await axios.put("/TogglevStatusSchool/" + id, {}).then(res => null).catch(r => null)
 
         dispacth({ type: "UPDATE", name: "school", data: { ...schools, id: index } })

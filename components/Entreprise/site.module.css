@@ -1,0 +1,149 @@
+.top {
+    margin-top: 3%;
+}
+
+.container {
+    margin: 2% 15% 2%;
+    padding: 10px 20px 10px;
+}
+
+.contain {
+    max-width: 50vw;
+}
+
+.dfr {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.dfr>div,
+.dfss>div {
+    margin: 0px 20px 0px;
+}
+
+.dfss {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px 40px 10px;
+}
+
+.dgp {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 20px 40px 10px;
+    margin-top: 3%;
+}
+
+.grid {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2%;
+    justify-content: flex-start;
+    padding: 10px 40px 10px;
+}
+
+.grid>div>div {
+    min-width: 20%;
+}
+
+.grid>div {
+    padding: 10px 20px 10px;
+    border-radius: 10px;
+    color: #000!important;
+}
+
+.padding {
+    margin: 20px 20px 20px;
+}
+
+.dfs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.boul {
+    clear: both;
+    content: " ";
+    border-radius: 50%;
+    background-color: #4a00b4;
+    padding: 10px 10px 10px;
+}
+
+.stepper {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 20px 0px 30px;
+}
+
+.notboul {
+    clear: both;
+    content: " ";
+    border-radius: 50%;
+    border: 2px solid #4a00b4;
+    padding: 8px 8px 8px;
+}
+
+@keyframes identifier {
+    from {
+        transform: translateY(10px);
+    }
+    to {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes identifierInverse {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(0px);
+    }
+}
+
+.nav {
+    width: 100%;
+    padding: 10px 40px 10px;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 30px;
+}
+
+.page {
+    animation: identifier .5s ease-out;
+    min-height: 55vh;
+}
+
+.prev {
+    padding: 10px 20px 10px;
+    border: 2px solid #4a00b4;
+    border-radius: 20px;
+    margin: 10px 5% 20px;
+}
+
+.df {
+    width: 95%;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px 20px 10px;
+    width: 80%;
+}
+
+.dfb {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 10% 0% 20px;
+}
+
+.padding button:disabled {
+    background-color: grey;
+}

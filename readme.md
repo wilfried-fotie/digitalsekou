@@ -1,10 +1,9 @@
-To Do
+To Do du Jour
 
-1 - Faire tout l'admin endeuc heures
- > Créer un réducer pour gerer l'etat de tous l'admin
- > recuperer toutes les donnés nécessaires
- > gerer les action au click
+Faire le crud de produit
+Faire le crud de pub et offre et faire fonctionner
+Faire les message entreprises
+Faire l'admin
+refaire le design school
 
-2 - Faire une fonctionnalité Pub
-
- > importer une pub qui apparait a la home page
+Faire le responsif

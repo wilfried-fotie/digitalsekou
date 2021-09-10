@@ -51,7 +51,8 @@
 
 .pub {
     margin: 20px 7% 20px;
-    height: 50vh!important;
+    height: 70vh!important;
+    width: 80%;
 }
 
 .pub img {

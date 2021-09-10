@@ -32,6 +32,14 @@ p {
     color: rgb(44, 44, 44);
 }
 
+.mr {
+    margin-right: 20px;
+}
+
+.pad {
+    margin-top: 20px;
+}
+
 p::first-letter {
     margin-left: 20px;
     text-transform: uppercase;
@@ -90,6 +98,26 @@ b {
     border-radius: 5px;
 }
 
+.btnFine {
+    padding: 7px 20px 7px;
+    background-color: green;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+form {
+    margin-bottom: 4%;
+}
+
+.btnPriRed {
+    padding: 7px 20px 7px;
+    background-color: red;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
 .btnSecondary {
     padding: 5px 20px 3px;
     border-radius: 12px;
@@ -107,9 +135,17 @@ b {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    scroll-behavior: smooth;
     --main-color: #000000aa;
     --primary-color: #4a00b4;
+}
+
+.iconiseur {
+    padding: 5px 10px 4px;
+    background-color: #c1c1c5;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
 }
 
 :root {
@@ -354,11 +390,30 @@ input {
 }
 
 .editor-class {
-    padding: 10px 20px 10px;
+    padding: 0px 20px 10px;
     line-height: 1.52em!important;
     font-size: .98em;
 }
 
 .wrapper-class {
     border: 2px solid #4a00b4;
+}
+
+.padding {
+    padding: 20px 20px 20px;
+}
+
+.particular .editor-class {
+    height: 40vh;
+}
+
+.imgFill {
+    max-width: 50vh;
+    /* min-height: 30vh; */
+    /* min-width: 30vw; */
+    max-height: 60vh;
+}
+
+.logo {
+    max-width: 100px;
 }

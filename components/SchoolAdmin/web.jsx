@@ -2,7 +2,7 @@ import React from 'react'
 import { SchoolContext} from "../../pages/addSchoolPro/[id]"
 import Preview from '../School/Preview'
 import styles from '../../styles/startpub.module.css'
-import { Bookmark, BoundingBox, BrightnessAltLowFill, BrightnessHighFill, BrightnessLowFill, Building, CheckCircle, Dice5Fill, DisplayFill, GeoAltFill, ImageFill, LockFill, TelephoneFill } from 'react-bootstrap-icons'
+import { Bookmark, BoundingBox, BrightnessAltLowFill, BrightnessHighFill, BrightnessLowFill, Building, CheckCircle, Dice5Fill, DisplayFill, Eraser, GeoAltFill, ImageFill, LockFill, TelephoneFill } from 'react-bootstrap-icons'
 import { useForm } from 'react-hook-form'
 import { FieldValidate, FileValidate, PasswordValidate, Radio, RadioValidate, Selector, TextAreaValidate,File, TextArea } from '../FormTools'
 import ArticleEditor from '../../pages/editor'
@@ -60,7 +60,7 @@ export function SiteWeb() {
     )
 }
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
+const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg',"mp4","MP4"]
 
 const allowOnlyPicture = (filename) => {
 
@@ -82,12 +82,14 @@ export function ModSchool() {
     const position = schoolData.data.positions.positions
     const types = schoolData.data.types.types
     const dispacth = schoolData.dispacth
-  
+    const [loader, setLoader] = React.useState(false)
+
 
     const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onChange", defaultValues: { data} })
     const [err, setErr] = React.useState("")
     const [state, setState] = React.useState("")
     const [succes, setSucces] = useModal(false)
+
     const [stateOutro, setStateOutro] = React.useState("")
     const [data2, setData2] = React.useState({
         logo: "",
@@ -97,29 +99,27 @@ export function ModSchool() {
         profilName: "",
         profilData: "",})
     const [checked, setChecked] = React.useState({ multiple: data.multiple, status: data.status, description: data.pro ? null : data.description })
-    const [fine, setFine] = React.useState("")
-    const [loader, setLoader] = React.useState(false)
+    const [error, setError] = useModal(false)
     const options = [{ value: "Bafoussam", label: "Bafoussam" }, { value: "Yaounde", label: "Yaoundé" }, { value: "Douala", label: "Douala" }, { value: "Bertoua", label: "Bertoua" }, { value: "Garoua", label: "Garoua" }, { value: "Limbe", label: "Limbe" }]
     const options2 = [{ value: "Supérieur", label: "Supérieur (Universités, Institut)" }, { value: "Secondaire", label: "Secondaire (Collèges, Lycées)" }, { value: "Primaire", label: "Primaire" }, { value: "maternelle", label: "maternelle" }, , { value: "crêche", label: "crêche" }]
 
     const onSubmit = (d) => {
         setLoader(true)
         const dataToUpload = {
-            ...d, description: data.pro ? draftToHtml(state.body) : checked.description || data.description , logo: data2.logoName || data.logo, profil: data2.profilName || data.profil , multiple: checked.multiple || data.multiple, status: checked.status || data.status
+            ...d, description: data.pro && state.body? draftToHtml(state.body) : data.description || data.description  ,pro: data.pro, logo: data2.logoName || data.logo, profil: data2.profilName || data.profil , multiple: checked.multiple || data.multiple, status: checked.status || data.status
             , data2, outro: draftToHtml(stateOutro.body) || data.outro,
 
         }
-        
         const formData2 = new FormData();
         const formData1 = new FormData();
 
         if (allowOnlyPicture(dataToUpload.data2.logoName) ) {
-            formData1.append("file", dataToUpload.data2.logoData, data.sigle + "-" + data2.logoName);
+            formData1.append("file", dataToUpload.data2.logoData, data.sigle + "-" + data2.logoName.replaceAll(" ", "").replaceAll("(", "").replaceAll(")", "").replaceAll("'", ""));
 
         }
 
         if (allowOnlyPicture(dataToUpload.data2.profilName)) {
-            formData2.append("file", dataToUpload.data2.profilData, data.sigle + "-" + data2.profilName);
+            formData2.append("file", dataToUpload.data2.profilData, data.sigle + "-" + data2.profilName.replaceAll(" ", "").replaceAll("(", "").replaceAll(")", "").replaceAll("(", ""));
         }
         axios.all([
             axios.put("/schools/" + sessionStorage.getItem('schoolId'), dataToUpload),
@@ -132,8 +132,9 @@ export function ModSchool() {
             setSucces(true)
             
             })
-            .catch(r => null)
-            .finally(setLoader(false))
+            .catch(r => setError(true))
+        .finally(() =>setLoader(false))
+            
          
 
 
@@ -155,7 +156,7 @@ export function ModSchool() {
                         ...s,
                         [name]: ev.target.result,
                         [id]: e.target.files[0],
-                        [name + "Name"]: e.target.files[0].name
+                        [name + "Name"]: e.target.files[0].name.replaceAll(" ", "").replaceAll("(", "").replaceAll("'", "").replaceAll('"', "").replaceAll(")", "").replaceAll("'", "")
 
 
                     }
@@ -177,7 +178,6 @@ export function ModSchool() {
     }
         )
     
- 
     
    const handleEditorContent = (content) => {
        setState(s => ({
@@ -207,9 +207,8 @@ export function ModSchool() {
                 {err && isSubmitted && !isSubmitting && isValid && <div className="error">
                     {err}
                 </div>}
-                {fine && isSubmitted && !isSubmitting && isValid && <div className="fine">
-                    {fine}
-                </div>}
+               
+
       
             <FieldValidate name="name" r={false} def={data.name} image={<Building color="#4a00b4" size="20px" />} auto="Entrez le nom de la spécilaité" control={control} >Nom Complet De L'établissement</FieldValidate>
         {errors.name && errors.name.type === "required" && (
@@ -240,9 +239,8 @@ export function ModSchool() {
 
             
                         
-                <File name="logo" def={data2.logo || "/" + data.sigle + "-" + data.logo} onChange={handleImageChange}>Importer Le Logo</File>
-               
-
+            <File name="logo" def={data2.logo || "/" + data.sigle + "-" + data.logo} onChange={handleImageChange}>Importer Le Logo</File>
+             
 
             <Selector mult={true} name="positions" def={position}  r={false} control={control} image={<GeoAltFill color="#4a00b4" size="20px" />} options={options}>Selectionner les positions de votre établissement</Selector>
 
@@ -253,18 +251,20 @@ export function ModSchool() {
                 <span className="error"> il doit faire au moins trois caracteres</span>
             )}
 
-                <Radio onChange={handleChange} value={data.status} name="status"  data={["Privé", "Public"]} >Status de l' établissement public ou privé? </Radio>
+            <Radio onChange={handleChange} value={data.status} name="status"  data={["Privé", "Public"]} >Status de l' établissement public ou privé? </Radio>
             {errors.status && errors.status.type === "required" && (
                 <span className="error">Ce champ est obligatoire</span>
             )}
           
 
-                <Radio onChange={handleChange} name="multiple" data={["Oui ", "Non"]} value={data.multiple}  image={<BoundingBox size={20} color="#4a00b4" />} data={["Non", "Oui"]}>Votre nom d' établissement est-il
+            <Radio onChange={handleChange} name="multiple" data={["Oui ", "Non"]} value={data.multiple}  image={<BoundingBox size={20} color="#4a00b4" />} data={["Non", "Oui"]}>Votre nom d' établissement est-il
                 utiliser pour plusieurs types d'etablissements ( exp: Lycées,Universités etc...) à la fois ? </Radio>
-            {errors.multiple && errors.multiple.type === "required" && (
+           
+                {errors.multiple && errors.multiple.type === "required" && (
                 <span className="error">Ce champ est obligatoire</span>
             )}
           
+                
 
             <Selector mult={checked.multiple === "Oui" ? true : false} name="type" r={false} def={types}  control={control} image={<GeoAltFill color="#4a00b4" size="20px" />} options={options2}>{data.multiple === "Non" ? "De quel niveau est votre établissement" : "De quels niveaux sont vos établissements"}</Selector>
 
@@ -276,28 +276,21 @@ export function ModSchool() {
             )}
 
                 
-                <File name="profil" def={data2.profil || "/" + data.sigle + "-" + data.profil} onChange={handleImageChange}>Importer Le Logo</File>
+            <File profil ={ data.pro ? true : false} name="profil" def={data2.profil || "/" + data.sigle + "-" + data.profil} onChange={handleImageChange}>Importer Le Logo</File>
 
 
-              
-
-               
-
-                <div className="editor">
-                    <div className="dfs" style={{ marginBottom: "50px" }}>
-                        <BrightnessHighFill size={ 20} color="#4a00b4"/>  Description De L'établissement
-
-                    </div>
-                    {data.pro && <ArticleEditor
-                        handleContent={handleEditorContent}
-                        edit={true}
-                        className="editor"
-                        state={data.description}
-                    />}
-                    {!data.pro && 
-                        <TextArea value={checked.description} onChange={handleChange} name="description" def={data.description}>Sigle De L'établissement </TextArea>
-                    }
-                </div>
+            <div className="editor">
+         
+                {data.pro && <ArticleEditor
+                    handleContent={handleEditorContent}
+                    edit={true}
+                    className="editor"
+                    state={data.description}
+                />}
+                {!data.pro && 
+                        <TextArea value={checked.description} onChange={handleChange} name="description" def={data.description}>Description De L'établissement </TextArea>
+                }
+            </div>
                 
                 <div style={{marginTop: "20px"}}>
                     <div className="dfs" style={{ marginBottom: "50px" }}>
@@ -314,7 +307,6 @@ export function ModSchool() {
 
                     {!data.pro && <p> <span className="error"> Réserver pour les pros</span> </p>}
                 </div>
-                
 
             <center style={{ padding: "5px 20px 10px" }}>
                 <button disabled={loader} className="dfss btnPri" >
@@ -330,7 +322,8 @@ export function ModSchool() {
             </form>
 
 
-            {succes && <FineModal position={{ top: 30, left: "35%" }} component={<div color="green"> <center> <CheckCircle size={40} color="green" /> </center><br />  Les données on étés mis à jour avec succes!!</div>} onModalChange={setSucces} />}
+            {succes && <FineModal position={{ top: 30, left: "35%" }} component={<div color="green"> <center> <CheckCircle size={40} color="green" /> </center><br />  Les données ont étés mis à jour avec succes!!</div>} onModalChange={setSucces} />}
+            {error && <FineModal position={{ top: 30, left: "35%" }} component={<div color="red"> <center> <Eraser size={40} color="red" /> </center><br />  Les données n'ont pas étés mis à jour avec succes!!</div>} onModalChange={setError} />}
         </div>
         </>)
 }

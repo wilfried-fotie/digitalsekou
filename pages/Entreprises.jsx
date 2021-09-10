@@ -8,18 +8,50 @@ import Footer from './Template/footer'
 import { ArrowRight } from 'react-bootstrap-icons'
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import useModal from '../components/CustomHooks/useModal'
+import CreateAccount from '../components/CreateAccount'
 
 function Entreprises() {
 
+
+    const router = useRouter()
     const [state, setState] = useState(false)
     const [state2, setState2] = useState(false)
+    const [visible, v] = useModal(false)
+    const [etoken, setEtoken] = React.useState()
+    const [entrepriseId, setEntreprise] = React.useState()
+
+    React.useEffect(() => {
+        setEtoken(sessionStorage.getItem("etoken"))
+        setEntreprise(sessionStorage.getItem("entrepriseId"))
+},[entrepriseId])
+
+
 
     const handleClose = (s) => {
         setState(s => !s)
     }
     const handleClose2 = (s) => {
-        setState(s => !s)
+        setState2(s => !s)
     }
+    const handleClose3 = (s) => {
+        v(false)
+    }
+
+    const handleClickVerif = (e) => {
+        e.preventDefault()
+        if (sessionStorage.getItem("etoken")) {
+            router.push("/StartPub?id=" + entrepriseId + "&token=" + etoken)
+        } else {
+            v(true)
+        }
+    }
+
+    const handleEtoken = (e) => {
+        setEtoken(e)
+    }
+
     return (
         <>
             <Head>
@@ -37,7 +69,7 @@ function Entreprises() {
                             les étudiants de l' autre
                             aujourd' hui il est possible
                             de vous réunir.
-                            Obtenez de la visisbilité ou faites découvrir vos produits et services à des étudiants
+                            Obtenez de la visibilité ou faites découvrir vos produits et services à des étudiants
 
                         </span>
                     </div>
@@ -98,7 +130,7 @@ function Entreprises() {
                 </div>
 
                 <div className={styles.mg}>
-                    <Link href="/StartPub"><a className="btnPrimary" >Commencer maintenant</a></Link>
+                    <a onClick={handleClickVerif} className="btnPrimary" >Commencer maintenant</a>
                     <a className="btnSecondary" onClick={() => {
                         handleClose(false)
 
@@ -156,7 +188,7 @@ function Entreprises() {
                 </div>
 
                 <div className={styles.mg}>
-                    <Link href="/StartPub"><a className="btnPrimary" >Commencer maintenant</a></Link>
+                    <Link href={"/StartPub?id=" + entrepriseId + "&token=" + etoken}><a className="btnPrimary" >Commencer maintenant</a></Link>
                     <a className="btnSecondary"
                         onClick={React.useCallback((e) => {
                             e.preventDefault()
@@ -168,7 +200,8 @@ function Entreprises() {
                     >Obtenir de l'aide</a>
                 </div>
                 {state && <CustomModal onModalChange={handleClose} component={<HelpEntre />} />}
-                {state2 && <CustomModal onModalChange={handleClose} component={<HelpEntre />} />}
+                {state2 && <CustomModal onModalChange={handleClose2} component={<HelpEntre />} />}
+                {visible && <CustomModal onModalChange={handleClose3} component={<CreateAccount stateChange={v} e={true} setToken={handleEtoken} />} />}
 
 
             </main>

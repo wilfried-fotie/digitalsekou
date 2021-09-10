@@ -8,11 +8,12 @@ import "slick-carousel/slick/slick-theme.css"
 import { Binoculars, Check, Facebook, Globe, Google, Linkedin, PersonBoundingBox } from 'react-bootstrap-icons'
 import Footer from './Template/footer';
 import Link from 'next/link';
-import { fetchEntreprisesData, fetchUsersData } from '../Model/getter';
+import { fecthAllPub, fecthAllOffer } from '../Model/getIndex';
+import { Markup } from 'interweave'
 
 
 
-export default function Home() {
+export default function Home({getPub,getOffer}) {
   return (
     <div className={styles.container}>
 
@@ -55,16 +56,20 @@ export default function Home() {
 
         </div>
 
+   
 
-        <div className={styles.pub} >
+
+
+
+      {getOffer.offers &&   <div className={styles.pub} >
 
           <div className={styles.span} >
 
             <h2 > Publicité </h2> </div > <div className={styles.slider} >
 
-            <SimpleSlider />
+           <SimpleSlider data={getOffer.offers}/>
 
-          </div> </div>
+          </div> </div>}
 
         <div className={styles.icones}>
 
@@ -224,6 +229,29 @@ export default function Home() {
 
 
 
+export async function getServerSideProps() {
+
+
+    const getOffer = await fecthAllOffer()
+    const getPub = await fecthAllPub()
+
+
+
+    return {
+        props: {
+            
+         
+            getOffer,
+            getPub
+
+          
+
+        },
+    };
+
+
+
+}
 
 
 

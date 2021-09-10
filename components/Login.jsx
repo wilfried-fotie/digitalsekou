@@ -6,6 +6,7 @@ import axios from 'axios'
 import "../global"
 import { useForm } from "react-hook-form"
 import Loader from 'react-loader-spinner'
+import { AccountContext } from '../pages/Template/Header'
 
 
 
@@ -17,14 +18,12 @@ function Login({ stateChange, setToken, e ,school}) {
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
     const [loader, setLoader] = React.useState(false)
-
-
     const router = useRouter()
     const { register, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isValid } } = useForm({ mode: "onTouched" })
 
     const onSubmit = async (data) => {
 
-
+      
 
         if (isValid) {
 
@@ -32,7 +31,7 @@ function Login({ stateChange, setToken, e ,school}) {
 
             data.username = data.username.trim()
             if (e !== null && e !== undefined && e) {
-
+                
                 await axios.post('/entreprise', data).then(res => {
 
                     sessionStorage.setItem("etoken", res.data.etoken)
@@ -41,7 +40,7 @@ function Login({ stateChange, setToken, e ,school}) {
                     setToken(sessionStorage.getItem("etoken"))
                     setFine("Votre comte est connecter avec succes!")
                     stateChange(false)
-                    router.push("/StartPub")
+                    router.push(`/StartPub?id=${res.data.id}&token=${res.data.etoken}`)
 
 
                 }).catch(e => {
@@ -57,7 +56,6 @@ function Login({ stateChange, setToken, e ,school}) {
                     sessionStorage.setItem("schoolToken", res.data.schoolToken)
                     sessionStorage.setItem("school", res.data.school)
                     sessionStorage.setItem("schoolId", res.data.id)
-                    setToken(sessionStorage.getItem("schoolToken"))
                     setFine("Vous êtes connecter avec succes!")
                     stateChange(false)
                     router.push(`/addSchoolPro/${res.data.id}?token=${res.data.schoolToken}`)

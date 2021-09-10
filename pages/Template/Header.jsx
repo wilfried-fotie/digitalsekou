@@ -26,8 +26,11 @@ function useModal(initial) {
 }
 
 
+export const AccountContext = React.createContext({})
 
-function Header({ value, visibleName, userData, entrepriseData, normal=true}) {
+
+
+function Header({ value, visibleName, userData, entrepriseData, normal = true }) {
     const [visbility, v] = useModal(false)
     const [visbility3, v3] = useModal(false)
     const [visbility1, v1] = useModal(false)
@@ -45,6 +48,9 @@ function Header({ value, visibleName, userData, entrepriseData, normal=true}) {
     const [etoken, setEtoken] = React.useState()
 
 
+
+
+
     useEffect(() => {
 
         window.document.addEventListener("scroll", () => {
@@ -59,7 +65,7 @@ function Header({ value, visibleName, userData, entrepriseData, normal=true}) {
         })
     }, [])
 
-       
+
 
     useEffect(() => {
         setToken(sessionStorage.getItem("token"))
@@ -93,8 +99,8 @@ function Header({ value, visibleName, userData, entrepriseData, normal=true}) {
          {normal &&   <main className={!scroll ? styles.main : styles.fixed} >
 
                 <div className="logos">
-                    <Link href="/"><a className="logo">  <Image src="/logo.png" alt="Digital Education Logo" width={65} height={50} /></a></Link>
-                    <Link href="/"><a>{!scroll && !visibleName ? <span className="log"><img src="/log.svg" alt="" /> </span> : null}</a></Link>
+                    <center>  <Link href="/"><a className="logo">  <Image src="/logo.png" alt="Digital Education Logo" width={65} height={50} /></a></Link></center>
+                    <center> <Link href="/"><a>{!scroll && !visibleName ? <span className="log"><img src="/log.svg" alt="" /> </span> : null}</a></Link></center>
 
                 </div>
                 <div className={styles.links}>
@@ -110,24 +116,30 @@ function Header({ value, visibleName, userData, entrepriseData, normal=true}) {
 
                 </div>
 
+                
+                  
+                
+
+                
+
+                        
+                 {   value == 4 ? etoken !== "" && etoken !== undefined && etoken ?
 
 
-                {
-
-                    value == 4 ? etoken !== "" && etoken !== undefined && etoken ?
-
-
-
-                        <Account user={entreprise} e={true} onTokenChange={setEtoken} userData={userData} entrepriseData={entrepriseData} /> : <Auth v={v3} e={true} v2={v4} visbility2={visbility4} visbility={visbility3} setToken={handleEtoken} />
-
-                        : value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken && schoolToken !== null ? <Account user={school} school={true} onTokenChange={setSchoolToken} /> : <Auth v={v1}  v2={v5} visbility2={visbility5} school={true}  visbility={visbility1} setToken={handleSchoolToken} />  :
+                        <Account user={entreprise} e={true} onTokenChange={setEtoken} userData={userData} entrepriseData={entrepriseData} /> :
+                       
+                        <Auth v={v3} e={true} v2={v4} visbility2={visbility4} visbility={visbility3} setToken={handleEtoken} />
+                    
+                            : value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken && schoolToken !== null ? <Account user={school} school={true} onTokenChange={setSchoolToken} /> : <Auth v={v1} v2={v5} visbility2={visbility5} school={true} visbility={visbility1} setToken={handleSchoolToken} />  :
                         
                         token !== "" && token !== undefined && token !== null ?
                                 <Account user={user} onTokenChange={setToken} userData={userData} entrepriseData={entrepriseData}/>
                             :
                             <Auth v={v} v2={v2}  visbility2={visbility2} visbility={visbility} setToken={handleToken} />
-                        
+                
                 }
+                      
+                
 
 
 
@@ -176,7 +188,8 @@ export default Header
 
 
 
-export function Auth({ visbility, visbility2, v, v2, setToken, e, school = false }) {
+export function Auth({ visbility, visbility2, v, v2, setState, setToken, e, school = false }) {
+ 
     return (
         <div>
             <div className={styles.connect}>
@@ -186,7 +199,7 @@ export function Auth({ visbility, visbility2, v, v2, setToken, e, school = false
                 > Créer Un Compte </a>}
             </div>
             {visbility && <CustomModal onModalChange={v} component={<CreateAccount stateChange={v} e={e} setToken={setToken}/>} />}
-            {visbility2 && <CustomModal onModalChange={v2} component={<Login stateChange={v2} e={e} setToken={setToken} school={school}/>} />}
+            {visbility2 && <CustomModal onModalChange={v2} component={<Login stateChange={v2} e={e}  setToken={setToken} school={school}/>} />}
         </div>
     )
 }
@@ -194,7 +207,10 @@ export function Auth({ visbility, visbility2, v, v2, setToken, e, school = false
 
 export function Account({ user, onTokenChange, e, school = false, userData, entrepriseData}) {
     const [visible, setVisible] = useModal(false)
-  
+    const [entreprise, setEntreprise] = React.useState()
+    React.useEffect(() => {
+        setEntreprise(sessionStorage.getItem("entreprise"))
+    }, [entreprise])
     const handleClick = () => {
         setVisible(true)
     }
@@ -203,7 +219,7 @@ export function Account({ user, onTokenChange, e, school = false, userData, entr
 
             <div >
 
-                <span className={styles.acc} onClick={handleClick}> <PersonCircle size={25} color="#fff" /> {user} </span>
+                <span className={styles.acc} onClick={handleClick}> <PersonCircle size={25} color="#fff" /> { e ? entreprise : user} </span>
             </div>
 
             {visible && <FineModal onModalChange={setVisible} component={<Disconnect v={setVisible} userData={userData} entrepriseData={entrepriseData} onTokenChange={onTokenChange} e={e} school={ school}/>} position={{ top: 90, right: 60 }} />}
@@ -218,7 +234,7 @@ export function Disconnect({ v, onTokenChange, e, school, userData, entrepriseDa
     const entrepriseId = parseInt(sessionStorage.getItem("entrepriseId"))
     const userId = parseInt(sessionStorage.getItem("userId"))
     const router = useRouter()
-    const [data, setData] = React.useState({})
+    const [data, setData] = React.useState()
     const handleDisconnect = () => {
 
 
@@ -249,7 +265,7 @@ export function Disconnect({ v, onTokenChange, e, school, userData, entrepriseDa
         v1(true)
         
         if (e !== null && e !== undefined && e) {
-            if (!entrepriseData.error) {
+            if (entrepriseData && !entrepriseData.error) {
                
                 setData(entrepriseData.entreprises[entrepriseId - 1])
 }
@@ -258,7 +274,7 @@ export function Disconnect({ v, onTokenChange, e, school, userData, entrepriseDa
         }
       
         else {
-            if (!userData.error) {
+            if (userData && !userData.error) {
 
                 setData(userData.users[userId - 1])
 
@@ -273,10 +289,10 @@ export function Disconnect({ v, onTokenChange, e, school, userData, entrepriseDa
 
     return (
         <div className={styles.tab}>
+           
             <a className={styles.dfss} onClick={handleDisconnect}>
                 <PersonBoundingBox size={20} color="#4a00b4" /> Se Déconnecter</a>
 
-          {school ? null : <a className={styles.dfss} onClick={handleClick}> <LockFill size={20} color="#4a00b4" /> Changer vos informations</a>} 
                 
            { (data !== null && data !== undefined && data) ? visbility && <CustomModal onModalChange={v1} component={<CreateAccount stateChange={v1} e={e} data={data} />} />:
             visbility && <CustomModal onModalChange={v1} component={<CreateAccount stateChange={v1} e={e} data={data} />} />} 

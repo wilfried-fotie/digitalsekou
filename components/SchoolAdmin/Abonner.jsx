@@ -28,11 +28,7 @@ export default function Abonner() {
                         </thead>
                         <tbody>
                             {users.map((e, k) => <Tr key={k} value={e} />)}
-
-
                         </tbody>
-
-
 
                     </table>
                         :

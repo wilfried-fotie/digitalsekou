@@ -50,7 +50,7 @@ function HelpEntre() {
             <nav className="df">
                 {step !== 0 && step < 2 ? <a className="btnSecondary" onClick={() => { dispacth({ type: "prev" }) }}>Précedent</a> : null}
                 {step < 2 ? < a className="btnPrimary" onClick={() => { dispacth({ type: "next" }) }} >Suivant</a> : null}
-                {step === 2 ? <Link href="StartPub"><a className="btnPri" >commencer maintenant</a></Link> : null}
+                {step === 2 ? <Link href={"/StartPub?id=" + sessionStorage.getItem("entrepriseId") + "&token=" + sessionStorage.getItem("etoken")}><a className="btnPri" >commencer maintenant</a></Link> : null}
 
             </nav>
         </div>

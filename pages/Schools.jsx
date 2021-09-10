@@ -11,6 +11,7 @@ import { fetchAllPositions, fetchAllSchoolData, fetchAllTypes } from '../Model/g
 
 function Schools({ schools,positions,types}) {
     const tab = schools.school
+    
     const positionData = positions.positions
     const typesData = types.types
 
@@ -26,9 +27,9 @@ function Schools({ schools,positions,types}) {
    
 
     const filter = []
-    const schoolData = [...tab]
+    const schoolData = tab
 
-    const fineData = typesData.map(s => {
+    const fineData = typesData && typesData.map(s => {
 
         const res = tab.filter(i => i.id == s.school_id)
         const type = res.map(e => e)
@@ -115,7 +116,7 @@ function Schools({ schools,positions,types}) {
 
                     </div>
                     <div className={styles.right}>
-                        {fineData.map((e,k) => {
+                        {fineData && fineData.map((e,k) => {
 
                             const ts = typesData.filter(t => {
                                 return t.school_id == e.school.id

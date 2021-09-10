@@ -1,5 +1,5 @@
 import React from 'react'
-import { LayersFill, PersonFill, Whatsapp, Trash } from 'react-bootstrap-icons'
+import { LayersFill, PersonFill, Whatsapp, Trash, FileX } from 'react-bootstrap-icons'
 import { SchoolContext } from '../../pages/addSchoolPro/[id]'
 import styles from '../../styles/startpub.module.css'
 import useModal from '../CustomHooks/useModal'
@@ -53,17 +53,24 @@ export function Row({sender,message,onHandleClick}) {
         <>
             <div className={styles.wraper}>
                 <div>
-                <b className="dfs">
-                        <PersonFill size={20} color="#4a00b4" />    {sender.username.toUpperCase()}
+
+                    <div className="dfss">
+                        
+
+                    <div className={styles.box}>
+                               <b className="dfss">
+                        <span className="iconiseur">  <PersonFill size={20} color="#4a00b4" /></span>    {sender.username.toUpperCase()}
                     </b> <br />
-                    <span className="dfs">
-                        <LayersFill size={20} color="#4a00b4"/>    {sender.status}
+                    <span style={{ display: "flex", justifyContent: 'flex-start', alignItems: "center"}}>
+                        <span className="iconiseur"><LayersFill size={20} color="#4a00b4"/></span>    {sender.status}
                     </span>
-               
-                
-                <p className={styles.mex}>
-{message}
-                </p>
+                    </div>
+         
+
+                    <p className={styles.mex}>
+                        {message}
+                    </p>
+                    </div>
                 </div>
                 <div className={styles.dgs}>
                     <Link href={"https://wa.me/237" + sender.tel}><a className={styles.wa} > <Whatsapp color="#FFF" size={20} /> Répondre</a></Link>

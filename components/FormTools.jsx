@@ -1,7 +1,8 @@
 import React from "react"
-import { BoxSeam, EyeFill, EyeSlashFill, ImageAlt, Lock, LockFill, NodeMinus, PencilSquare } from 'react-bootstrap-icons'
+import { BoxSeam, Calendar2CheckFill, CalendarCheckFill, EyeFill, EyeSlashFill, ImageAlt, Lock, LockFill, NodeMinus, NutFill, PencilSquare } from 'react-bootstrap-icons'
 import {  Controller, useController, useForm } from "react-hook-form"
 import Select from 'react-select'
+import ArticleEditor from "../pages/editor"
 
 import styles from '../styles/AddSchool.module.css'
 
@@ -58,11 +59,13 @@ export function Field({ auto, children, r = false,name, type = "text", value, on
 
 
 
-export function TextArea({ children, name, value, onChange }) {
+export function TextArea({ children, name, value, onChange,auto }) {
     return <div>
 
-        <div> <label htmlFor={name}>{children}</label> </div>
-        <div>  <textarea rows={10} className={styles.area} value={value} onChange={onChange} name={name} id={name} />   </div>
+        <div> <label htmlFor={name} className="dfs">
+            <PencilSquare size={20} color="#4a00b4" />
+            {children}</label> </div>
+        <div className="padding">  <textarea rows={10} placeholder={auto} style={{ padding: "10px 20px 10px", fontFamily: "Montserrat" }} className={styles.area} value={value} onChange={onChange} name={name} id={name} />   </div>
 
     </div>
 }
@@ -77,7 +80,7 @@ export function TextAreaValidate({ children,size = 10, name,min=3,max="1000",ima
         <div> <label htmlFor={name} className="dfs">
             <PencilSquare size={20} color="#4a00b4"/>
             {children}</label> </div>
-        <div>  <textarea rows={size} className={styles.area}
+        <div>  <textarea style={{padding: "10px 20px 10px", fontFamily: "Montserrat"}} rows={size} className={styles.area}
             {...inputProps}
             ref={ref} name={name} id={name} />   </div>
 
@@ -109,17 +112,18 @@ export function FileValidate({ children, name, multiple = false, def = "", r = t
 }
     
     
-export function File({ children, name, def = "", r = true, onChange, multiple = false }) {
+export function File({ children, name, def = "",defData = null,  r = true, onChange, profil=false, multiple = false }) {
     return <div className={styles.dg}>
         <div className="dfs">
             <ImageAlt size={20} color="#4a00b4" />
             <label htmlFor={name}>{children}</label>
         </div>
-        {def && <img src={def} height="50px" />}
+        <center>  {def && (def.substring(def.lastIndexOf(".")) == ".mp4" || def.substring(def.lastIndexOf(".")) == ".MP4" ? <video src={def} alt="video" height={50} controls>La vidéo n'as pas pu se charger</video> : <img src={ def} height={30} alt="image ou vidéo chargé" />)}</center>
+        {defData && <center>{<img height={30} src={defData}/>}</center>}
 
         <div>
             <input type="file" name={name} id={name + "Data"}
-                accept="image/*"
+                accept={profil ? "image/*,.mp4,.MP4" : "image/*"}
                 multiple={multiple == true ? multiple : null}
                 onChange={onChange}
             />
@@ -161,7 +165,7 @@ export function Radio({ children, name, r = true, data,value, onChange, image = 
                 <div style={{ paddingTop: r ? "20px" : null }} className={r ? "dfss" : styles.checkbox}>
                 
 
-                    {data.map(e => <div key={e}> <input type="radio" value={e} onChange={onChange} name={name} id={e} defaultChecked={e==value} onChange={onChange} /><label htmlFor={e}>{e}</label></div>)}
+                    {data.map(e => <div key={e}> <input type="radio" value={e} onChange={onChange} name={name} id={e} defaultChecked={e==value}  /><label htmlFor={e}>{e}</label></div>)}
     
 
 
@@ -195,6 +199,7 @@ export function RadioValidate({ children, name, r = true, control, data, image =
 export function Selector({ options,r=false, mult=false, def = [],children, name, control,  image = <NodeMinus size={30} color="#4a00b4" /> }) {
     const newDef = []
     def.map(e => newDef.push({ value: e.position || e.types || e, label: e.position || e.types || e}))
+    
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },
         formState: { touchedFields, dirtyFields } } = useController({ name, control, rules: { required: true }, defaultValue: newDef})
@@ -208,3 +213,62 @@ export function Selector({ options,r=false, mult=false, def = [],children, name,
     </div>
 }
 
+export function SelectoR({ options, r = false, mult = false,def=[], onChange,state, children, name,  image = <NodeMinus size={30} color="#4a00b4" /> }) {
+   
+ 
+    return <div className={r ? "dfss" : styles.dg}>
+
+        <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
+        <div>  <Select options={options} isMulti={mult} onChange={onChange} defaultValue={def} value={state} name={name}
+            classNamePrefix="select" /></div>
+
+    </div>
+}
+
+
+export function Editor({ handleEdit, state, edit, r, defHeight="200px", image = <NodeMinus size={30} color="#4a00b4" />, name, children }) {
+    return (
+        <>
+
+            <div >
+
+                <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
+                <div style={{ marginTop: "20px"}}>
+                
+                
+                <ArticleEditor
+                handleContent={handleEdit}
+                state={state}
+                edit={edit}
+                height={defHeight}
+                className="editor"
+            />
+                
+                
+                </div>
+
+            </div>
+
+            
+
+        </>
+    )
+}
+
+
+export function CheckBox({ children, name, dataId,p=false, r = true, state = [], onChange, image = <Calendar2CheckFill size={20} color="#4a00b4" /> }) {
+    return (
+        <>
+            <div className={styles.border}>
+                <div>
+                    <label htmlFor={name} className="dfs" style={{color: "#000"}}> {image} {children}</label> </div>
+                <div style={{ paddingTop: r ? "20px" : null }} className={r ? "dfss" : styles.checkbox}>
+
+                        {state.map((e, k) => <div key={k} className={p ? "pad" : null}> <input type="checkbox" checked={e.value} value={e.value} onChange={onChange} name={name[k]} data-id={dataId} id={e.label}/><label htmlFor={e.label}>{e.label}</label></div>)}
+
+
+                </div>
+            </div>
+        </>
+    )
+}

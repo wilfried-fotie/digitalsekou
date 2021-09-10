@@ -1,0 +1,8 @@
+.end {
+    margin-top: 3%;
+    margin-right: 5%;
+    position: relative;
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+}

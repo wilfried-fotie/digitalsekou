@@ -1,13 +1,18 @@
 import React from "react";
 import Slider from "react-slick";
 import Image from 'next/image';
+import draftToHtml from 'draftjs-to-html'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ArrowRight, ArrowLeft } from 'react-bootstrap-icons'
 import Icon from "./CustomHooks/Icon";
+import  { Visualisation } from "./Entreprise/Offre";
+import {Visualisation as V} from "./Entreprise/Pub";
+import { Markup } from "interweave";
+import Link from "next/link"
 
 
-export default function SimpleSlider() {
+export default function SimpleSlider({data}) {
     var settings = {
         dots: true,
         infinite: true,
@@ -25,7 +30,7 @@ export default function SimpleSlider() {
     return (
         <Slider {...settings}>
 
-            <center><img src="/dot1.jpg" width={500} height={300} /></center>
+            {/* <center><img src="/dot1.jpg" width={500} height={300} /></center>
 
             <center><img src="/dot2.jpg" width={500} height={300} /></center>
 
@@ -33,7 +38,10 @@ export default function SimpleSlider() {
             <center><img src="/dot4.jpg" width={500} height={300} /></center>
             <center><img src="/dot5.jpg" width={500} height={300} /></center>
 
-            <center> <img src="/dot6.jpg" width={500} height={300} /> </center>
+             <img src="/dot6.jpg" width={500} height={300} />  */}
+
+            {data.map((e, k) => <center><Visualisation key={k} data={{ ...e, expiration: e.expire, objet: e.title }} /></center>)}
+            {pub.map((e, k) => <center><V key={k} data={e} /></center>)}
 
         </Slider>
     );
