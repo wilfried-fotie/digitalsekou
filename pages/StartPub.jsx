@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect } from 'react'
 import styles from '../styles/startpub.module.css'
-import { Building, ImageAlt, NodeMinus, TelephoneFill, BarChart, Pen, Display, Person, ArrowLeft, Diagram2Fill, CurrencyExchange, PersonCircle, FileWord, FileWordFill, BarChartFill, Flower1, PencilSquare, CartFill, CashStack, DisplayFill } from 'react-bootstrap-icons'
+import { Building, ImageAlt, NodeMinus, TelephoneFill, BarChart, Pen, Display, Person, ArrowLeft, Diagram2Fill, CurrencyExchange, PersonCircle, FileWord, FileWordFill, BarChartFill, Flower1, PencilSquare, CartFill, CashStack, DisplayFill, HouseFill } from 'react-bootstrap-icons'
 import { useRouter } from "next/router"
 import Head from 'next/head'
 import Pub from '../components/Entreprise/Pub'
@@ -15,6 +15,9 @@ import axios from 'axios'
 import { fecthOffer, fecthPost, fecthProduct, fecthPub, fetchEntrepriseData, fetchentrEprisePositionData, fetchEntrepriseSiteData } from '../Model/getEntreprise'
 import { ModSite } from '../components/Entreprise/ModSite'
 import Page from '../components/Entreprise/Page'
+import Welcome from '../components/SchoolAdmin/Welcome'
+import { Connect } from './Sudo'
+import PasserPro from '../components/Entreprise/PasserPro'
 
 
 const useIsomorphicLayoutEffect =
@@ -52,7 +55,6 @@ export default function Controller({ entreprise, entrepriseSite, entreprisePosit
                 let finish = { ...state, [action.name]: {[action.pre]: newState}}
                 return finish
 
-            case "ADDSPE":
                 
             case "DELETE":
                 const delState = [...state[action.name][action.pre]]
@@ -67,10 +69,14 @@ export default function Controller({ entreprise, entrepriseSite, entreprisePosit
                 finish = { ...state, [action.name]: { [action.pre]: upState } }
                 return finish
             case "UPDATESITE":
-                const upSiteState = state[action.name][action.pre]
 
                 finish = { ...state, [action.name]: { [action.pre]: action.data }, entreprisePosition: { position: action.position }}
                 
+                return finish
+            case "UPDATEENTREPRISE":
+
+                finish = { ...state, [action.name]: { [action.pre]: action.data }}
+
                 return finish
             default:
 
@@ -146,7 +152,7 @@ export default function Controller({ entreprise, entrepriseSite, entreprisePosit
 
 export function StartPub() {
 
-    const [level, setLevel] = React.useState(1)
+    const [level, setLevel] = React.useState(10)
     const router = useRouter()
     const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
     const site = React.useContext(EntrepriseContext).data.entrepriseSite.site
@@ -159,12 +165,15 @@ export function StartPub() {
             <title>Administration Entreprise</title>
 </Head>
 
-        <main>
+            <main>
+                
+               
             <div className={styles.db}>
-
+                   
                 <div className={styles.bar}>
                     <nav className={styles.bar, styles.dss}>
 
+                            
                         <span className={level == 0 ? styles.active : styles.span} onClick={(e) => {
                             e.preventDefault()
                             setLevel(0)
@@ -174,19 +183,20 @@ export function StartPub() {
 
                         <div className={styles.dgc}>
                             <PersonCircle size={80} color="#fff" />
-                            <span className={styles.dbcText}>{site.name}</span>
+                            <span className={styles.dbcText}>{entreprise.username}</span>
                         </div>
                        
 
 
-                        <span className={level == 1 ? styles.active : styles.span} onClick={() => { setLevel(1) }}> <CurrencyExchange size={20} color={level == 1 ? "#fff" : "#fff9"} className={level == 1 ? styles.acticon : styles.icon} /> Publicités </span>
+                            <span className={level == 10 ? styles.active : styles.span} onClick={() => { setLevel(10) }}> <HouseFill size={20} color={level == 10 ? "#fff" : "#fff9"} className={level == 10 ? styles.acticon : styles.icon} /> Acceuil </span>
+                            <span className={level == 1 ? styles.active : styles.span} onClick={() => { setLevel(1) }}> <CurrencyExchange size={20} color={level == 1 ? "#fff" : "#fff9"} className={level == 1 ? styles.acticon : styles.icon} /> Publicités </span>
                         <span className={level == 2 ? styles.active : styles.span} onClick={() => { setLevel(2) }}> <Diagram2Fill size={20} color={level == 2 ? "#fff" : "#fff9"} className={level == 2 ? styles.acticon : styles.icon} /> Offres </span>
-                        {!entreprise.site ?  <span className={level == 4 ? styles.active : styles.span} onClick={() => { setLevel(4) }}> <FileWordFill size={20} color={level == 4 ? "#fff" : "#fff9"} className={level == 4 ? styles.acticon : styles.icon} /> Créer une page </span>
-                      :   <span className={level == 8 ? styles.active : styles.span} onClick={() => { setLevel(8) }}> <FileWordFill size={20} color={level == 8 ? "#fff" : "#fff9"} className={level == 8 ? styles.acticon : styles.icon} /> Modifier votre page </span>}
+                            {!entreprise.site && <span className={level == 4 ? styles.active : styles.span} onClick={() => { setLevel(4) }}> <FileWordFill size={20} color={level == 4 ? "#fff" : "#fff9"} className={level == 4 ? styles.acticon : styles.icon} /> Créer une page </span>}
+                      {site && site.name  && <span className={level == 8 ? styles.active : styles.span} onClick={() => { setLevel(8) }}> <FileWordFill size={20} color={level == 8 ? "#fff" : "#fff9"} className={level == 8 ? styles.acticon : styles.icon} /> Modifier votre page </span>}
                        
-                        {site.pres && <span className={level == 6 ? styles.active : styles.span} onClick={() => { setLevel(6) }}> <CashStack size={20} color={level == 6 ? "#fff" : "#fff9"} className={level == 6 ? styles.acticon : styles.icon} /> Ajouter vos prestations </span>}
-                            {site.prod && <span className={level == 7 ? styles.active : styles.span} onClick={() => { setLevel(7) }}> <CartFill size={20} color={level == 7 ? "#fff" : "#fff9"} className={level == 7 ? styles.acticon : styles.icon} /> Ajouter des produits </span>}
-                            {entreprise.site  && <span className={level == 9 ? styles.active : styles.span} onClick={() => { setLevel(9) }}> <DisplayFill size={20} color={level == 9 ? "#fff" : "#fff9"} className={level == 9 ? styles.acticon : styles.icon} /> Visualiation de la page </span>}
+                            { site && site.pres && <span className={level == 6 ? styles.active : styles.span} onClick={() => { setLevel(6) }}> <CashStack size={20} color={level == 6 ? "#fff" : "#fff9"} className={level == 6 ? styles.acticon : styles.icon} /> Ajouter vos prestations </span>}
+                            { site && site.prod && <span className={level == 7 ? styles.active : styles.span} onClick={() => { setLevel(7) }}> <CartFill size={20} color={level == 7 ? "#fff" : "#fff9"} className={level == 7 ? styles.acticon : styles.icon} /> Ajouter des produits </span>}
+                            {site && site.name  && <span className={level == 9 ? styles.active : styles.span} onClick={() => { setLevel(9) }}> <DisplayFill size={20} color={level == 9 ? "#fff" : "#fff9"} className={level == 9 ? styles.acticon : styles.icon} /> Visualiation de la page </span>}
 
                         <span className={level == 3 ? styles.active : styles.span} onClick={() => { setLevel(3) }}> <Flower1 size={20} color={level == 3 ? "#fff" : "#fff9"} className={level == 3 ? styles.acticon : styles.icon} /> Activités </span>
                         <span className={level == 5 ? styles.active : styles.span} onClick={() => { setLevel(5) }}> <BarChartFill size={20} color={level == 5 ? "#fff" : "#fff9"} className={level == 5 ? styles.acticon : styles.icon} /> Statistiques </span>
@@ -196,15 +206,19 @@ export function StartPub() {
                 <div className={styles.content}>
 
                  
+                        <div className="dfb padding">
+                            <PasserPro />
+                            <Connect info={{ url: "/entreprise-pass", data: entreprise, token: { name: "entreprise", token: "etoken", id: "entrepriseId" } }} />
+                        </div>
 
-
-                    {level == 1 && <Pub />}
+                        {level == 10 && <div className="padding"> <Welcome /></div>}
+                        {level == 1 && <Pub />}
                     {level == 2 && <Offre />}
                     {level == 3 && <Activity />}
                     {level == 5 && <Stat />}
-                    {entreprise.site ? level == 8 && <ModSite/>  : level == 4 && <Site />}
+                        {entreprise.site ? level == 8 && <ModSite /> : level == 4 && <Site onTermine={setLevel}/>}
                         {level == 6 && <AddPost />}
-                        {level == 9 && <Page data={site} position={position} getProduct={getProduct} getPost={getPost}/>}
+                        {level == 9 && <Page data={site} entreprise={entreprise} position={position} getProduct={getProduct} getPost={getPost}/>}
                     {level == 7 && <AddProduct />}
                 </div>
             </div>

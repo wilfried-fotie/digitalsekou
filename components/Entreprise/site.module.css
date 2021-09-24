@@ -3,8 +3,28 @@
 }
 
 .container {
-    margin: 2% 15% 2%;
+    margin: 2% 15% 10px;
     padding: 10px 20px 10px;
+}
+
+.container li {
+    margin-left: 10%!important;
+}
+
+.cont {
+    margin: 2% 6% 10px;
+}
+
+.flexTab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+    gap: 5vh;
+}
+
+.cont0 {
+    margin: 0px 6% 2%;
 }
 
 .contain {
@@ -21,6 +41,10 @@
 .dfr>div,
 .dfss>div {
     margin: 0px 20px 0px;
+}
+
+.pag li {
+    margin-left: 10%;
 }
 
 .dfss {
@@ -55,6 +79,9 @@
     padding: 10px 20px 10px;
     border-radius: 10px;
     color: #000!important;
+    overflow: hidden;
+    border: .2px solid #4a00b4;
+    width: 30%;
 }
 
 .padding {

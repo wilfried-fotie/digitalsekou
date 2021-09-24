@@ -1,7 +1,8 @@
 import React from 'react'
-import { Rainbow, Reception0, Reception4 } from 'react-bootstrap-icons'
+import { ClipboardData, Rainbow, Reception0, Reception4 } from 'react-bootstrap-icons'
 import { SchoolContext } from '../../pages/addSchoolPro/[id]'
-import styles from '../../styles/startpub.module.css'
+import { Card } from '../Entreprise/Stat'
+import styles from "../Entreprise/stat.module.css"
 
 function Stats() {
     const school = React.useContext(SchoolContext).data.schoolData.school
@@ -11,16 +12,19 @@ function Stats() {
     return (
     <>
    {school.pro &&     <div>
+                <center className="h1 padding">Statistiques </center>
+               
+                <div className={styles.df}>
+                    
+     
+                    <Card icon={<ClipboardData size={40} color="#4a00b4" />} desc={"Nombres de clics dans les résultats de récherches"} number={school.stat} />
+                    <Card desc={"Nombres d'abonner"} number={users.length} icon={<ClipboardData size={40} color="#4a00b4" />} />
             
-            <div className="dfss">
-              <Card text={"Nombres de clics dans les résultats de récherches"} value={school.stat} />
-            <Card text={"Nombres d'abonner"} value={users.length} /> 
             
-            </div>
-        <div className="dfss">
-                <Card text={"Nombres de spécialités"} value={spe.length} />
+       
+                    <Card desc={"Nombres de spécialités"} number={spe.length} icon={<ClipboardData size={40} color="#4a00b4" />} />
 
-            </div>
+               </div>
            
             </div>
             }
@@ -32,22 +36,22 @@ function Stats() {
 export default Stats
 
 
-export function Card({text,value}) {
-    return (
-        <div className={styles.card}>
+// export function Card({text,value}) {
+//     return (
+//         <div className={styles.card}>
 
-            <center>
-                {text}
+//             <center>
+//                 {text}
 
-            </center>
-            <div className="dfss">
-                <center style={{ padding: "5px 20px 10px", fontSize: "2em" }}>
-                    {value}
+//             </center>
+//             <div className="dfss">
+//                 <center style={{ padding: "5px 20px 10px", fontSize: "2em" }}>
+//                     {value}
 
-                </center>
-            </div>
+//                 </center>
+//             </div>
            
 
-        </div>
-    )
-}
+//         </div>
+//     )
+// }

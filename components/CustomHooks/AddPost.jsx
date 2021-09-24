@@ -64,7 +64,7 @@ export default function PostTeur() {
     return (
         <div>
 
-            <center className="h1 pad">Création d'une Offre</center>
+            <center className="h1 pad">Création d'un Post</center>
 
             <PasserPro/>
 
@@ -83,6 +83,7 @@ export default function PostTeur() {
                     onHandleEditor={handleEditorContentOutro}
                     data={state}
                     handleClick={handleClick}
+                    reset={setState}
 
                 />}
                 {choise == 1 && <Visualisation
@@ -111,7 +112,7 @@ export default function PostTeur() {
 }
 
 export  function AddPost() {
-    const getPost = React.useContext(EntrepriseContext).data.getPost.posts
+    const getPost =  React.useContext(EntrepriseContext).data.getPost.posts
 
     const [visible, v] = useModal(false)
     const [visible2, v2] = useModal(false)
@@ -193,17 +194,11 @@ export  function AddPost() {
             <div className={styles.table}>
 
                 <table >
-                    {/* <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Nom de la prestation</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead> */}
+         
                     <tbody>
 
-                        {getPost == "" ? <center className="h2"></center> : null}
-                        {getPost.map((e,k)=>  <tr key={k}>
+                        {getPost == "" ? <center className="h2">Vide!!!</center> : 
+                        getPost.map((e,k)=>  <tr key={k}>
                             <td>#{k + 1}</td>
                             <td>{e.name}</td>
                             <td> <div className={styles.dfss}> <a className="btnPri dfss" onClick={() => handleMod(e.id,k)}> <PenFill className={styles.right} size="20px" color="#FFF" /> Modifier</a><a className="btnPriRed dfss" onClick={() => handleDel(e.id,k)}> <TrashFill className={styles.right} size={20} color="#FFF" /> Supprimer</a></div></td>
@@ -288,7 +283,7 @@ const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
 
 }
 
-export function Creation({ onHandleImageStateChange, onHandleTextStateChange, data, onHandleEditor, handleClick}) {
+export function Creation({ onHandleImageStateChange, onHandleTextStateChange, data, onHandleEditor, handleClick,reset}) {
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
     const [state, setState] = React.useState(data.position)
@@ -296,6 +291,9 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
     const site = React.useContext(EntrepriseContext).data.entrepriseSite.site
     const dispacth = React.useContext(EntrepriseContext).dispacth
     const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
+    const getPost = React.useContext(EntrepriseContext).data.getPost.posts
+    const id = getPost.length - 1
+    const post = id < 0 ?  1 : getPost[id].id + 1
     const [loader, setLoader] = React.useState(false)
     const [visible, v] = useModal(false)
 
@@ -308,41 +306,42 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
         onHandleImageStateChange(e)
     }
 
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        setErrors(true)
+        
         if (data.media && data.outro && data.name) {
             if (allowOnlyPicture(data.mediaName)) {
                 const formData1 = new FormData();
-
+                const img = entreprise.id + "-entreprise-prestation-" + post + "." + data.mediaName.split(".", -1)[1]
                 setLoader(true)
-                formData1.append("file", data.mediaData, entreprise.username + "-entreprise-prestation-" + data.mediaName);
+                formData1.append("file", data.mediaData, img);
 
 
 
                 axios.all([
-                    axios.post("/add-post-entreprise/" + entreprise.id, { name: data.name, media: data.mediaName, entrepriseId: entreprise.id, outro: draftToHtml(data.outro), disposition: state, proprio: "entreprise"}),
+                    axios.post("/add-post-entreprise/" + entreprise.id, { name: data.name, media: img, entrepriseId: entreprise.id, outro: draftToHtml(data.outro), disposition: state, proprio: "entreprise"}),
                     axios.post("/upload", formData1),
 
                 ]
 
 
                 ).then(res => {
-                    // sessionStorage.setItem("schoolToken", res[0].data.token)
-                    // sessionStorage.setItem("school", res[0].data.sigle)
-                    // sessionStorage.setItem("schoolId", res[0].data.id)
-                    // router.push(`/addSchoolPro/${res[0].data.id}?token=${res[0].data.token}`)
+                   
 
                     dispacth({ type: "ADD", name: "getPost",pre: "posts",data: res[0].data })
                     
                     setLoader(false)
+                    reset({ media: "", outro: "", position: 1, name: "" })
+                   
                 })
                     .catch(err => {
-                        console.log(data.name)
                         setLoader(false)
 
                     })
             }
+        } else {
+            setErrors(true)
         }
     }
     const handleEdit = (e) => {
@@ -355,12 +354,11 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
 
             <div className={styles.anim}>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} enctype="multipart/form-data">
                    
-
                     
                     <File name="media" def={data.media} onChange={handleImage} state={data.media}>Importer Une Image</File>
-
+                   
                     <span className="error">
                         {errors && data.media == "" && "Ce champs est réquis"}
                     </span>
@@ -427,6 +425,8 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
     const site = React.useContext(EntrepriseContext).data.entrepriseSite.site
     const dispacth = React.useContext(EntrepriseContext).dispacth
     const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
+    const getPost = React.useContext(EntrepriseContext).data.getPost.posts[k]
+   
     const [loader, setLoader] = React.useState(false)
     
     const initial = data.media
@@ -446,37 +446,34 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
         if (data.media && data.outro && data.name) {
             if (allowOnlyPicture(data.media) || (data.mediaName && allowOnlyPicture(data.mediaName)) ) {
                 const formData1 = new FormData();
+                const random = Math.floor(Math.random() * 10)
 
                 setLoader(true)
-                data.mediaName &&   formData1.append("file", data.mediaData, entreprise.username + "-entreprise-prestation-" + data.mediaName);
+                data.mediaName && formData1.append("file", data.mediaData, entreprise.id + "-entreprise-prestation-" + id + "-" + random + "." + data.mediaName.split(".", -1)[1]);
 
 
 
                 axios.all([
-                    axios.put("/posts/" + id, { name: data.name, media: data.mediaName || data.media, outro: draftToHtml(data.outro) || data.outro, disposition: data.position, proprio: "entreprise" }, {
+                    axios.put("/posts/" + id, { name: data.name, media: data.mediaName && entreprise.id + "-entreprise-prestation-" + id + "-" + random  + "." + data.mediaName.split(".", -1)[1] || data.media, outro: draftToHtml(data.outro) || data.outro, disposition: data.position, proprio: "entreprise" }, {
                             headers: {
                                 Authorization: "Bearer " + sessionStorage.getItem("etoken")
                             }
                         
                     }),
                     data.mediaName && axios.post("/upload", formData1),
-                    data.mediaName && axios.delete("/upload/" + entreprise.username + "-entreprise-prestation-" + data.mediaName),
+                    data.mediaName &&  axios.delete("/upload/" + getPost.image),
 
                 ]
 
 
                 ).then(res => {
-                    // sessionStorage.setItem("schoolToken", res[0].data.token)
-                    // sessionStorage.setItem("school", res[0].data.sigle)
-                    // sessionStorage.setItem("schoolId", res[0].data.id)
-                    // router.push(`/addSchoolPro/${res[0].data.id}?token=${res[0].data.token}`)
-
-                    dispacth({ type: "UPDATE", name: "getPost", pre: "posts", id: k, data: { description: draftToHtml(data.outro) || data.outro, name: data.name, media: data.mediaName || data.media, image: data.mediaName || data.media, outro: draftToHtml(data.outro) || data.outro, disposition: data.position, proprio: "entreprise" } })
+                   
+                    dispacth({ type: "UPDATE", name: "getPost", pre: "posts", id: k, data: { id: id, description: draftToHtml(data.outro) || data.outro, name: data.name, media: data.mediaName && entreprise.id + "-entreprise-prestation-" + id + "-" + random + "." + data.mediaName.split(".", -1)[1] || data.media, image: data.mediaName && entreprise.id + "-entreprise-prestation-" + id + "-" + random + "." + data.mediaName.split(".", -1)[1] || data.media, outro: draftToHtml(data.outro) || data.outro, disposition: data.position, proprio: "entreprise" } })
 
                     setLoader(false)
                 })
                     .catch(err => {
-                        alert("une erreur est survenu")
+                        alert("une erreur est survenu" + err)
                         setLoader(false)
 
                     })
@@ -493,12 +490,13 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
 
             <div className={styles.anim}>
 
+       
+
                 <center className="h2">Modification</center>
 
                 <form onSubmit={handleSubmit}>
 
-
-                    <File name="media" def={data.mediaName ? null : "/" + entreprise.username + "-entreprise-prestation-" + data.media} defData={data.mediaName ? data.media : null} onChange={handleImage} state={data.media}>Importer Une Image</File>
+                    <File name="media" def={data.mediaName ? null :  "/" + data.media} defData={data.mediaName ? data.media : null} onChange={handleImage} state={data.media}>Importer Une Image</File>
 
                     <span className="error">
                         {errors && data.media == "" && "Ce champs est réquis"}
@@ -509,7 +507,7 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
                     </span>
 
 
-                    <Editor name="editor" r={false} state={data.outro } className={styles.width} handleEdit={handleEdit} edit={true}>
+                    <Editor name="editor" r={false} state={draftToHtml(data.outro) || data.outro } className={styles.width} handleEdit={handleEdit} edit={true}>
 
                         Description de votre offre
                     </Editor>
@@ -589,20 +587,24 @@ export function Error() {
 
 export function Delete({ close, id,k }) {
     const dispacth = React.useContext(EntrepriseContext).dispacth
-
+    const getPost = React.useContext(EntrepriseContext).data.getPost.posts[k]
+    const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
     const handleClick = () => {
     close(true)
     }
     
     const handleDelete = async () => {
-        await axios.delete(`/posts/${id}`,
+        await axios.all([
+            axios.delete(`/posts/${id || getPost.id}`,
             {
                 headers: {
                     Authorization: "Bearer " + sessionStorage.getItem("etoken")
                 }
 
             }
-        )
+            ),
+            axios.delete("/upload/" + getPost.image)
+        ])
             .then(() => {
                 // setError()
                 // setFine("Suppression réussi")
@@ -623,7 +625,6 @@ export function Delete({ close, id,k }) {
 
     return (
         <div >
-            {JSON.stringify(id)}
             <p >
                 Voulez-vous réellement supprimer ??
             </p>

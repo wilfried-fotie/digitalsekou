@@ -1,8 +1,58 @@
 .left {
     display: inline-block;
     padding: 10px 30px 10px;
-    width: 42vw;
     background-color: #fff;
+}
+
+.body {
+    margin-bottom: 5%;
+}
+
+.textContent {
+    max-width: 55vw;
+}
+
+.bar {
+    max-width: 20vw;
+    background-color: rgba(201, 201, 201, 0.507);
+    min-height: 100vh;
+    padding: 3% 5px 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+}
+
+.bar * {
+    color: black!important;
+}
+
+.bar p {
+    text-align: left!important;
+}
+
+.flex {
+    display: flex;
+}
+
+.round {
+    border-radius: 50%;
+    padding: 10px 5px 10px;
+    border: 5px solid #4a00b4;
+    display: block;
+    color: #4a00b4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+}
+
+.body li {
+    margin-left: 10%;
+}
+
+.maine {
+    margin: 0px 2% 3%;
 }
 
 .contain {

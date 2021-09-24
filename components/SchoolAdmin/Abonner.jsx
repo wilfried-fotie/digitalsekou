@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import React from 'react'
-import { Whatsapp } from 'react-bootstrap-icons'
+import { ClipboardData, Whatsapp } from 'react-bootstrap-icons'
 import { SchoolContext } from '../../pages/addSchoolPro/[id]'
 import styles from '../../styles/startpub.module.css'
+
 
 
 export default function Abonner() {
@@ -14,18 +15,19 @@ export default function Abonner() {
         
         <>
         {
-            data.pro &&
-                <div className="container">
+                data.pro && <>
+                    <center className="h1 padding">Liste de vos abonnés</center>
             
+                <div className="container">
                     {users.lenght !== 0 ? <table>
-                        <thead>
+                        {/* <thead>
                             <tr>
                                 <th>Nom</th>
                                 <th>Tel</th>
                                 <th>Status</th>
                                 <th>Contacter</th>
                             </tr>
-                        </thead>
+                        </thead> */}
                         <tbody>
                             {users.map((e, k) => <Tr key={k} value={e} />)}
                         </tbody>
@@ -33,7 +35,7 @@ export default function Abonner() {
                     </table>
                         :
                         <span className="fine">Aucune personne n'est déja abonner</span>
-                    } </div> }
+                    } </div></> }
             
             
           {!data.pro && <p><center className="error">Cette fonctionnalité est réserver  à la version pro</center></p>}

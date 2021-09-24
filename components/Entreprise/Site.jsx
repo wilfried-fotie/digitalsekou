@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowLeft, ArrowRight, DisplayFill, GeoAlt, GeoAltFill, Image, ImageFill, Link, PencilSquare, PhoneVibrateFill, TelephoneFill, TelephoneXFill, TrophyFill } from 'react-bootstrap-icons'
+import { ArrowLeft, ArrowRight, DisplayFill, FileEarmarkPostFill, GeoAlt, GeoAltFill, Image, ImageFill, Link, PencilSquare, PhoneVibrateFill, TelephoneFill, TelephoneXFill, TrophyFill } from 'react-bootstrap-icons'
 import styles from "./site.module.css"
 import style from "./offre.module.css"
 import { CheckBox, Editor, Field, File, Radio, SelectoR, Selector, TextArea } from '../FormTools'
@@ -12,24 +12,27 @@ import Loader from 'react-loader-spinner'
 import axios from 'axios'
 import draftjsToHtml from 'draftjs-to-html'
 import { EntrepriseContext } from '../../pages/StartPub'
+import styl from "../Entreprise/offre.module.css"
 
 
 
-function Site() {
+function Site({onTermine}) {
 
     const [state, setState] = React.useState(1)
     const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
-
+   
     const [errors, setErrors] = React.useState(false)
-    const [data, setData] = React.useState({ logo: "", outro: "", position: [], activity: "", profil: "", description: "", prop: { pres: false, pro: false }, status: { off: false, on: false }, tel: entreprise.tel, name: entreprise.username, opens: { lundi: false, mardi: false, mercredi: false, jeudi: false, vendredi: false, samedi: false, dimanche: false } })
+    const [data, setData] = React.useState({ logo: "", outro: "",disposition: 3, position: [], activity: "", profil: "", description: "", prop: { pres: false, pro: false }, status: { off: false, on: false }, tel: entreprise.tel, name: entreprise.username })
     const handleClick = () => {
-        if (state < data.status.off ? 4 : 3) {
+        if ((state < (data.status.off == false ? 3 : 4))) {
             setState(s => s + 1)
         } else {
             setState(state)
         }
     }
-
+    const handleDispo = (e) => {
+        setData(s => ({ ...s, disposition: e }))
+    }
     const handleClickInverse = () => {
         if (state < 2) {
             setState(state)
@@ -58,13 +61,7 @@ function Site() {
     const onSetErrors = () => {
         setErrors(true)
     }
-    const handleEditChange =  (content) => {
-            setState(s => ({
-                ...s,
-                description: content,
-                articleUpdated: true
-            }));
-        }
+   
 
     const checkChange = (e) => {
         setData(s => ({ ...s, [e.target.getAttribute("data-id")]: { ...s[e.target.getAttribute("data-id")], [e.target.name]: e.target.checked } }))
@@ -102,7 +99,7 @@ function Site() {
             
 <center className={styles.top}><span className="h1">Création de page pro</span></center>
 
-            
+        
             <center className={style.nav}>
                 <a className={choise ? style.active : style.inactive} onClick={() => handleChoiseState(true)}><PencilSquare className="mr" size={25} color="#4a00b4" /> Création </a>
                 <a className={!choise ? style.active : style.inactive} onClick={() => handleChoiseState(false)}><DisplayFill size={25} className="mr" color="#4a00b4" /> Visualiation </a>
@@ -125,7 +122,7 @@ function Site() {
                     errors={errors}
 
                 />}
-                {state == (!data.status.off ? 4 : 3) && <Page3
+                {state == 3 && data.status.off && <Page3
                     data={data}
                     onHandleEditor={handleEditorContentOutro}
                     onHandleTextChange={handleChange}
@@ -133,22 +130,16 @@ function Site() {
                     errors={errors}
 
                 />}
-                {/* {state == 4 && <Page5
-                    data={data}
-                    onCheckChange={checkChange}
-                    onSetErrors={onSetErrors}
-                    onHandleTextChange={handleChange}
-
-                    errors={errors}
-
-                />} */}
-                {state == 4 && <Page4
+       
+                {state == (data.status.off ? 4 : 3) && <Page4
                     data={data}
                     onHandleEditor={handleEditorContentOutro}
                     onHandleTextChange={handleChange}
                     onHandleSelectChange={handleSelectChange}
                     onSetErrors={onSetErrors}
                     errors={errors}
+                    handleDispo={handleDispo}
+                    onTermine={onTermine}
 
                 />}
              
@@ -345,7 +336,7 @@ const allowOnlyPicture = (filename) => {
 }
 
 
-export function Page4({ data, onHandleEditor, errors, onSetErrors}) {
+export function Page4({ data, onHandleEditor, errors, onSetErrors, onTermine, handleDispo}) {
 
 
     const [visible, v] = useModal(false)
@@ -353,7 +344,13 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors}) {
     const [visible3, v3] = useModal(false)
     const [loader, setLoader] = React.useState(false)
     const [error, setError] = React.useState({})
+    const dispacth = React.useContext(EntrepriseContext).dispacth
+    const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
+    const [dispo, setDispo] = React.useState(data.disposition)
 
+    const handleClickDispo = (e) => {
+        handleDispo(e)
+    }
     const handleEdit = (e) => {
         onHandleEditor(e)
     }
@@ -384,16 +381,6 @@ let state = data
             }
         }
 
-        // if (state.password.length < 8) {
-        //     err -= 1
-        //     setErrors(s => {
-        //         return { ...s, password: "Le mot de passe doit être au moins 8 caractères" }
-        //     })
-        // } else {
-        //     err++
-
-        // }
-
 
         if (err == 1) { setErrors({}) }
 
@@ -407,23 +394,25 @@ let state = data
                 const formData1 = new FormData();
                 const formData2 = new FormData();
                 setLoader(true)
-                formData1.append("file", state.logoData, state.name + "-entreprise-" + state.logoName);
-                formData2.append("file", state.profilData, state.name + "-entreprise-" + state.profilName);
+                formData1.append("file", state.logoData, entreprise.id + "-entreprise-logo." + state.logoName.split(".", -1)[1]);
+                formData2.append("file", state.profilData, entreprise.id + "-entreprise-profil." + state.profilName.split(".", -1)[1]);
 
 
                 axios.all([
-                    axios.post("/add-site-entreprise", { ...state, entrepriseId: sessionStorage.getItem('entrepriseId'), outro: draftjsToHtml(state.outro)}),
+                    axios.post("/add-site-entreprise", { ...state, logoName: entreprise.id + "-entreprise-logo." + state.logoName.split(".", -1)[1], profilName: entreprise.id + "-entreprise-profil." + state.profilName.split(".", -1)[1], disposition: dispo,entrepriseId: entreprise.id, outro: draftjsToHtml(state.outro)}),
                     axios.post("/upload", formData1),
                     axios.post("/upload", formData2)
                 ]
 
 
                 ).then(res => {
-                    // sessionStorage.setItem("schoolToken", res[0].data.token)
-                    // sessionStorage.setItem("school", res[0].data.sigle)
-                    // sessionStorage.setItem("schoolId", res[0].data.id)
-                    // router.push(`/addSchoolPro/${res[0].data.id}?token=${res[0].data.token}`)
+                   
+                    const pos = state.position.map(e => ({ position: e.value }))
+                    dispacth({ type: "UPDATESITE", name: "entrepriseSite", position: pos, pre: "site", data: res[0].data })
+                    dispacth({ type: "UPDATEENTREPRISE", name: "entreprise", pre: "entreprise", data: { ...entreprise,site: true} })
+
                     setLoader(false)
+                    onTermine(9)
                 })
                     .catch(err => {
                         console.log(err)
@@ -454,9 +443,32 @@ let state = data
     return (
         <div className={styles.page}>
           
-            <div className="particular">
-
             
+
+            <div className="a">
+                <p className="dfs"> <FileEarmarkPostFill size={20} color="#4a00b4" /> Disposition</p>
+                <div className="dfss">
+                    <div className={dispo === 1 ? styl.activeborder0 : styl.border0} onClick={() => { setDispo(1); handleClickDispo(1)}}>
+                        <ImageFill size={20} color="#4a00b4" /> <span>Texte</span>
+                    </div>
+                    <div className={dispo === 2 ? styl.activeborder : styl.border} onClick={() => { setDispo(2); handleClickDispo(2) }}>
+                        <ImageFill size={20} color="#4a00b4" /> <span>Texte</span>
+                    </div>
+
+                    <div className={dispo === 3 ? styl.activeborder2 : styl.border2} onClick={() => { setDispo(3); handleClickDispo(3)}}>
+                        <span>Texte</span>    <ImageFill size={20} color="#4a00b4" />
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+            <div className="particular pad">
+
+           
                 
             <Editor name="outro" r={false} state={draftToHtml(data.outro)} handleEdit={handleEdit} edit={true}>
 
@@ -489,45 +501,10 @@ let state = data
 }
 
 
-export function Page5({ data, errors, onCheckChange, onHandleTextChange }) {
-    const handleCheckChange = (e) => {
-        onCheckChange(e)
 
-    }
-    const handleChangeText = (e) => {
-        onHandleTextChange(e)
-    }
-
-    return (
-        <>
-            <div className={styles.page}>
-
-                <CheckBox name={["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]} dataId="opens" p={true} onChange={handleCheckChange} state={[{ label: <Timer name={"Lundi"} />, value: data.opens.lundi }, { label: <Timer name={"Mardi"} />, value: data.opens.mardi }, { label: <Timer name={"Mercredi"} />, value: data.opens.mercredi }, { label: <Timer name={"Jeudi"} />, value: data.opens.jeudi }, { label: <Timer name={"Vendredi"} />, value: data.opens.vendredi }, { label: <Timer name={"Samedi"} />, value: data.opens.samedi }, { label: <Timer name={"Dimanche"} />, value: data.opens.dimanche }]} r={false} >
-                Jours d'ouverture
-                </CheckBox>
-                
-             
-        </div>
+export function Preview({ data }) {
     
-        </>
-    )
-}
 
-export function Timer({ name }) {
-    const [state,setState] = React.useState()
-    const onChange = e => {
-        setState(e.target.value)
-    }
-    return (
-        <>
-            {name} de :  <input type="time" name="" value={state} onChange={onChange} id="" /> jusqu' à <input type="time" name=""  id="" />
-
-        </>
-    )
-}
-
-
-export function Preview({data}) {
     return (
         <div className={styles.prev}>
          
@@ -540,8 +517,8 @@ export function Preview({data}) {
                 
                 <div className={styles.df}>
                     <a className="active"> Acceuil</a>
-                    <a>Catalogue</a>
-                    <a>Nos Services</a>
+                    {data.prop.prod && <a>Catalogue</a>}
+                    {data.prop.pres && <a>Nos Services</a>}
                     <a>Nous Contacter</a>
                 </div>
 
@@ -551,13 +528,13 @@ export function Preview({data}) {
             </nav>
 
 
-            <div className={styles.dfb}>
+            <div className={data.disposition == 1 ? styles.flexTab : data.disposition == 3 ? styles.dfb : styl.dfr }>
                 <div className={styles.contain}>
                     {data.outro ? <Markup content={draftToHtml(data.outro).substr(0, 1000) + "..."} /> : "Description de votre entreprise sera afficher ici"}
                     
                 </div>
 
-                {/* {data.profil ? <img  src={data.profil} /> : } */}
+                
 
                 {data.profil ?  <img src={data.profil} className="imgFill" alt="image ou vidéo chargé" /> : <Image size={250} color="#4a00b4" />}
             </div>
@@ -570,9 +547,9 @@ export function Preview({data}) {
             <div>
                 <span className={styles.dfs}>   <TelephoneFill size={20} color="#4a00b4" /> {data.tel || "Téléphone"}</span>
 
-                <span className={styles.dfs}>   <GeoAlt size={20} color="#4a00b4" /> {data.position == [] ? "Villes dans lesquelles vous êtes" : data.position && data.position.map(e => e.label + ", ")}</span>
+                <span className={styles.dfs}> {data.status.off && <GeoAlt size={20} color="#4a00b4" />}{data.position == [] ? "Villes dans lesquelles vous êtes" : data.position && data.position.map(e => e.label + ", ")}</span>
                 <span className={styles.dfs}>
-                    {data.description ? data.description : "(  Description de votre emplacement)"}
+                    {data.description ? data.description : data.status.off && " Description de votre emplacement"}
                 </span>
             
              

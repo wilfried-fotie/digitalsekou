@@ -1,27 +1,29 @@
 import React, { useEffect, useLayoutEffect } from 'react'
-import { ArrowLeft,  Lock,  Person, PersonCircle,  DisplayFill, FileRuled, Pen, DoorClosed, Briefcase, Cash,  KanbanFill, AlignMiddle, Link, ChevronRight, HouseFill, BellFill, BarChartFill, Joystick, TrophyFill, } from 'react-bootstrap-icons'
+import { ArrowLeft, Lock, Person, PersonCircle, FileWordFill,  DisplayFill, FileRuled, Pen, DoorClosed, Briefcase, Cash,  KanbanFill, AlignMiddle, Link, ChevronRight, HouseFill, BellFill, BarChartFill, Joystick, TrophyFill, FileWord, Globe, } from 'react-bootstrap-icons'
 import style from '../../styles/sudo.module.css'
 import "../../global"
 import axios from "axios"
 import { useRouter } from "next/router"
 import useChangeBool from '../../components/handleBool'
 import FineModal from '../../components/fineModal'
-import CustomModal from '../../components/customModal'
 import { useForm } from 'react-hook-form'
 import { FieldValidate, PasswordValidate } from '../../components/FormTools'
 import styles from '../../styles/startpub.module.css'
 import Loader from "react-loader-spinner";
 import { fetchPositions, fetchTypes, fetchFilieres, fetchSchoolData, fetchSpecialities, fetSchoolAbo, fetSchoolMessages } from "../../Model/getter"
 import { Account } from '../Template/Header'
-import { SiteWeb } from '../../components/SchoolAdmin/web'
+import { ModSchool, SiteWeb } from '../../components/SchoolAdmin/web'
 import Welcome from '../../components/SchoolAdmin/Welcome'
 import { Home } from '../../components/SchoolAdmin/Fiches'
 import Abonner from '../../components/SchoolAdmin/Abonner'
-import AddSchool from '../AddSchool'
-import { schoolReducer } from '../../Reducer/schoolPro'
-import Notif from '../../components/SchoolAdmin/notif'
 import Stats from '../../components/SchoolAdmin/Stats'
 import Notification from '../../components/SchoolAdmin/Notification'
+import WebsitePreview from '../../components/School/WebsitePreview'
+import { Connect } from '../Sudo'
+import Head from "next/head"
+import { AddPost } from '../../components/CustomHooks/AddPost'
+import AddThink from '../../components/SchoolAdmin/AddThink'
+import { fecthPost } from '../../Model/getEntreprise'
 
 
 const useIsomorphicLayoutEffect =
@@ -70,6 +72,7 @@ export function ControllerBuilder({ submitData, err ,e=false}) {
     }
     return (
         <>
+           
             <main className={style.main}>
             
                 <div className={style.ok}>
@@ -128,7 +131,7 @@ export const SchoolContext = React.createContext({})
 
 
 
-export default function Controller({ schoolData, fils, specialities, types,positions,abo ,mes}) {
+export default function Controller({ schoolData, fils, specialities, types, positions, abo, mes, getPost}) {
   
     const [schoolId, setSchoolId] = React.useState()
     const [schoolToken, setSchoolToken] = React.useState()
@@ -146,12 +149,24 @@ export default function Controller({ schoolData, fils, specialities, types,posit
 
                 return finish
             case "ADDSPE":
-                const newSatate2 = [...state[action.name]]
+                const newStatea = [...state[action.name][action.pre]]
+                newStatea.push({ ...action.data })
 
-                newSatate2.push({ ...action.data })
-                finish = { ...state, [action.name]: newSatate2 }
-               
+                finish = { ...state, [action.name]: { [action.pre]: newStatea } }
+                return finish
 
+
+            case "DELETESPE":
+                const delStat = [...state[action.name][action.pre]]
+
+                let num2 = action.id
+                delStat.splice(num2, 1)
+                finish = { ...state, [action.name]: { [action.pre]: delStat } }
+                return finish
+            case "UPDATESPE":
+                const upState2 = [...state[action.name][action.pre]]
+                upState2[action.id] = action.data
+                finish = { ...state, [action.name]: { [action.pre]: upState2 } }
                 return finish
             case "DELETE":
                  const delState = [...state[action.name]]
@@ -161,6 +176,13 @@ export default function Controller({ schoolData, fils, specialities, types,posit
                     num = delState.payload
                 }
                 finish = { ...state, [action.name]: delState }
+                return finish
+            case "DELETE2":
+                const delState3 = [...state[action.name][action.name]]
+                
+                delState3.splice(action.id, 1)
+               
+                finish = { ...state, [action.name]: { [action.name]: delState3} }
                 return finish
            
             case "UPDATESCHOOL":
@@ -184,37 +206,35 @@ export default function Controller({ schoolData, fils, specialities, types,posit
                 finish = { ...state, [action.name]: upSchoolState, positions: dolor, types: action.value.multiple == "Non" ? { types: [action.value.type.value] } : dolorPosition }
 
                 return finish
-            case "UPDATENewArray":
-                 const upState2 = [...state[action.name]]
-
-                upState2[action.id].name = action.value
-                upState2[action.id].fil = action.fil
-                upState2[action.id].prix = action.prix
-
-
+            case "UPDATEOBJ":
                 
 
-                finish = { ...state, [action.name]: upState2 }
+                finish = { ...state, [action.name]: { [action.pre]: action.data } }
+
+
 
                 return finish
            
             case "UPDATE":
                  const upState = [...state[action.name]]
 
-                if (upState[action.id].name = "spe") {
-                    upState[action.id].name = action.value
-                    upState[action.id].description = action.description
-                    upState[action.id].price = action.price
-                }
-
+                upState[action.id] = action.data
                 finish = { ...state, [action.name]: upState }
+
+                return finish
+            case "UPDATEALL":
+
+                const upStateAll = [state[action.name]]
+
+                finish = { ...state, [action.name]: { [action.name]: action.data,error: false } }
 
                 return finish
             default:
 
                 const defState = [...state[action.name]]
 
-                finish = { ...state, [action.name]: defState }
+                finish = {
+                    ...state, [action.name]: { [action.name]: defState } }
 
                 return finish
         }
@@ -227,7 +247,7 @@ export default function Controller({ schoolData, fils, specialities, types,posit
   
   
 
-    const [data, dispacth] = React.useReducer(schoolReducer, { schoolData, positions, types, spe, users,mes})
+    const [data, dispacth] = React.useReducer(schoolReducer, { schoolData, positions, types, spe, users, mes, getPost})
    
 
 
@@ -299,7 +319,9 @@ export function Dasboard({  specialities}) {
 
     return (
         <>
-
+            <Head>
+                <title>School Administration</title>
+            </Head>
             <div className={style.container}>
 
 
@@ -310,31 +332,35 @@ export function Dasboard({  specialities}) {
                                 e.preventDefault()
                                 setLevel(0)
                                 router.push("/")
-                            }}> <ArrowLeft size={20} color={level == 0 ? "#fff" : "#4a00b4"} className={level == 0 ? style.acticon : style.icon} /> Revenir au site</span>
+                            }}> <ArrowLeft size={20} color={level == 0 ? "#fff" : "#FFF9"} className={level == 0 ? style.acticon : style.icon} /> Revenir au site</span>
 
-                            <span className={level == 1 ? style.active : style.span} onClick={() => { setLevel(1) }}> <HouseFill size={20} color={level == 1 ? "#fff" : "#4a00b4"} className={level == 1 ? style.acticon : style.icon} /> Acceuil  </span>
-                            <span className={level == 2 ? style.active : style.span} onClick={() => { setLevel(2) }}> <FileRuled size={20} color={level == 2 ? "#fff" : "#4a00b4"} className={level == 2 ? style.acticon : style.icon} /> Fiches  </span>
-                            <span className={level == 3 ? style.active : style.span} onClick={() => { setLevel(3) }}> <DisplayFill size={20} color={level == 3 ? "#fff" : "#4a00b4"} className={level == 3 ? style.acticon : style.icon} /> Site Web </span>
-                            <span className={level == 4 ? style.active : style.span} onClick={() => { setLevel(4) }}> <PersonCircle size={20} color={level == 4 ? "#fff" : "#4a00b4"} className={level == 4 ? style.acticon : style.icon} /> Parents/Élève </span>
-                            <span className={level == 5 ? style.active : style.span} onClick={() => { setLevel(5) }}> <BellFill size={20} color={level == 5 ? "#fff" : "#4a00b4"} className={level == 5 ? style.acticon : style.icon} /> Notifications </span>
-                            <span className={level == 6 ? style.active : style.span} onClick={() => { setLevel(6) }}> <BarChartFill size={20} color={level == 6 ? "#fff" : "#4a00b4"} className={level == 6 ? style.acticon : style.icon} /> Statistiques </span>
+                            
+                            <div className={style.ava} >
+                                <img className={style.avatar}  src={dataSchool && "/"  + dataSchool.logo} alt={dataSchool && dataSchool.sigle || "Logo"} />
+
+                            </div>
+
+
+                            <span className={level == 1 ? style.active : style.span} onClick={() => { setLevel(1) }}> <HouseFill size={20} color={level == 1 ? "#fff" : "#FFF9"} className={level == 1 ? style.acticon : style.icon} /> Acceuil  </span>
+                            <span className={level == 2 ? style.active : style.span} onClick={() => { setLevel(2) }}> <FileRuled size={20} color={level == 2 ? "#fff" : "#FFF9"} className={level == 2 ? style.acticon : style.icon} /> Fiches  </span>
+                            <span className={level == 8 ? style.active : style.span} onClick={() => { setLevel(8) }}> <Globe size={20} color={level == 8 ? "#fff" : "#FFF9"} className={level == 8 ? style.acticon : style.icon} /> Enrichir Votre Site Web </span>
+                            <span className={level == 3 ? style.active : style.span} onClick={() => { setLevel(3) }}> <FileWordFill size={20} color={level == 3 ? "#fff" : "#FFF9"} className={level == 3 ? style.acticon : style.icon} /> Modifier Votre Site Web </span>
+                            <span className={level == 7 ? style.active : style.span} onClick={() => { setLevel(7) }}> <DisplayFill size={20} color={level == 7 ? "#fff" : "#FFF9"} className={level == 7 ? style.acticon : style.icon} /> Visualiser Votre Site Web </span>
+                            <span className={level == 4 ? style.active : style.span} onClick={() => { setLevel(4) }}> <PersonCircle size={20} color={level == 4 ? "#fff" : "#FFF9"} className={level == 4 ? style.acticon : style.icon} /> Abonnés </span>
+                            <span className={level == 5 ? style.active : style.span} onClick={() => { setLevel(5) }}> <BellFill size={20} color={level == 5 ? "#fff" : "#FFF9"} className={level == 5 ? style.acticon : style.icon} /> Notifications </span>
+                            <span className={level == 6 ? style.active : style.span} onClick={() => { setLevel(6) }}> <BarChartFill size={20} color={level == 6 ? "#fff" : "#FFF9"} className={level == 6 ? style.acticon : style.icon} /> Statistiques </span>
 
                         </div>
+                        
 
                     </aside>
                     <article className={style.article}>
                         <nav className="dfb">
 
-                            <img style={{width: "100px"}} src={dataSchool && "/" + dataSchool.sigle + "-" + dataSchool.logo} alt={dataSchool && dataSchool.sigle || "Logo"} />
+<ForPro />
+                            <Connect info={{ url: "/school-change-pass", data: dataSchool,token: {name: "school",token:"schoolToken",id: "schoolId"}}}/>
 
-
-                            <div className={styles.end}>
-                                <ForPro />
-                                <div className={styles.account}>
-                                    <Account user={user} school={true} onTokenChange={setSchoolToken} />
-
-                                </div>
-                            </div>
+                           
 
 
                         </nav>
@@ -343,8 +369,10 @@ export function Dasboard({  specialities}) {
 
                           
                             {level == 1 && <Welcome />}
-                            {level == 2 &&   <Home specialities={specialities} />}
-                            {level == 3 && <SiteWeb  specialities={specialities}/>}
+                            {level == 2 && <Home specialities={specialities} />}
+                            {level == 8 && <AddThink />}
+                            {level == 3 && <center><> <ModSchool specialities={specialities} /></> </center>}
+                            {level == 7 && <WebsitePreview  />}
                             {level == 4 && <Abonner />}
                             {level == 5 && <Notification/>}
                             {level == 6 && <Stats />}
@@ -362,7 +390,6 @@ export function Dasboard({  specialities}) {
 export function ForPro() {
     const [visbility, v] = useModal(false)
     const school = React.useContext(SchoolContext).data.schoolData.school
-
     const handleChange = () => {
         v(false)
     }
@@ -386,7 +413,7 @@ export function ProMode() {
     const handleSubmit = () => {
       
         axios.put(`/demande/${school.id}`, { demande: true }).then(r => null).catch(e => null)
-        dispacth({ type: "UPDATESCHOOL", name: "schoolData", id: school.id, value: {...school,demande: !school.demande} })
+        dispacth({ type: "UPDATEOBJ", name: "schoolData",pre: "school", data: {...school,demande: !school.demande} })
     }
     return (
         <>
@@ -419,25 +446,24 @@ export  async function getServerSideProps ({ params, query}) {
   
   const token = query.token
     const id = parseInt(params.id)
-    const fils = await fetchFilieres(id);
     const specialities = await fetchSpecialities(id);
     const types = await fetchTypes(id);
     const positions = await fetchPositions(id);
     const schoolData = await fetchSchoolData(id, token);
     const abo = await fetSchoolAbo(id)
     const mes = await fetSchoolMessages(id)
-
+    const getPost = await fecthPost(id,"school")
 
 
     return {
         props: {
             schoolData,
-            fils,
             specialities,
             types,
             positions,
             abo,
-            mes
+            mes,
+            getPost
             
         },
     };

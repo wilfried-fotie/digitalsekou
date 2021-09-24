@@ -55,7 +55,7 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
 
         window.document.addEventListener("scroll", () => {
             setPosition(window.document.body.getBoundingClientRect().top)
-            if (window.document.body.getBoundingClientRect().top < -23) {
+            if (window.document.body.getBoundingClientRect().top < -23 && value !== "3") {
                 setScroll(true)
 
             } else {

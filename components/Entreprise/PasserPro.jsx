@@ -5,10 +5,17 @@ import styles from "../Entreprise/offre.module.css"
 
 function PasserPro() {
     const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
+    const dispacth = React.useContext(EntrepriseContext).dispacth
     const [state, setState] = React.useState(entreprise.demande)
     const state2 = entreprise.pro
     const handleClick = () => {
-        axios.put("/demande-entreprise/" + entreprise.id, {}).then().catch()
+        axios.put("/demande-entreprise/" + entreprise.id, {
+            headers: {
+                Authorization: "Bearer " + sessionStorage.getItem("etoken")
+            }
+        }).then().catch(()=>alert("Erreur"))
+        setState(entreprise.demande)
+        dispacth({ type: "UPDATEENTREPRISE", name: "entreprise", pre: "entreprise", data: { ...entreprise, demande: !entreprise.demande} })
         setState(s=> !s)
     }
     return (

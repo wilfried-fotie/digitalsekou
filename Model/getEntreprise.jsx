@@ -21,6 +21,21 @@ export const fetchEntrepriseData = async function (id, token) {
 }
 
 
+export const fetchEntrepriseSlugData = async function (slug) {
+
+    return await axios.get(`/entreprise/get/${slug}`)
+        .then(res => ({
+            error: false,
+            entreprise: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            entreprise: null,
+        }))
+}
+
+
+
 export const fecthPub = async function (id) {
 
     return await axios.get(`/get-pubs/${id}`)
@@ -64,9 +79,9 @@ export const fecthProduct = async function (id) {
 
 }
 
-export const fecthPost = async function (id) {
+export const fecthPost = async function (id, who = "entreprises") {
 
-    return await axios.get(`/get-entreprises-posts/${id}`)
+    return await axios.get(`/get-${who}-posts/${id}`)
         .then(res => ({
             error: false,
             posts: res.data,

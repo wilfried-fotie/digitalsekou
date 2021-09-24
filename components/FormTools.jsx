@@ -52,7 +52,7 @@ export function Field({ auto, children, r = false,name, type = "text", value, on
     return (<div className={r ? "dfss" : styles.dg}>
 
         <div> <label htmlFor={name} className="dfs"> {image} {children}</label> </div>
-        <div>  <input type={type} placeholder={auto} value={value} onChange={onChange} name={name} id={name} />   </div>
+        <div>  <input type={type} min={type == "date" ? new Date().toLocaleDateString().replaceAll("/","-") : null} placeholder={auto} value={value} onChange={onChange} name={name} id={name} />   </div>
 
     </div>)
 }
@@ -198,7 +198,7 @@ export function RadioValidate({ children, name, r = true, control, data, image =
 
 export function Selector({ options,r=false, mult=false, def = [],children, name, control,  image = <NodeMinus size={30} color="#4a00b4" /> }) {
     const newDef = []
-    def.map(e => newDef.push({ value: e.position || e.types || e, label: e.position || e.types || e}))
+  def &&  def.map(e => newDef.push({ value: e.position || e.types || e, label: e.position || e.types || e}))
     
     const { field: { ref, ...inputProps },
         fieldState: { invalid, isTouched, isDirty },

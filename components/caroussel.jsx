@@ -1,18 +1,13 @@
 import React from "react";
 import Slider from "react-slick";
-import Image from 'next/image';
-import draftToHtml from 'draftjs-to-html'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ArrowRight, ArrowLeft } from 'react-bootstrap-icons'
-import Icon from "./CustomHooks/Icon";
 import  { Visualisation } from "./Entreprise/Offre";
 import {Visualisation as V} from "./Entreprise/Pub";
-import { Markup } from "interweave";
-import Link from "next/link"
 
 
-export default function SimpleSlider({data}) {
+export default function SimpleSlider({data,pub}) {
     var settings = {
         dots: true,
         infinite: true,

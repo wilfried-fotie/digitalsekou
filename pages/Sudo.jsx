@@ -298,7 +298,7 @@ export async function getServerSideProps({ params, query }) {
 
 
 
-export function Connect() {
+export function Connect({info}) {
     const [visbility2, v2] = useModal(false)
     const pos = React.useRef(null)
     const [position, setPosition] = React.useState({})
@@ -320,7 +320,7 @@ export function Connect() {
 
                 <Gear size={20} className={style.icon} color="#4a00b4" /> <span>Paramètre</span>  </a>
 
-            {visbility2 && <FineModal onModalChange={v2} position={position} component={<Verif />} />}
+            {visbility2 && <FineModal onModalChange={v2} position={position} component={<Verif info={ info}/>} />}
 
         </div>
 
@@ -403,12 +403,13 @@ export function Dasboard() {
 
 
 
-export function Verif() {
+export function Verif({info}) {
     const router = useRouter()
     const [visible, v] = useModal(false)
     const handleDisconnect = () => {
-        sessionStorage.removeItem("sudoToken")
-        sessionStorage.removeItem("sudo")
+        sessionStorage.removeItem(info.token.name)
+        sessionStorage.removeItem(info.token.id)
+        sessionStorage.removeItem(info.token.token)
         router.push("/")
     }
 
@@ -429,14 +430,14 @@ export function Verif() {
 
 
             </div>
-            {visible && <CustomModal onModalChange={v} component={<ChangePasse />} />}
+            {visible && <CustomModal onModalChange={v} component={<ChangePasse info={info} />} />}
         </>
     )
 }
 
 
 
-export function ChangePasse() {
+export function ChangePasse({info}) {
 
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
@@ -447,12 +448,13 @@ export function ChangePasse() {
   
     const onSubmit =  (data) => {
         if (isValid) {
-            axios.put("/sudo", {...data,username: "admin"}, {
+            setLoader(true)
+            axios.put(info.url, { ...info.data, password: data.password, oldpassword: data.oldpassword }, {
                 headers: {
-                    Authorization: "Bearer " + sessionStorage.getItem("sudoToken")
+                    Authorization: "Bearer " + sessionStorage.getItem(info.token.token)
                 }
 
-            }).then(res=> setFine("Modification éffectuer avec succès")).catch(rres=> setErr("Une erreur est survenu veuillez réessayer")).finally(setLoader(false))
+            }).then(res => { setFine("Modification éffectuer avec succès"); setErr(""); setLoader(false) }).catch(rres => { setErr("Une erreur est survenu veuillez réessayer"); setFine(""); setLoader(false) })
     }
 }
 
@@ -475,7 +477,7 @@ export function ChangePasse() {
                     <span className="error">ce champ est obligatoire</span>
                 )}
                 {errors.oldpassword && errors.oldpassword.type === "minLength" && (
-                    <span className="error"> ce champ doit faire au moins trois caracteres</span>
+                    <span className="error"> ce champ doit faire au moins 8 caracteres</span>
                 )}
 
                 <PasswordValidate name="password" r={false} control={control} image={<LockFill size={20} color="#4a00b4" />} newp={true} >Nouveau mot de passe</PasswordValidate>

@@ -75,6 +75,12 @@
     justify-content: space-between;
 }
 
+.flex2 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
 .pad {
     margin-top: 5%;
 }
@@ -128,10 +134,11 @@
 }
 
 .bar {
-    height: 100ch;
+    height: 100vh;
     background: #4a00b4;
     width: 20vw;
     position: fixed;
+    overflow-y: auto;
 }
 
 .db {
@@ -221,7 +228,6 @@
 }
 
 .active {
-    background-color: #4a00b4;
     color: white;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;

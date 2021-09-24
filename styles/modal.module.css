@@ -16,8 +16,8 @@
     z-index: 6;
     background-color: #fff;
     box-shadow: #4a00b4 3px 3px 10px;
-    max-width: 55vw;
-    max-height: 90vh;
+    width: 55vw;
+    max-height: 95vh;
     padding: 20px 30px 10px;
     border-radius: 20px;
     overflow-y: auto;

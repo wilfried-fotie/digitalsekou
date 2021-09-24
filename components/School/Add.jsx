@@ -6,12 +6,13 @@ import axios from 'axios'
 import "../../global"
 import Select from 'react-select'
 import styles from '../../styles/AddSchool.module.css'
-import { Radio, Field, File, Password, TextArea } from '../FormTools'
+import { Radio, Field, File, Password, TextArea, Editor } from '../FormTools'
 import useModal from '../CustomHooks/useModal'
 import  {SendData, Tools, ToolsBefore} from '../CustomHooks/Tools'
 import FineModal from '../fineModal'
 import CustomModal from '../customModal'
 import Loader from 'react-loader-spinner'
+import draftToHtml from 'draftjs-to-html'
 
 
 const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
@@ -28,7 +29,7 @@ const allowOnlyPicture = (filename) => {
 
 
 
-export default function Add({ onSelectChange, onImageChange, onChange, state, onSelectStatusChange, onStatusCheckedChange }) {
+export default function Add({ onSelectChange, onImageChange, onChange, state, onSelectStatusChange, onStatusCheckedChange, onEditorTextChange }) {
     
     
 
@@ -54,6 +55,9 @@ export default function Add({ onSelectChange, onImageChange, onChange, state, on
     const handleImage = (e) => {
         onImageChange(e)
 
+    }
+    const handleEditChange = (e) => {
+        onEditorTextChange(e)
     }
 
     const handleCheckChange = (e) => {
@@ -161,7 +165,7 @@ err++
    }
  
     return (
-<form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
 
             <div className={styles.left}>
 
@@ -200,7 +204,7 @@ err++
 
             
                 
-                <Radio name="status" data={["Privé", "Public"]} onChange={handleCheckChange}  >Status de l' établissement public ou privé? </Radio>
+                <Radio name="status"  data={["Privé", "Public"]} onChange={handleCheckChange}  >Status de l' établissement public ou privé? </Radio>
                 
                 <span className="error" >{!state.status &&errors && errors.status}</span>
                 <Radio name="multiple" image={<BoundingBox size={20} color="#4a00b4" />} data={["Non", "Oui"]} onChange={handleCheckChange} >Votre nom d' établissement est-il
@@ -214,8 +218,16 @@ err++
                 <span className="error" >{!!state.type && errors && errors.type}</span>
 
             <File name="profil" onChange={handleImage}>Importer Une Image de Profil</File>
-                <span className="error">{!state.profil &&errors && errors.profil}</span>
-            <TextArea name="description" onChange={handle} value={state.description}>Description De L'établissement </TextArea>
+                <span className="error">{!state.profil && errors && errors.profil}</span>
+                
+
+
+                {/* <TextArea name="description" onChange={handle} value={state.description}>Description De L'établissement </TextArea> */}
+                
+                <Editor name="description" r={false} state={draftToHtml(state.description)} handleEdit={handleEditChange} >
+
+                    Ajouter description de votre activité qui va apparaître sur votre page
+                </Editor>
                 <span className="error" >{!state.description && errors && errors.description}</span>
                
                 <div className={styles.dg}>

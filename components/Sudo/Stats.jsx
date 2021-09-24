@@ -1,6 +1,6 @@
 import React from 'react'
 import { Exclude } from 'react-bootstrap-icons'
-import { Card } from '../SchoolAdmin/Stats'
+import { Card } from '../Entreprise/Stat'
 import styles from '../../components/Style/CreateAccount.module.css'
 import style from '../../styles/sudo.module.css'
 function Stats() {

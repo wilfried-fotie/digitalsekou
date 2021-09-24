@@ -59,15 +59,13 @@ export default function Home({getPub,getOffer}) {
    
 
 
-
-
-      {getOffer.offers &&   <div className={styles.pub} >
+      { (getPub.pubs && getPub.pubs[0] !== undefined || getOffer.offers[0]  !== undefined) &&   <div className={styles.pub} >
 
           <div className={styles.span} >
 
             <h2 > Publicité </h2> </div > <div className={styles.slider} >
 
-           <SimpleSlider data={getOffer.offers}/>
+           <SimpleSlider data={getOffer.offers} pub={getPub.pubs }/>
 
           </div> </div>}
 

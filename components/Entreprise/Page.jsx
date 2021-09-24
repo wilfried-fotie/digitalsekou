@@ -1,23 +1,22 @@
 import React from "react"
-import {  GeoAlt,  Image, ImageFill, TelephoneFill } from 'react-bootstrap-icons'
+import { GeoAlt, Image as Img, ImageFill, Globe, TelephoneFill } from 'react-bootstrap-icons'
 import styles from "./site.module.css"
 import { Markup } from 'interweave'
 import Link from 'next/link'
-import { Visualisation } from "../CustomHooks/AddPost"
+import styl from "../Entreprise/offre.module.css"
 
 
 
 
-export default function Page({ data,position,getPost,getProduct }) {
-   
+export default function Page({ data,position,getPost,getProduct,entreprise ,mode}) {
+
 
     return (
         <div className={styles.pag}>
-
             <nav className={styles.nav}>
 
 
-                {data.logo && <img src={"/" + data.name + "-entreprise-" + data.logo} className='logo' alt={data.name} /> || <div className="dfss"> <ImageFill size={20} color="#4a00b4" />  <span>Logo</span> </div>}
+                {data.logo && <img src={"/" +  data.logo} className='logo' alt={data.name} /> || <div className="dfss"> <ImageFill size={20} color="#4a00b4" />  <span>Logo</span> </div>}
 
 
 
@@ -28,28 +27,27 @@ export default function Page({ data,position,getPost,getProduct }) {
                     <Link href="#contact"><a>Nous Contacter</a></Link>
                 </div>
 
-
-
-
             </nav>
 
-
-            <div className={styles.dfb} >
-                <div className={styles.contain}>
+            <div className={data.disposition == 1 ? styles.flexTab : data.disposition == 3 ? styles.dfb : styl.dfr} >
+                <div className={mode ? styles.cont : styles.contain}>
                     {data.outro ? <Markup content={data.outro.substr(0, 1000) } /> : "Description de votre entreprise sera afficher ici"}
 
                 </div>
 
                 {/* {data.profil ? <img  src={data.profil} /> : } */}
 
-                {data.profil ? <img src={ "/" + data.name + "-entreprise-" +data.profil} className="imgFill" alt="image ou vidéo chargé" /> : <Image size={250} color="#4a00b4" />}
+                {data.profil ? <img src={"/" + data.profil} className="imgFill" alt="image ou vidéo chargé" /> : <Img size={250} color="#4a00b4" />}
             </div>
 
-            <div className="padding" id="contact">
-
+            <div className={mode ? styles.cont : "padding"} id="contact">
+                <div className={mode ? styles.cont0 : "padding"}>
                 <Link href={"https://wa.me/237" + data.tel}><a className="btnPrimary">Nous contacter</a></Link>
 
-            </div>
+                </div>
+                
+            <b className="padding" style={{top: "30px"}}>{data.activity}</b>
+
             <div className={styles.padding}>
 
             
@@ -58,34 +56,36 @@ export default function Page({ data,position,getPost,getProduct }) {
 
                     {data.offline && <span className={styles.dfs}>   <GeoAlt size={20} color="#4a00b4" /> {position == [] ? "Villes dans lesquelles vous êtes" : position && position.map(e => e.position + ", ")}</span>}
                     {data.offline && <span className={styles.dfs}>
-                        {data.description_position ? data.description_position : "(  Description de votre emplacement)"}
+                        {data.description_position ? data.description_position : " Description de votre emplacement "}
+                        
                     </span>}
+                    {(data.site || data.web) && <Link href={data.site || data.web}><a className={styles.dfs} style={{ color: "blue" }}>  <Globe size={20} color="#4a00b4" /> {data.name}</a></Link>}
 
 
 
 
                 </div>
 
-            </div>
+                </div></div>
 
             <div>
             
             </div>
             <div>
 
-              {data.pres &&  <div className="pad">
+              {data.pres &&  <div className={mode ? styles.cont : "pad"}>
                     <center> <h1 id="services" className={styles.top} style={{color: "#4a00b4" }}>Nos Services</h1></center>
 
-                    {getPost.map(e => <div>
+                    {getPost.map((e,k) => <div key={k}>
 
          <center className="pad h2">{e.name}</center>
   <div className={e.disposition == 1 ? styles.dgp : e.disposition == 2 ? styles.dfss : styles.dfr}>
 
                       
 
-                        <div className="dfss">
+                            <div className="dfss">
 
-                          <img src={data.name.toLowerCase() + "-entreprise-prestation-" + e.image} className={e.disposition !== 1 ? "imgFill" : styles.imageFill} alt="image d'un post" />
+                                <img src={ "/" +  e.image} className={e.disposition !== 1 ? "imgFill" : styles.imageFill} alt="image d'un post" />
 
 
                         </div>
@@ -109,21 +109,21 @@ export default function Page({ data,position,getPost,getProduct }) {
                     )}
 
                 </div>}
-                {data.prod && <div>
+                {data.prod && <div className={mode ? styles.cont : "pad"}>
                     <center> <h1 id="catalogue" className={styles.top} style={{ color: "#4a00b4" }}>Nos Articles</h1></center>
                     <div className={styles.grid}>
      
-                        {getProduct.map(e => <div className="pad" >
+                        {getProduct.map((e,k) => <div key={k} className="pad" >
 
                         <div className="dfss">
 
-
-                            <img src={data.name.toLowerCase() + "-entreprise-product-" + e.image} className="imgFill" alt="image d'un post" />
+                                <img src={ "/" + e.image} className="imgFill" alt="image d'un post" />
 
 
                         </div>
-                   
-                        <center className="pad b">Prix: {e.price + " Frcfa"}</center>
+                            <center className="pad b"> {e.name}</center>
+
+                        <center className="pad b"> {e.price + " Frcfa"}</center>
                        
                     </div>)} </div>
                 </div>}

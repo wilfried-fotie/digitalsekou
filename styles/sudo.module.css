@@ -35,9 +35,9 @@
 
 .bar {
     height: 100vh;
-    position: fixed;
+    background: #4a00b4;
     width: 20vw;
-    border-right: 4px solid #4a00b4;
+    position: fixed;
 }
 
 .btnSpace {
@@ -45,7 +45,7 @@
 }
 
 .bar .span {
-    color: #4a00b4;
+    color: #FFF9;
     padding: 20px 20px 10px;
     display: flex;
     align-items: center;
@@ -56,20 +56,32 @@
     cursor: pointer;
 }
 
-.active {
-    background-color: #4a00b4;
-    color: white;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    padding: 10px 30px 10px;
+.ava {
     display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.avatar {
+    margin: 2% 5% 5%;
+    padding: 5% 10% 5%;
+    height: 100px;
+}
+
+.active {
+    color: white;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 10px 20px 10px;
+    display: flex;
+    background-color: #ffffff54;
     align-items: center;
 }
 
 .disagree {
     background-color: #4a00b4;
     color: white;
-    border-radius: 20px;
+    border-radius: 5px;
     border: 2px solid inherit;
     padding: 5px 10px 5px;
     display: flex;
@@ -136,7 +148,7 @@
 .agree {
     background-color: rgb(226, 23, 23);
     color: white;
-    border-radius: 20px;
+    border-radius: 5px;
     padding: 5px 10px 5px;
     display: flex;
     align-items: center;
@@ -178,10 +190,78 @@
 }
 
 .article table td {
-    padding: 5px 10px 3px;
+    padding: 10px 10px 10px;
+    text-align: center!important;
+}
+
+.article table td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.article table td:nth-child(3) {
+    width: 20%;
+    text-align: justify;
+}
+
+.article table td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .article table thead tr td:first-child::before {
+    clear: both;
+    padding-left: 10px;
+}
+
+.article2 {
+    margin: 20px 5% 10px;
+}
+
+.article2 table thead {
+    background-color: #4a00b4;
+}
+
+.article2 table thead tr:first-child th {
+    color: #fff!important;
+    font-size: .88em;
+}
+
+.article2 table {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.article2 table th {
+    color: black;
+    padding: 10px 20px 10px;
+}
+
+.article2 tr:nth-child(even) {
+    background: rgb(217, 211, 235)!important;
+}
+
+.article2 table td {
+    padding: 10px 10px 10px;
+    text-align: center!important;
+}
+
+.article2 table td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.article2 table td:nth-child(3) {
+    width: 20%;
+    text-align: justify;
+}
+
+.article2 table td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.article2 table thead tr td:first-child::before {
     clear: both;
     padding-left: 10px;
 }

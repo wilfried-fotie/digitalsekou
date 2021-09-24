@@ -1,5 +1,5 @@
 import React from "react"
-import { ArrowLeft, ArrowRight, DisplayFill, GeoAlt, GeoAltFill, Image, ImageFill, Link, PencilSquare, PhoneVibrateFill, TelephoneFill, TelephoneXFill, TrophyFill } from 'react-bootstrap-icons'
+import { ArrowLeft, ArrowRight, DisplayFill, FileEarmarkPostFill, GeoAlt, GeoAltFill, Image, ImageFill, Link, PencilSquare, PhoneVibrateFill, TelephoneFill, TelephoneXFill, TrophyFill } from 'react-bootstrap-icons'
 import styles from "./site.module.css"
 import { CheckBox, Editor, Field, File, Radio, SelectoR, Selector, TextArea } from '../FormTools'
 import draftToHtml from 'draftjs-to-html'
@@ -12,6 +12,7 @@ import axios from 'axios'
 import draftjsToHtml from 'draftjs-to-html'
 import { EntrepriseContext } from "../../pages/StartPub"
 import PasserPro from "./PasserPro"
+import styl from "../Entreprise/offre.module.css"
 
 
 
@@ -22,9 +23,9 @@ export function ModSite() {
 
     const [state, setState] = React.useState(1)
     const [errors, setErrors] = React.useState(false)
-    const [data, setData] = React.useState({ logo: site.logo,name:site.name, outro: site.outro, position: opt, activity: site.activity, profil: site.profil, description: site.description_position, prop: { pres: site.pres, pro: site.prod }, status: { off: site.offline, on: site.online }, tel: site.tel, web: site.site })
+    const [data, setData] = React.useState({ logo: site.logo,name:site.name, outro: site.outro, disposition: site.disposition, position: opt, activity: site.activity, profil: site.profil, description: site.description_position, prop: { pres: site.pres, pro: site.prod }, status: { off: site.offline, on: site.online }, tel: site.tel, web: site.site })
     const handleClick = () => {
-        if (state < data.status.off ? 4 : 3) {
+        if ((state < (data.status.off == false ? 3 : 4))) {
             setState(s => s + 1)
         } else {
             setState(state)
@@ -39,7 +40,9 @@ export function ModSite() {
         }
     }
 
-    
+    const handleDispo = (e) => {
+        setData(s => ({ ...s, disposition: e }))
+    }
 
     const handleChange = (e) => {
         setData(s => ({ ...s, [e.target.name]: e.target.value }))
@@ -48,7 +51,7 @@ export function ModSite() {
     const handleEditorContentOutro = (content) => {
         setData(s => ({
             ...s,
-            outro: content,
+            outro: draftjsToHtml(content),
             articleUpdated: true
         }));
     }
@@ -59,13 +62,7 @@ export function ModSite() {
     const onSetErrors = () => {
         setErrors(true)
     }
-    const handleEditChange = (content) => {
-        setState(s => ({
-            ...s,
-            description: content,
-            articleUpdated: true
-        }));
-    }
+
 
     const checkChange = (e) => {
         setData(s => ({ ...s, [e.target.getAttribute("data-id")]: { ...s[e.target.getAttribute("data-id")], [e.target.name]: e.target.checked } }))
@@ -86,8 +83,8 @@ export function ModSite() {
                 setData(s => {
                     return {
                         ...s,
-                        [name]: ev.target.result,
-                        [id]: e.target.files[0],
+                        [name + "media"]: ev.target.result,
+                        [id ]: e.target.files[0],
                         [name + "Name"]: e.target.files[0].name.replaceAll(" ", "").replaceAll("(", "").replaceAll("'", "").replaceAll('"', "").replaceAll(")", "").replaceAll("'", "")
 
 
@@ -100,14 +97,13 @@ export function ModSite() {
     }
     return (
         <>
-            
           
             <div>
 
 
                 <center className={styles.top}><span className="h1">Modification de page </span></center>
 
-                <PasserPro />
+                
 
              
 
@@ -144,6 +140,7 @@ export function ModSite() {
                         onHandleTextChange={handleChange}
                         onHandleSelectChange={handleSelectChange}
                         onSetErrors={onSetErrors}
+                        handleDispo={handleDispo}
                         errors={errors}
 
                     />}
@@ -208,6 +205,7 @@ export function Boul({ active, state }) {
 
 export function Page1({ onHandleTextChange, onHandleImageChange, data, errors }) {
 
+    const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
 
     const handleImage = (e) => {
         onHandleImageChange(e)
@@ -221,13 +219,14 @@ export function Page1({ onHandleTextChange, onHandleImageChange, data, errors })
     return (
         <>
             <div className={styles.page}>
+         
 
                 <Field name="name" r={false} auto="Entrez le nom de votre entreprise exp: Camlait" value={data.name} onChange={handleChangeText}  >  Nom de l'Entreprise  </Field>
                 <span className="error">
                     {errors && (data.name == "") && "Ce Champ est réquis"}
                 </span>
                
-                <File name="logo" def={data.logoName ? null : "/" + data.name + "-entreprise-" + data.logo} defData={data.logoName ? data.logo : null}  onChange={handleImage} >Importer Le Logo</File>
+                <File name="logo" def={data.logoName ? data.logomedia : data.logo}  onChange={handleImage} >Importer Le Logo</File>
                 <span className="error">
                     {errors && (data.logo == "") && "Ce Champ est réquis"}
                 </span>
@@ -249,6 +248,9 @@ export function Page1({ onHandleTextChange, onHandleImageChange, data, errors })
 }
 
 export function Page2({ onHandleImageChange, data, onHandleTextChange, onCheckChange, errors }) {
+
+    const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
+
     const handleImage = (e) => {
         onHandleImageChange(e)
     }
@@ -266,7 +268,7 @@ export function Page2({ onHandleImageChange, data, onHandleTextChange, onCheckCh
     return (
         <>
             <div className={styles.page}>
-                <File name="profil" def={data.profilName ? null : "/" + data.name + "-entreprise-" + data.profil} defData={data.profilName ? data.profil : null} onChange={handleImage}  >Importer La photo de profil</File>
+                <File name="profil" def={data.profilName ? data.profilmedia : data.profil} onChange={handleImage}  >Importer La photo de profil</File>
                 <span className="error">
                     {errors && (data.profil == "") && "Ce Champ est réquis"}
                 </span>
@@ -348,7 +350,7 @@ const allowOnlyPicture = (filename) => {
 }
 
 
-export function Page4({ data, onHandleEditor, errors, onSetErrors }) {
+export function Page4({ data, onHandleEditor, errors, onSetErrors, handleDispo }) {
 
     const site = React.useContext(EntrepriseContext).data.entrepriseSite.site
     const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
@@ -357,11 +359,16 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors }) {
     const [visible, v] = useModal(false)
     const [visible2, v2] = useModal(false)
     const [visible3, v3] = useModal(false)
+    const [visible4, v4] = useModal(false)
     const [loader, setLoader] = React.useState(false)
     const [error, setError] = React.useState({})
+    const [dispo, setDispo] = React.useState(data.disposition)
 
     const handleEdit = (e) => {
         onHandleEditor(e)
+    }
+    const handleClickDispo = (e) => {
+        handleDispo(e)
     }
     const handleSubmit = async () => {
         onSetErrors()
@@ -390,19 +397,7 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors }) {
             }
         }
 
-        // if (state.password.length < 8) {
-        //     err -= 1
-        //     setErrors(s => {
-        //         return { ...s, password: "Le mot de passe doit être au moins 8 caractères" }
-        //     })
-        // } else {
-        //     err++
-
-        // }
-
-
-        if (err == 1) { setErrors({}) }
-
+   
 
         if (err >= 9) {
 
@@ -412,35 +407,36 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors }) {
             state.description = state.description.trim()
             const formData1 = new FormData();
             const formData2 = new FormData();
+            const random = Math.floor(Math.random() * 10)
+
             if (data.logoData &&  allowOnlyPicture(data.logoName)) {
-                formData1.append("file", state.logoData, state.name + "-entreprise-" + state.logoName.replaceAll(" ", "").replaceAll("(", "").replaceAll(")", "").replaceAll("'", ""));
+                formData1.append("file", state.logoData, entreprise.id + "-entreprise-logo-" + random  + "." + data.logoName.split(".", -1)[1]);
 
             }
 
             if (data.profilData && allowOnlyPicture(data.profilName)) {
-                formData2.append("file", state.profilData, state.name + "-entreprise-" + state.profilName.replaceAll(" ", "").replaceAll("(", "").replaceAll(")", "").replaceAll("(", ""));
+                formData2.append("file", state.profilData, entreprise.id + "-entreprise-profil-" + random  + "." + data.profilName.split(".", -1)[1] );
             }
            
          setLoader(true)
-            data.logoData &&    formData1.append("file", state.logoData, state.name + "-entreprise-" + state.logoName);
-            data.profilData && formData2.append("file", state.profilData, state.name + "-entreprise-" + state.profilName);
+            data.logoData && formData1.append("file", state.logoData, entreprise.id + "-entreprise-logo-" + random  + "." + data.logoName.split(".", -1)[1]);
+            data.profilData && formData2.append("file", state.profilData, entreprise.id + "-entreprise-profil-" + random + "."  + state.profilName.split(".", -1)[1]);
             axios.all([
-                axios.put("/entreprise-site/" + entreprise.id, { ...state, entrepriseId: entreprise.id, outro: draftjsToHtml(data.outro) || state.outro, logo: data.logoName || data.logo, profil: data.profilName || data.profil }),
-                data.logoName && axios.delete("/upload/" + site.name + "-entreprise-" + site.logo),
-                data.profilName && axios.delete("/upload/" + site.name + "-entreprise-" + site.profil),
+                axios.put("/entreprise-site/" + entreprise.id, { ...state, entrepriseId: entreprise.id, outro: draftjsToHtml(data.outro) || state.outro, logo: data.logoName && entreprise.id + "-entreprise-logo-" + random  + "." + data.logoName.split(".", -1)[1] || data.logo, profil: data.profilName && entreprise.id + "-entreprise-profil-" + random  + "." + state.profilName.split(".", -1)[1] || data.profil }),
+                data.logoName &&  axios.delete("/upload/" + site.logo),
+                data.profilName &&  axios.delete("/upload/" + site.profil),
 
                 data.logoName && axios.post("/upload", formData1),
-                data.profilName && axios.post("/upload", formData2)
+                data.profilName && axios.post("/upload", formData2),
+               
+                
             ]
 
             ).then(res => {
-                // sessionStorage.setItem("schoolToken", res[0].data.token)
-                // sessionStorage.setItem("school", res[0].data.sigle)
-                // sessionStorage.setItem("schoolId", res[0].data.id)
-                // router.push(`/addSchoolPro/${res[0].data.id}?token=${res[0].data.token}`)
+                const sta = { ...state, site: state.web, description_position: state.description, offline: state.status.off, online: state.status.on, pres: state.prop.pres, prod: state.prop.pro, entrepriseId: entreprise.id, outro: draftjsToHtml(data.outro) || state.outro, logo: data.logoName && entreprise.id + "-entreprise-logo-" + random  + "." + data.logoName.split(".", -1)[1] || data.logo, profil: data.profilName && entreprise.id + "-entreprise-profil-" + random  + "." + state.profilName.split(".", -1)[1] || data.profil }
+            
                 const pos = state.position.map(e=> ({position: e.value}))
-                dispacth({ type: "UPDATESITE", name: "entrepriseSite",position: pos, pre: "site", data: { ...state,site: state.web, description_position: state.description, offline: state.status.off, online: state.status.on,pres: state.prop.pres,prod: state.prop.pro, entrepriseId: entreprise.id, outro: draftjsToHtml(data.outro) || state.outro, logo: data.logoName || data.logo, profil: data.profilName || data.profil } })
-                console.log({ ...state, entrepriseId: entreprise.id, outro: draftjsToHtml(data.outro) || state.outro, logo: data.logoName || data.logo, profil: data.profilName || data.profil })
+                dispacth({ type: "UPDATESITE", name: "entrepriseSite", position: pos, pre: "site", data: sta })
                 setLoader(false)
             })
                 .catch(err => {
@@ -472,7 +468,25 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors }) {
     return (
         <div className={styles.page}>
 
-            <div className="particular">
+            <div className="a">
+                <p className="dfs"> <FileEarmarkPostFill size={20} color="#4a00b4" /> Disposition</p>
+                <div className="dfss">
+                    <div className={dispo === 1 ? styl.activeborder0 : styl.border0} onClick={() => { setDispo(1); handleClickDispo(1) }}>
+                        <ImageFill size={20} color="#4a00b4" /> <span>Texte</span>
+                    </div>
+                    <div className={dispo === 2 ? styl.activeborder : styl.border} onClick={() => { setDispo(2); handleClickDispo(2) }}>
+                        <ImageFill size={20} color="#4a00b4" /> <span>Texte</span>
+                    </div>
+
+                    <div className={dispo === 3 ? styl.activeborder2 : styl.border2} onClick={() => { setDispo(3); handleClickDispo(3) }}>
+                        <span>Texte</span>    <ImageFill size={20} color="#4a00b4" />
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div className="particular pad">
                 <Editor name="outro" r={false} state={data.outro} handleEdit={handleEdit} edit={true}>
 
                     Ajouter une description de votre activité qui va apparaître sur votre page
@@ -497,6 +511,7 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors }) {
             {visible && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v} component={<Tools />} />}
             {visible2 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
             {visible3 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
+            {visible4 && <FineModal position={{ top: 30, left: "35%" }} component={<div color="green"> <center> <CheckCircle size={40} color="green" /> </center><br />  Les données ont étés mis à jour avec succes!!</div>} onModalChange={v4} />}
 
         </div>
     )
@@ -542,6 +557,7 @@ export function Timer({ name }) {
 
 
 export function Preview({ data }) {
+
     return (
         <div className={styles.prev}>
 

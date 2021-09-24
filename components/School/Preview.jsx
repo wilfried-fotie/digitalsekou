@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { GeoAlt, Grid3x3GapFill, Image,  MenuButton } from 'react-bootstrap-icons'
 import styles from '../../styles/AddSchool.module.css'
 import useChangeBool from '../handleBool'
-
+import draftToHtml from 'draftjs-to-html'
+import { Markup } from 'interweave'
 
 
 function Preview({ data}) {
@@ -40,6 +41,7 @@ function Preview({ data}) {
 
     return (
         <article ref={article}>
+
             <div className={fixed ? styles.fixed : null} >
                 <div className={styles.nav}>
                     <a onClick={() => { handleChoiseState(choise) }} className={choise ? styles.active : null}>Desktop</a>
@@ -72,11 +74,9 @@ function Preview({ data}) {
                                     <div className="h1">
 
                                         {data.name  || "Nom complet de l'établissement"}
-                                        ( {data.sigle || "Sigle"} ) </div>
+                                       </div>
 
-                                    <p> {data.description !== "" ?
-                                            data.description.length > 400 ?
-                                                data.description.substr(0, 400) + " ..." : data.description :
+                                    <p> {<Markup content={draftToHtml(data.description).substr(0, 1000)} />  || 
                                                     "Ajouter la description de votre établissement ici"
                                     } </p>
 {}

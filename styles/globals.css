@@ -24,7 +24,8 @@ body {
     transform: translateY(0);
 }
 
-p {
+p,
+.p {
     font-weight: 600;
     text-align: justify;
     padding: 10px 20px 10px;
@@ -140,12 +141,21 @@ form {
 }
 
 .iconiseur {
-    padding: 5px 10px 4px;
+    padding: 7px 10px 7px;
     background-color: #c1c1c5;
-    border-radius: 10px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-right: 20px;
+}
+
+.flexTab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+    gap: 5vh;
 }
 
 :root {
@@ -220,6 +230,14 @@ a {
 ol,
 ul {
     text-align: left!important;
+    margin-left: 40px;
+    line-height: 2em!important;
+}
+
+.padding h1,
+.padding h2,
+.padding h3 {
+    margin-left: 40px;
 }
 
 select,
@@ -327,6 +345,14 @@ input {
     width: 100%;
     outline: none;
     color: #4b4b4b;
+}
+
+.mleft {
+    margin-left: 40px;
+}
+
+.d a {
+    margin-left: 40px;
 }
 
 .input__row {

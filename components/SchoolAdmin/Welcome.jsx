@@ -5,7 +5,8 @@ export default function Welcome() {
     return (
         <div>
             <div className="container">
-                Welcome to Administration of you're website
+             
+             <span className="h1"> Bienvenue !!!</span>  
             
               
             </div>
