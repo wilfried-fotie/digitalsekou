@@ -10,13 +10,13 @@ function Stat() {
     const getPost = React.useContext(EntrepriseContext).data.getPost.posts
     const getProduct = React.useContext(EntrepriseContext).data.getProduct.products
     const site = React.useContext(EntrepriseContext).data.entrepriseSite.site
-
+    const context = React.useContext(EntrepriseContext)
+    const mes = context.data.getMesssage.messages
     return (
         <div className={styles.top}>
 
             
 <center className="h1">Statistiques de vos Ativités</center>
-
 
                 <div className={styles.tab}>
 
@@ -42,6 +42,7 @@ function Stat() {
                     <Card icon={<ClipboardData size={40} color="#4a00b4" />} desc={"Nombre de publicités"} number={getPub.length} />
                     <Card icon={<ClipboardData size={40} color="#4a00b4" />} desc={"Nombre de cliques sur le site"} number={site.stat} />
                     <Card icon={<ClipboardData size={40} color="#4a00b4" />} desc={"Nombre d'offres"} number={getOffer.length} />
+                    {site.id && <Card icon={<ClipboardData size={40} color="#4a00b4" />} desc={"Nombre de Messages"} number={mes.length} />}
                     {site.pres && <Card icon={<ClipboardData size={40} color="#4a00b4" />} desc={"Nombre de prestations"} number={getPost.length} />}
                     {site.prod && <Card icon={<ClipboardData size={40} color="#4a00b4" />} desc={"Nombre d'articles"} number={getProduct.length} />}
              
@@ -60,7 +61,7 @@ export default Stat
 
 
 
-export function Card({icon,desc,number}) {
+export function Card({ icon = <ClipboardData size={40} color="#4a00b4" />,desc = "Descripiton",number = 0}) {
     return (
         <>
             <div className={styles.card}>
@@ -112,8 +113,8 @@ export function Tr({ e, pub, k }) {
     return (<>
 
         <tr>
-            <td> {"#" + k} </td>
-            <td> {pub ? "Publicité" : "Offre"} </td>
+            <td>{k}</td>
+            <td> {pub ? "Publicité  Numéro : " + k : "Offre Numéro :" + k} </td>
 
             <td> {e.stat} Cliques </td>
         </tr>

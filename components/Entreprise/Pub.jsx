@@ -4,6 +4,7 @@ import { AlignMiddle, ArrowLeft, ArrowRight, Building, Calendar2DateFill, Displa
 import { Field, FieldValidate, File, FileValidate } from '../FormTools'
 import Link from 'next/link'
 import FineModal from '../fineModal'
+import {useRouter} from "next/router"
 import { useModal } from '../../pages/addSchoolPro/[id]'
 import Loader from 'react-loader-spinner'
 import { EntrepriseContext } from '../../pages/StartPub'
@@ -12,6 +13,7 @@ import ModalEditor from '../modalEditor'
 import CustomModal from '../customModal'
 import { verifSupDate } from '../CustomHooks/supDate'
 import { Error } from '../CustomHooks/AddPost'
+import { verifTwoDate } from '../CustomHooks/verifTwoDate'
 
 
 
@@ -184,13 +186,7 @@ export function AddPost({reset}) {
             <div className={styles.table}>
 
                 <table >
-                    {/* <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Nom de la prestation</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead> */}
+                   
                     <tbody>
                         {getPub == "" ? <center className="h2"></center> : 
                         getPub.map((e, k) => <tr key={k}>
@@ -225,7 +221,7 @@ export function AddPost({reset}) {
 }
 
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png',"PNG", 'jpg', 'jpeg']
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
 const allowOnlyPicture = (filename) => {
 
@@ -237,7 +233,14 @@ const allowOnlyPicture = (filename) => {
 
 }
 
-export function Visualisation({data}) {   
+export function Visualisation({ data, mode = false }) {
+    const  router = useRouter()
+    const handleClick = async (e) => {
+
+        e.preventDefault()
+        await axios.put("addStatPub/" + data.id)
+        router.push(data.name)
+    }
     return (
         <>
             
@@ -248,7 +251,7 @@ export function Visualisation({data}) {
                 <div className="dfss pad">
 
 
-                    {data.media ? null : <ArrowLeft size={20} color="#4a00b4" />} {data.logo || data.media ? <Link href={data.name}><a><img src={data.logo || data.media} className={styles.img} alt="Publicité" /></a></Link> : <ImageFill size={200} color="#4a00b4" />}  {data.media ? null : <ArrowRight size={20} color="#4a00b4" />}
+                    {data.media ? null : <ArrowLeft size={20} color="#4a00b4" />} {data.logo || data.media ? <Link href={data.name}><a onClick={mode ? handleClick : null}><img src={data.logo || data.media} className={styles.img} alt="Publicité" /></a></Link> : <ImageFill size={200} color="#4a00b4" />}  {data.media ? null : <ArrowRight size={20} color="#4a00b4" />}
                     
 
 
@@ -282,7 +285,7 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
     const handleSubmit = (e) => {
         e.preventDefault()
         setErrors(true)
-        if (data.name && data.logo && data.days && data.days > 0 && data.date && verifSupDate(new Date(), new Date(data.date))) {
+        if (data.name && data.logo && data.days && data.date && verifTwoDate(new Date(data.date), new Date(data.days)) && verifSupDate(new Date(), new Date(data.date)) && verifSupDate(new Date(), new Date(data.days))) {
             if (allowOnlyPicture(data.logoName)) {
                 const formData1 = new FormData();
                 const img = entreprise.id + "-entreprise-pub-" + post + "." + data.logoName.split(".", -1)[1]
@@ -300,10 +303,7 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
 
 
                 ).then(res => {
-                    // sessionStorage.setItem("schoolToken", res[0].data.token)
-                    // sessionStorage.setItem("school", res[0].data.sigle)
-                    // sessionStorage.setItem("schoolId", res[0].data.id)
-                    // router.push(`/addSchoolPro/${res[0].data.id}?token=${res[0].data.token}`)
+                
                     dispacth({ type: "ADD", name: "getPub", pre: "pubs", data: res[0].data })
 
                     setLoader(false)
@@ -345,11 +345,15 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
                         {errors && data.date == "" && "Entrez une date valide"}
                         {errors && !verifSupDate(new Date(), new Date(data.date)) && "La date est invalide"}
                     </span>
-                    <Field name="days" type="number" r={false} image={<Mastodon color="#4a00b4" size="20px" />} auto="Entrez le nombre de jour de la publicité exp: 2" value={data.days} onChange={handleChangeText}  >  Entrez le nombre de jour de la publicité  </Field>
+                    
+                 
+                    <Field name="days" type="date" r={false} image={<Calendar2DateFill color="#4a00b4" size="20px" />} value={data.days} onChange={handleChangeText}  >  Entrez la date de fin de la publicité </Field>
                     <span className="error">
-                        {errors && (data.days == "" || data.days <= 0) && "Entrez un nombre de jours valide"}
+                        {errors && data.days == "" && "Entrez une date valide"}
+                        {errors && !verifTwoDate(new Date(data.date), new Date(data.days)) && "La date est invalide"}
+                        {errors && !verifSupDate(new Date(), new Date(data.days)) && "La date est invalide"}
+
                     </span>
-                   
 
 
 
@@ -400,7 +404,7 @@ export function Edit({onHandleImageStateChange, onHandleTextStateChange, data, i
         e.preventDefault()
         setErrors(true)
 
-        if (data.name && data.logo && data.days && data.days > 0 && data.date && verifSupDate(new Date(),new Date(data.date))) {
+        if (data.name && data.logo && data.days && data.date && verifTwoDate(new Date(data.date), new Date(data.days)) && verifSupDate(new Date(), new Date(data.date)) && verifSupDate(new Date(),new Date(data.date))) {
             if (allowOnlyPicture(data.logo) || (data.logoData && allowOnlyPicture(data.logoName))) {
                 const formData1 = new FormData();
                 const random = Math.floor(Math.random() * 10)
@@ -415,7 +419,7 @@ export function Edit({onHandleImageStateChange, onHandleTextStateChange, data, i
                 axios.all([
                    await axios.put("/pubs/" + id, {logo: data.logoName && img || data.logo, days: data.days, date: data.date,name: data.name }, {
                         headers: {
-                            Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                            Authorization: "Bearer " + localStorage.getItem("etoken")
                         }
                     }),
                     await data.logoName && axios.post("/upload", formData1),
@@ -465,14 +469,13 @@ export function Edit({onHandleImageStateChange, onHandleTextStateChange, data, i
                         {errors && !verifSupDate(new Date(), new Date(data.date)) && "La date est invalide"}
 
                     </span>
-                    <Field name="days" type="number" r={false} image={<Mastodon color="#4a00b4" size="20px" />} auto="Entrez le nombre de jour de la publicité exp: 2" value={data.days} onChange={handleChangeText}  >  Entrez le nombre de jour de la publicité  </Field>
+                    <Field name="days" type="date" r={false} image={<Calendar2DateFill color="#4a00b4" size="20px" />} value={data.days.split("T")[0]} onChange={handleChangeText}  >  Entrez la date de fin de la publicité  </Field>
                     <span className="error">
-                        {errors && (data.days == "" || data.days <= 0) && "Entrez un nombre de jours valide"}
+                        {errors && data.days == "" && "Entrez une date valide"}
+                        {errors && !verifTwoDate(new Date(data.date), new Date(data.days)) && "La date est invalide"}
+                        {errors && !verifSupDate(new Date(), new Date(data.days)) && "La date est invalide"}
+
                     </span>
-                   
-
-
-
 
                     <center>   <div className={styles.df}>
                         <button disabled={loader} className="dfss btnPri" >
@@ -523,7 +526,7 @@ export function Delete({ close, id, k }) {
             axios.delete(`/pubs/${id}`,
                 {
                     headers: {
-                        Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                        Authorization: "Bearer " + localStorage.getItem("etoken")
                     }
 
                 }

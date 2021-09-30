@@ -277,7 +277,7 @@ export function Visualisation({ data }) {
     )
 }
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
 const allowOnlyPicture = (filename) => {
 
@@ -460,7 +460,7 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
                 axios.all([
                     axios.put("/posts/" + id, { name: data.name, media: data.mediaName && entreprise.id + "-school-post-" + id + "-" + random + "." + data.mediaName.split(".", -1)[1] || data.media, outro: draftToHtml(data.outro) || data.outro, disposition: data.position, proprio: "entreprise" }, {
                         headers: {
-                            Authorization: "Bearer " + sessionStorage.getItem("schoolToken")
+                            Authorization: "Bearer " + localStorage.getItem("schoolToken")
                         }
 
                     }),
@@ -602,7 +602,7 @@ export function Delete({ close, id, k }) {
             axios.delete(`/posts/${id || getPost.id}`,
                 {
                     headers: {
-                        Authorization: "Bearer " + sessionStorage.getItem("schoolToken")
+                        Authorization: "Bearer " + localStorage.getItem("schoolToken")
                     }
 
                 }

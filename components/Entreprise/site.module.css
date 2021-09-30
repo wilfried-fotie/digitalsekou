@@ -15,6 +15,17 @@
     margin: 2% 6% 10px;
 }
 
+.pub {
+    margin: 20px 7% 20px;
+    width: 90%;
+}
+
+.pub img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .flexTab {
     display: flex;
     justify-content: center;
@@ -160,6 +171,7 @@
     width: 95%;
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
     padding: 10px 20px 10px;
     width: 80%;
 }

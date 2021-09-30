@@ -14,9 +14,10 @@ import Loader from 'react-loader-spinner'
 import ModalEditor from '../modalEditor'
 import CustomModal from '../customModal'
 import { verifSupDate } from '../CustomHooks/supDate'
+import { useRouter } from 'next/router'
 
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
 const allowOnlyPicture = (filename) => {
 
@@ -248,8 +249,14 @@ export function AddPost({reset}) {
 
 
 
-export function Visualisation({ data }) {
+export function Visualisation({ data,mode }) {
 
+    const router = useRouter()
+    const handleClick = async (e) => {
+
+        await axios.put("addStatOffer/" + data.id)
+       
+    }
 
     return (
         <>
@@ -276,7 +283,7 @@ export function Visualisation({ data }) {
 
                         <center className="fine">Expire Le:  {" " + new Date(data.expiration).toDateString() || " date d'expiration"}</center>
                         <div className="pad">
-                            {!data.outro && <div className={styles.view}><Link href={data.url}><a className="btnSecondary dfss"><EyeFill size={20} color="#4a00b4" /> voir l'offre </a></Link></div>}
+                            {!data.outro && <div className={styles.view}><Link href={data.url}><a className="btnSecondary dfss" onClick={mode ? handleClick : null}><EyeFill size={20} color="#4a00b4" /> voir l'offre </a></Link></div>}
  </div>
                         <div className="pad">
                             {data.outro && <Markup content={draftToHtml(data.outro) ||  data.outro} />}
@@ -493,7 +500,7 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
                await  axios.all([
                     axios.put("/offers/" + id, { objet: data.objet, expiration: data.expiration, logo: (data.logoName && img) || data.logo, outro: draftToHtml(data.outro) || data.outro, tel: data.tel, url: data.url,  proprio: "entreprise" }, {
                         headers: {
-                            Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                            Authorization: "Bearer " + localStorage.getItem("etoken")
                         }
 
                     }),
@@ -549,7 +556,8 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
                     <Field name="expiration" type="date" r={false} image={<Calendar2DateFill color="#4a00b4" size="20px" />} auto="Entrez la date d'expiration" value={data.expiration} onChange={handleChangeText}  >  Entrez la date d'expiration </Field>
                     <span className="error">
                         {errors && data.expiration == "" && "Entrez la date d'expiration"}
-                       
+                        {errors && !verifSupDate(new Date(), new Date(data.expiration)) && "date invalide"}
+
 
 
                     </span>
@@ -615,7 +623,7 @@ export function Delete({ close, id, k }) {
             axios.delete(`/offers/${id}`,
                 {
                     headers: {
-                        Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                        Authorization: "Bearer " + localStorage.getItem("etoken")
                     }
 
                 }

@@ -24,6 +24,8 @@ import Head from "next/head"
 import { AddPost } from '../../components/CustomHooks/AddPost'
 import AddThink from '../../components/SchoolAdmin/AddThink'
 import { fecthPost } from '../../Model/getEntreprise'
+import CustomModal from '../../components/customModal'
+import NotPro from '../../components/CustomHooks/NotPro'
 
 
 const useIsomorphicLayoutEffect =
@@ -263,16 +265,16 @@ export default function Controller({ schoolData, fils, specialities, types, posi
     useIsomorphicLayoutEffect(() => {
 
 
-        setSchoolToken(sessionStorage.getItem("schoolToken"))
-        setSchoolId(sessionStorage.getItem("schoolId"))
+        setSchoolToken(localStorage.getItem("schoolToken"))
+        setSchoolId(localStorage.getItem("schoolId"))
     }, [])
 
     const handleSubmit = (data) => {
         axios.post("/school", data).then(async (res) => {
 
-            sessionStorage.setItem("schoolToken", res.data.schoolToken)
-            sessionStorage.setItem("school", res.data.school)
-            sessionStorage.setItem("schoolId", res.data.id)
+            localStorage.setItem("schoolToken", res.data.schoolToken)
+            localStorage.setItem("school", res.data.school)
+            localStorage.setItem("schoolId", res.data.id)
             setSchoolToken(res.data.schoolToken)
 
 
@@ -401,7 +403,7 @@ export function ForPro() {
                 {school.demande ? <a className="btnPri" onClick={handleChange}>  Demande en cours... </a> : school.pro ? <a className={styles.wa}> <TrophyFill color="green" size={20} /> Bravo!! Vous êtes pro  </a> : <a className="btnPri" onClick={handleChange}> Passer Pro </a> }
             </div>
 
-            {visbility && <FineModal position={{ top: 30, left: "35%", width: "30%" }} onModalChange={v} component={<ProMode />} />}
+            {visbility && <CustomModal onModalChange={v} component={<><NotPro pass={false}/><ProMode/></>} />}
         </>
     )
 }
@@ -417,19 +419,9 @@ export function ProMode() {
     }
     return (
         <>
-            <div >
-                <a>Passer Pro et Vous aurez les avantages liés aux pros</a>
-                <p>
-                    Pour passer pro il faudrait Faire un depot à un numéro et après validation vous passer pro.
-
-                </p>
-                <p>
-                    Si Vous avez effectuer le depot alors valider votre demande en cliquant SUR LE BOUTON <br />
-
-                </p>
-                <center><a className="btnPri" onClick={handleSubmit}>Valider La Demande</a></center>
-            </div>
-
+            
+            <center className="padding"><a className="btnPri" onClick={handleSubmit}>Valider La Demande</a></center>
+          
 
         </>
     )

@@ -12,6 +12,7 @@ import { EntrepriseContext } from '../../pages/StartPub'
 import Loader from 'react-loader-spinner'
 import CustomModal from '../customModal'
 import ModalEditor from '../modalEditor'
+import NotPro from './NotPro'
 
 export default function PostTeur() {
 
@@ -66,7 +67,6 @@ export default function PostTeur() {
 
             <center className="h1 pad">Création d'un Post</center>
 
-            <PasserPro/>
 
             <center className={styles.nav}>
                 <a className={choise == 0 ? styles.active : styles.inactive} onClick={() => handleChoiseState(0)}><PencilSquare className="mr" size={25} color="#4a00b4" /> Création </a>
@@ -271,7 +271,7 @@ export function Visualisation({ data }) {
     )
 }
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
  const allowOnlyPicture = (filename) => {
 
@@ -296,6 +296,7 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
     const post = id < 0 ?  1 : getPost[id].id + 1
     const [loader, setLoader] = React.useState(false)
     const [visible, v] = useModal(false)
+    const [visible2, v2] = useModal(false)
 
     const handleChangeText = (e) => {
         onHandleTextStateChange(e)
@@ -304,6 +305,10 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
 
     const handleImage = (e) => {
         onHandleImageStateChange(e)
+    }
+    const handleClickPro = (e) => {
+        e.preventDefault()
+        v2(true)
     }
 
 
@@ -398,7 +403,7 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
 
 
                     <center className="pad">   <div className={styles.df}>
-                        <button disabled={loader} className="dfss btnPri" >
+                        <button disabled={loader} onClick={entreprise.pro ? null : handleClickPro} className="dfss btnPri" >
                             {loader && <Loader
                                 type="TailSpin"
                                 color="white"
@@ -412,6 +417,8 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
 
             </div>
             {visible && <FineModal position={{ top: 30, left: "35%", width: "40%" }} onModalChange={v} component={<Error />} />}
+            {visible2 && <CustomModal onModalChange={v2} component={<NotPro />} />}
+
         </>
     )
 }
@@ -456,7 +463,7 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
                 axios.all([
                     axios.put("/posts/" + id, { name: data.name, media: data.mediaName && entreprise.id + "-entreprise-prestation-" + id + "-" + random  + "." + data.mediaName.split(".", -1)[1] || data.media, outro: draftToHtml(data.outro) || data.outro, disposition: data.position, proprio: "entreprise" }, {
                             headers: {
-                                Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                                Authorization: "Bearer " + localStorage.getItem("etoken")
                             }
                         
                     }),
@@ -598,7 +605,7 @@ export function Delete({ close, id,k }) {
             axios.delete(`/posts/${id || getPost.id}`,
             {
                 headers: {
-                    Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                    Authorization: "Bearer " + localStorage.getItem("etoken")
                 }
 
             }

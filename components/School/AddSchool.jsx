@@ -33,7 +33,7 @@ function Site({lastId}) {
         outro: "<h1>Une Note</h1><center>Ajouter des notes exp: comment faire pour s'inscrire numéro de compte et consort...</center>",
         profil: "",
         profilName: "",
-        disposition: 2,
+        disposition: 3,
         profilData: "",
         position: [],
 
@@ -384,7 +384,7 @@ export function Page3({ data, onHandleSelectChange, onCheckChange, handleClick, 
     )
 }
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg',"PNG","JPEG","JPG"]
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
 const allowOnlyPicture = (filename) => {
 
@@ -463,9 +463,9 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors,lastId }) {
 
 
                 ).then(res => {
-                    sessionStorage.setItem("schoolToken", res[0].data.token)
-                    sessionStorage.setItem("school", res[0].data.sigle)
-                    sessionStorage.setItem("schoolId", res[0].data.id)
+                    localStorage.setItem("schoolToken", res[0].data.token)
+                    localStorage.setItem("school", res[0].data.sigle)
+                    localStorage.setItem("schoolId", res[0].data.id)
                     router.push(`/addSchoolPro/${res[0].data.id}?token=${res[0].data.token}`)
                     setLoader(false)
                     
@@ -501,7 +501,6 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors,lastId }) {
         <div className={styles.page}>
 
             <div className="particular">
-
 
                 <Editor name="description" r={false} state={draftToHtml(data.description)} handleEdit={handleEdit} edit={true}>
 
@@ -557,8 +556,8 @@ export function Preview({ data }) {
 
 
             </nav>
-            <div className={ data.disposition == 1 ? style.tabl : data.disposition == 2 ? "dfss" : style.dfr }>
-                <div >
+            <div className={ data.disposition == 1 ? style.tabl : data.disposition == 3 ? "dfss" : style.dfr }>
+                <div className="containText">
                     {data.description ? <Markup content={draftToHtml(data.description).substr(0, 1000) + "..."} /> : "Description de votre entreprise sera afficher ici"}
 
                 </div>

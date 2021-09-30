@@ -11,7 +11,7 @@ function PasserPro() {
     const handleClick = () => {
         axios.put("/demande-entreprise/" + entreprise.id, {
             headers: {
-                Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                Authorization: "Bearer " + localStorage.getItem("etoken")
             }
         }).then().catch(()=>alert("Erreur"))
         setState(entreprise.demande)
@@ -20,7 +20,7 @@ function PasserPro() {
     }
     return (
         <div>
-            <div className={styles.end}>
+            <div >
                 {!state? <a className="btnPri" onClick={handleClick}> Passer pro </a> : state2 ? <a className="btnFine" > Bravo !!! </a> :  <a className="btnPri" onClick={handleClick}> Demande en cours... </a>}
             </div>
 

@@ -13,71 +13,72 @@ export default function Activity({ choise, handleChoiseState }) {
     const [visbility3, v3] = useModal(false)
     const [visbility2, v2] = useModal(false)
 
-    const [position, setPosition] = React.useState({})
     const schools = React.useContext(SudoContext).data.school
+    const entreprises = React.useContext(SudoContext).data.entreprises
+    const eFine = React.useContext(SudoContext).data.entreprises.map(e=> ({username: e.username}))
+    const sites = React.useContext(SudoContext).data.sites
+    const getPubs = React.useContext(SudoContext).data.pubs
+    const getOffers = React.useContext(SudoContext).data.offers
     const dispacth = React.useContext(SudoContext).dispacth
-    const schoolDemande = schools.filter(e => e.demande == true )
-    const handleClick = React.useCallback(async(id, index) => {
+    const schoolDemande = schools.filter(e => e.demande == true)
+    const fineEntreprise = sites.map(e1 => ({ ...e1, ...entreprises.find(e => e.id == e1.entreprise_id) }))
+    const finePubs = getPubs.map(e1 => ({ ...e1, ...eFine.find(e => e.id == e1.entreprise_id) })).filter(e => e.demande == true)
+    const fineOffers = getOffers.map(e1 => ({ ...e1, ...eFine.find(e => e.id == e1.entreprise_id) })).filter(e => e.demande == true)
+    const en = fineEntreprise.map(e => e).filter(e => e.demande == true)
 
+    
+    const handleEntrepriseSubmit = async(id, index) => {
+        await axios.put("/ToggleStatusEntreprise/" + id, {}).then(res => null).catch(r => null)
 
-        await axios.put("/DelStatusSchool/"+id,{}).then(res => null).catch(r=> null)
-        dispacth({ type: "DELETE", name: "school", data: { ...schools, id: index } })
+        dispacth({ type: "UPDATE", name: "entreprises", id: index, value: { ...en[index], demande: false, pro: true } })
 
-   
-    })
-
-    const handleSubmit = React.useCallback(async(id, index)=>{
-
+    }
+  
+    const handleSchoolSubmit = async(id, index) => {
         await axios.put("/ToggleStatusSchool/" + id, {}).then(res => null).catch(r => null)
 
-        dispacth({ type: "DELETE", name: "school", data: { ...schools, id: index } })
-        
+        dispacth({ type: "UPDATE", name: "school", id: index,value: { ...schools[index], demande: false,pro: true } })
+    }
+    const handleEntrepriseClick = async(id, index) => {
+        await axios.put("/DelStatusEntreprise/" + id, {}).then(res => null).catch(r => null)
+
+        dispacth({ type: "UPDATE", name: "entreprises", id: index, value: { ...en[index], demande: false } })
+    }
+    const handleSchoolClick = async(id,index) => {
+        await axios.put("/DelStatusSchool/" + id, {}).then(res => null).catch(r => null)
+
+        dispacth({ type: "UPDATE", name: "school", id:index, value: {...schools[index],demande: false} })
 
 
-    })
-
+    }
 
 
     return (
         <>
-            <div className={style.choose}>
-                <span className={choise ? style.act : style.noact} onClick={() => { handleChoiseState(choise) }}> <Clipboard className={style.icon} size={20} color="#4a00b4" /> Publicités </span>
-                <span className={choise ? style.noact : style.act} onClick={() => { handleChoiseState(!choise) }}> <Building className={style.icon} size={20} color="#4a00b4" /> Etablissement Pro</span>
-            </div>
-
-            <div className={!choise ? style.no : null}>
-                <div className={style.end}>
-                    <a className="btnPri" >Ajouter</a>
-                </div>
-              
+            {/* <div className={style.choose}>
+                <span className={choise ? style.act : style.noact} onClick={() => { handleChoiseState(choise) }}> <Clipboard className={style.icon} size={20} color="#4a00b4" /> Publicités et Offres </span>
+                <span className={choise ? style.noact : style.act} onClick={() => { handleChoiseState(!choise) }}> <Building className={style.icon} size={20} color="#4a00b4" /> Demande Passer Pro</span>
+            </div> */}
+            <div className={choise ? style.no : null}>
 
                 <table>
-                    <thead>
-                        <tr><th>#id</th><th>Sigle de l'établissement</th><th>Actions</th></tr>
-
-                    </thead>
-                    <tbody>
-                        {/* {[1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9].map((e, f) => <Test key={f} id={e} onDelete={handleClick} />)} */}
-
+                  <tbody>
+                        {finePubs.map((e, f) => <Tr key={f} one={true} id={f} value={e} onSubmit={() => handlePubSubmit(e.id, f)} onDelete={() => handlePubClick(e.id,f)} />)}
+                        {fineOffers.map((e, f) => <Tr key={f} one={true} id={f} value={e} onSubmit={() => handleOfferSubmit(e.id, f)} onDelete={() => handleOfferClick(e.id,f)} />)}
                         
                     </tbody>
                 </table>
             </div>
             
-            <div className={choise ? style.no : null} style={{marginTop: "3%"}}>
+            <div >
 
-              
+
 
                 <table>
-                    <thead>
-                        <tr>
-                            <th>id</th><th>Date de création</th><th>Nom de l'établissement</th><th>Actions</th>
-                        </tr>
-                        
-                    </thead>
+                  
                     <tbody>
-
-                        {schoolDemande.map((e, f) => <Tr key={f} id={f} value={e} onSubmit={handleSubmit} onDelete={handleClick} />)}
+                        {en.map((e, f) => <Tr key={f} id={f} value={e} onSubmit={() => handleEntrepriseSubmit(e.id, f)} onDelete={() =>handleEntrepriseClick(e.id,f)} />)}
+                        {schoolDemande.map((e, f) => <Tr key={f} id={f} value={e} onSubmit={()=>handleSchoolSubmit(e.id,f)} onDelete={()=>handleSchoolClick(e.id,f)} />)}
                     </tbody>
                 </table>
                 
@@ -98,13 +99,13 @@ export default function Activity({ choise, handleChoiseState }) {
 
 
 
-export function Tr({ id, value, onDelete ,onSubmit}) {
+export function Tr({ id, value, onDelete ,onSubmit,one=false}) {
     
     return (<>
         <tr >
-            <td>{value.id}</td>
-            <td>{value.create_at}</td>
-            <td>{value.sigle}</td>
+            <td>{value.create_at ? (new Date(value.create_at).toLocaleDateString() + " à " + new Date(value.create_at).toLocaleTimeString() ) : (new Date(value.available).toLocaleDateString() + " à " + new Date(value.available).toLocaleTimeString())}</td>
+            <td>{ value.username || value.sigle || value.name}</td>
+            {one ? <td>{value.content ? "Offre" :  "Publicité"}</td> : <td>{value.sigle ? "Ecole" :  "Entreprises" }</td>}
           
             <td className="dfss"> <a className={style.disagree} onClick={() => {
 

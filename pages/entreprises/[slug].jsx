@@ -1,55 +1,60 @@
 import React from 'react'
 import Footer from '../Template/footer'
 import Link from 'next/link'
-import { ArrowLeft, ArrowLeftRight, Bell, ChevronLeft, EmojiNeutralFill, GeoAlt, Grid3x3GapFill, TelephoneFill, Whatsapp, XCircleFill, XOctagonFill } from 'react-bootstrap-icons'
+import { ArrowLeft, ArrowLeftRight, Bell, ChevronLeft, EmojiNeutralFill, EmojiSmileFill, GeoAlt, Grid3x3GapFill, TelephoneFill, Whatsapp, XCircleFill, XOctagonFill } from 'react-bootstrap-icons'
 import styles from '../../styles/AddSchool.module.css'
 import { Markup } from 'interweave';
 import Head from 'next/head'
 import App from '../../components/SchoolAdmin/notif'
 import axios from 'axios'
 import Header from '../Template/Header'
-import { fecthPost, fecthProduct, fetchentrEprisePositionData, fetchEntrepriseSiteData, fetchEntrepriseSlugData } from '../../Model/getEntreprise'
+import { fecthOffer, fecthPost, fecthProduct, fecthPub, fecthSiteOffer, fecthSitePost, fecthSiteProduct, fecthSitePub, fetchentrEprisePositionData, fetchEntrepriseSiteData, fetchEntrepriseSiteDataSlug, fetchentrEpriseSitePositionData, fetchEntrepriseSiteSlugData, fetchEntrepriseSlugData } from '../../Model/getEntreprise'
+import { fecthFinePub, fecthFineOffer} from '../../Model/getIndex'
 import Page from '../../components/Entreprise/Page'
+import FineModal from '../../components/fineModal'
 
-function ViewSchool({ entreprise, positions, site, getProduct, getPost}) {
+function ViewSchool({ entreprise, positions, site, getProduct, getPost, getOffer,getPub}) {
     
 
 
 
     const [message, setMessage] = React.useState(true)
+    const [errorConnect, setErrorConnect] = React.useState(false)
     const [abonnement, setAbonnement] = React.useState(false)
     const [userId, setuserId] = React.useState(false)
     React.useEffect(() => {
-        setuserId(sessionStorage.getItem("userId"))
+        setuserId(localStorage.getItem("userId"))
     }, [userId])
-    const handleClickSuscribe = () => {
-        if (sessionStorage.getItem("userId")) {
-            axios.post("/abonnement", { userId: parseInt(sessionStorage.getItem("userId")), schoolId: data.id }).then(res => setAbonnement(true)).catch(e => console.log(e))
-            setAbonnement(true)
+ 
+
+    const handleClik = () => {
+        if (localStorage.getItem("userId")) {
+            setMessage(false)
         } else {
-            alert("veuiller créer un compte ou vous connecter  avant de pouvoir vous abonner aux établissements")
+            setErrorConnect(true)
         }
+
     }
 
-
-
     const handleSendData = async (e) => {
-        await axios.post("/message", { userId: sessionStorage.getItem("userId"), message: e.toString(), schoolId: data.id }).then(res => null).catch(r => alert(r))
+       
+        await axios.post("/message-entreprise", { userId: localStorage.getItem("userId"), message: e.toString(), schoolId: entreprise.entreprise.id }).then(res => null).catch(r => alert(r))
+
     }
 
     return (
         <>
-            {!entreprise.error && entreprise.entreprise.site &&  <div>
+            {!site.error && site.site.id &&  <div>
 
                 <Head>
-                    {/* <title>{data.sigle}</title>
-                    <meta name="description" content={data.description} /> */}
+                    <title>{site.site.name}</title>
+                    <meta name="description" content={site.site.outro.substr(0, 1000) } />
                 </Head>
                 {userId ? <div className="container" style={{width: "8%",marginLeft: "5%"}}> <Link href="/"><a className="btnSecondary dfss" > <ArrowLeft size={20} color="#4a00b4" /> Retour </a></Link></div>: <Header value={2} normal={false} />}
 
                 <main className={styles.body}>
 
-                    <Page data={site.site} mode={true} entreprise={entreprise.entreprise} position={positions.position} getProduct={getProduct.products} getPost={getPost.posts} />
+                    <Page data={site.site} getPub={getPub} getOffer={getOffer} mode={true} entreprise={entreprise.entreprise} position={positions.position} getProduct={getProduct.products} getPost={getPost.posts} />
 
                 </main>
 
@@ -58,19 +63,18 @@ function ViewSchool({ entreprise, positions, site, getProduct, getPost}) {
 
 
                 {message && <div className={styles.mess}>
-                    <Whatsapp color="green" onClick={() => (sessionStorage.getItem("userId") ? setMessage(false) : alert("Vous devez être inscrit ou connecter! pour effectuer cette opération"))} size={40} />
-
-
+                    <Whatsapp color="green" onClick={handleClik} size={40} />
                 </div>}
+                
                 {!message && <div className={styles.message}>
                     <XCircleFill size={30} onClick={() => setMessage(true)} color="#4a00b4" className={styles.closeur} />
 
-                    <App school={entreprise.entreprise} size={40} send={handleSendData} />
+                    <App  school={entreprise.entreprise} size={40} send={handleSendData} />
 
 
                 </div>}
             </div>}
-            {(entreprise.error || !entreprise.entreprise.site) && <div>
+            {(site.error || !site.site.id) && <div>
 
                 <div className={styles.contain}>
                     <center>
@@ -82,7 +86,11 @@ function ViewSchool({ entreprise, positions, site, getProduct, getPost}) {
 
 
             </div>}
-          
+            <div>
+
+            </div>
+            {errorConnect && <FineModal position={{ top: 30, left: "35%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou vous inscrirez vous!</div>} onModalChange={setErrorConnect} />}
+
         </>
     )
 }
@@ -106,11 +114,14 @@ export async function getServerSideProps({ params }) {
         return
     }
 
-    const entreprise = await fetchEntrepriseSlugData(params.slug);
-    const positions = !entreprise.error && entreprise.entreprise.id ?  await fetchentrEprisePositionData(entreprise.entreprise.id) : null;
-    const site = !entreprise.error && entreprise.entreprise.id ? await fetchEntrepriseSiteData(entreprise.entreprise.id) :null
-    const getPost = !entreprise.error && entreprise.entreprise.id ? await fecthPost(entreprise.entreprise.id) : null
-    const getProduct = !entreprise.error && entreprise.entreprise.id ? await fecthProduct(entreprise.entreprise.id) : null
+    const site = await fetchEntrepriseSiteSlugData(params.slug)
+
+    const entreprise = !site.site.error && site.site.entreprise_id ? await fetchEntrepriseSiteDataSlug(site.site.entreprise_id) : null ;
+    const positions = !site.site.error && site.site.entreprise_id ? await fetchentrEpriseSitePositionData(site.site.entreprise_id) : null;
+    const getPost = !site.site.error && site.site.entreprise_id ? await fecthSitePost(site.site.entreprise_id) : null
+    const getProduct = !site.site.error && site.site.entreprise_id ? await fecthSiteProduct(site.site.entreprise_id) : null
+    const getOffer = !site.site.error && site.site.entreprise_id ? await fecthFineOffer(site.site.entreprise_id) : null
+    const getPub = !site.site.error && site.site.entreprise_id ? await fecthFinePub(site.site.entreprise_id) : null
 
     return {
         props: {
@@ -118,7 +129,9 @@ export async function getServerSideProps({ params }) {
             positions,
             site,
             getPost,
-            getProduct
+            getProduct,
+            getOffer,
+            getPub
           
         },
     };

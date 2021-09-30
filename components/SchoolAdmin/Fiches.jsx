@@ -14,6 +14,7 @@ import ModalEditor from '../modalEditor'
 import draftToHtml from 'draftjs-to-html'
 import draftjsToHtml from 'draftjs-to-html'
 import { Markup } from 'interweave';
+import NotPro from '../CustomHooks/NotPro'
 
 
 
@@ -21,6 +22,7 @@ import { Markup } from 'interweave';
 
 export function Home() {
     const [visbility3, v3] = useModal(false)
+    const [visbility, v] = useModal(false)
     const position = React.useRef(null)
     const context = React.useContext(SchoolContext)
     let spe = context.data.spe
@@ -38,12 +40,10 @@ export function Home() {
         v3(true)
     }
 
-    const handleClick2 = (pad) => {
-        v(true)
-    }
+  
 
     const handleAlert = () => {
-        alert("Cette fonctionnalité est réservé à la version pro")
+        v(true)
     }
     return (<>
         <div className={styles.pad}>
@@ -61,6 +61,7 @@ export function Home() {
             
     
         {visbility3 && <ModalEditor onModalChange={v3} component={<AddSpeciality v={v3} dispacth={dispacth2} />} />}
+        {visbility && <ModalEditor onModalChange={v} component={<NotPro />} />}
 
 
     </>)
@@ -199,7 +200,7 @@ const state = data
 
 
 export function Delete({ v, id, k, state, dispacth, spe, dispacth2 }) {
-    let Token = sessionStorage.getItem("schoolToken")
+    let Token = localStorage.getItem("schoolToken")
     let val = k !== undefined ? k : state[id] && state[id].id
 
     const [fine, setFine] = React.useState()
@@ -286,7 +287,7 @@ export function Edit({ v, id, k, dispacth, state, spe }) {
    
     let val = k !== undefined ? k : state[id].k
     const { register, control, handleSubmit, formState: { errors, isSubmitSuccessful, isSubmitted, isSubmitting, isValid } } = useForm({ mode: "onTouched", defaultValues: { name: state[id].name, price: state[id].price || state[id].prix } })
-    let Token = sessionStorage.getItem("schoolToken")
+    let Token = localStorage.getItem("schoolToken")
     const options = types.types.map(e => ({ label: e.types, value: e.types }))
 
    

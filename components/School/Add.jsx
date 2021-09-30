@@ -15,7 +15,7 @@ import Loader from 'react-loader-spinner'
 import draftToHtml from 'draftjs-to-html'
 
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
 const allowOnlyPicture = (filename) => {
 
@@ -131,9 +131,9 @@ err++
             
             
           ).then(res => {
-                     sessionStorage.setItem("schoolToken", res[0].data.token)
-                 sessionStorage.setItem("school", res[0].data.sigle)
-              sessionStorage.setItem("schoolId", res[0].data.id)
+                     localStorage.setItem("schoolToken", res[0].data.token)
+                 localStorage.setItem("school", res[0].data.sigle)
+              localStorage.setItem("schoolId", res[0].data.id)
               router.push(`/addSchoolPro/${res[0].data.id}?token=${res[0].data.token}`)
               setLoader(false)
              } )

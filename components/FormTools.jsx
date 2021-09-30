@@ -118,7 +118,7 @@ export function File({ children, name, def = "",defData = null,  r = true, onCha
             <ImageAlt size={20} color="#4a00b4" />
             <label htmlFor={name}>{children}</label>
         </div>
-        <center>  {def && (def.substring(def.lastIndexOf(".")) == ".mp4" || def.substring(def.lastIndexOf(".")) == ".MP4" ? <video src={def} alt="video" height={50} controls>La vidéo n'as pas pu se charger</video> : <img src={ def} height={30} alt="image ou vidéo chargé" />)}</center>
+        <center>  {def && (def.substring(def.lastIndexOf(".")) == ".mp4" || def.substring(def.lastIndexOf(".")) == ".MP4" ? <video src={def} alt="video" height={50} controls>La vidéo n'as pas pu se charger</video> : <img src={ def} height={30} alt="image ou vidéo en cours de chargement" />)}</center>
         {defData && <center>{<img height={30} src={defData}/>}</center>}
 
         <div>

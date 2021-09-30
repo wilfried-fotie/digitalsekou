@@ -217,7 +217,7 @@ export function Page1({ onHandleTextChange, onHandleImageChange, data, errors}) 
                 <span className="error">
                     {errors && (data.name == "") && "Ce Champ est réquis"}
                 </span>
-                <File name="logo" onChange={handleImage} >Importer Le Logo</File>
+                <File name="logo" def={data.logo} onChange={handleImage} >Importer Le Logo</File>
                 <span className="error">
                     {errors && (data.logo == "") && "Ce Champ est réquis"}
                 </span>
@@ -256,7 +256,7 @@ export function Page2({ onHandleImageChange, data, onHandleTextChange, onCheckCh
     return (
         <>
             <div className={styles.page}>
-                <File name="profil" onChange={handleImage}  >Importer La photo de profil</File>
+                <File name="profil" def={ data.profil} onChange={handleImage}  >Importer La photo de profil</File>
                 <span className="error">
                     {errors && (data.profil == "") && "Ce Champ est réquis"}
                 </span>
@@ -323,7 +323,7 @@ export function Page3({ data, onHandleSelectChange, onHandleTextChange, errors})
     )
 }
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg']
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
 const allowOnlyPicture = (filename) => {
 
@@ -390,6 +390,7 @@ let state = data
             state.tel = state.tel.trim()
             state.name = state.name.trim()
             state.description = state.description.trim()
+            state.web = !state.web ? "" : state.web.trim()
             if (allowOnlyPicture(state.logoData) && allowOnlyPicture(state.profilData)) {
                 const formData1 = new FormData();
                 const formData2 = new FormData();
@@ -443,7 +444,6 @@ let state = data
     return (
         <div className={styles.page}>
           
-            
 
             <div className="a">
                 <p className="dfs"> <FileEarmarkPostFill size={20} color="#4a00b4" /> Disposition</p>

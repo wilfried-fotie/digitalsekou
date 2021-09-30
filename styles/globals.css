@@ -140,6 +140,10 @@ form {
     --primary-color: #4a00b4;
 }
 
+.containText {
+    max-width: 50vw;
+}
+
 .iconiseur {
     padding: 7px 10px 7px;
     background-color: #c1c1c5;

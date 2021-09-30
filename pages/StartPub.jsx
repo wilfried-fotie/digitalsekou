@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect } from 'react'
 import styles from '../styles/startpub.module.css'
-import { Building, ImageAlt, NodeMinus, TelephoneFill, BarChart, Pen, Display, Person, ArrowLeft, Diagram2Fill, CurrencyExchange, PersonCircle, FileWord, FileWordFill, BarChartFill, Flower1, PencilSquare, CartFill, CashStack, DisplayFill, HouseFill } from 'react-bootstrap-icons'
+import { Building, ImageAlt, NodeMinus, TelephoneFill, BarChart, Pen, Display, Person, ArrowLeft, Diagram2Fill, CurrencyExchange, PersonCircle, FileWord, FileWordFill, BarChartFill, Flower1, PencilSquare, CartFill, CashStack, DisplayFill, HouseFill, ChatSquareTextFill } from 'react-bootstrap-icons'
 import { useRouter } from "next/router"
 import Head from 'next/head'
 import Pub from '../components/Entreprise/Pub'
@@ -12,12 +12,15 @@ import AddProduct from '../components/CustomHooks/AddProduct'
 import AddPost from '../components/CustomHooks/AddPost'
 import { ControllerBuilder } from './addSchoolPro/[id]'
 import axios from 'axios'
-import { fecthOffer, fecthPost, fecthProduct, fecthPub, fetchEntrepriseData, fetchentrEprisePositionData, fetchEntrepriseSiteData } from '../Model/getEntreprise'
+import { fecthOffer, fecthPost, fecthProduct, fecthMessage, fecthPub, fetchEntrepriseData, fetchentrEprisePositionData, fetchEntrepriseSiteData } from '../Model/getEntreprise'
 import { ModSite } from '../components/Entreprise/ModSite'
 import Page from '../components/Entreprise/Page'
 import Welcome from '../components/SchoolAdmin/Welcome'
 import { Connect } from './Sudo'
 import PasserPro from '../components/Entreprise/PasserPro'
+import Messages from '../components/Entreprise/Messages'
+import NotPro from '../components/CustomHooks/NotPro'
+import CustomModal from '../components/customModal'
 
 
 const useIsomorphicLayoutEffect =
@@ -39,7 +42,7 @@ export const EntrepriseContext = React.createContext({})
 
 
             
-export default function Controller({ entreprise, entrepriseSite, entreprisePosition,getPost,getProduct,getPub,getOffer}) {
+export default function Controller({ entreprise, entrepriseSite, entreprisePosition, getPost, getProduct, getPub, getOffer, getMesssage}) {
 
     const [entrepriseId, setEntrepriseId] = React.useState()
    
@@ -91,7 +94,7 @@ export default function Controller({ entreprise, entrepriseSite, entreprisePosit
 
 
 
-    const [data, dispacth] = React.useReducer(schoolReducer, { entreprise, entrepriseSite, entreprisePosition, getPost, getProduct,getPub,getOffer})
+    const [data, dispacth] = React.useReducer(schoolReducer, { entreprise, entrepriseSite, entreprisePosition, getPost, getProduct, getPub, getOffer, getMesssage})
 
 
 
@@ -107,16 +110,16 @@ export default function Controller({ entreprise, entrepriseSite, entreprisePosit
     useIsomorphicLayoutEffect(() => {
 
 
-        setEntrerpiseToken(sessionStorage.getItem("etoken"))
-        setEntrepriseId(sessionStorage.getItem("entrepriseId"))
+        setEntrerpiseToken(localStorage.getItem("etoken"))
+        setEntrepriseId(localStorage.getItem("entrepriseId"))
     }, [])
 
     const handleSubmit = (data) => {
         axios.post("/entreprise", data).then(async (res) => {
 
-            sessionStorage.setItem("etoken", res.data.etoken)
-            sessionStorage.setItem("entreprise", res.data.username)
-            sessionStorage.setItem("entrepriseId", res.data.id)
+            localStorage.setItem("etoken", res.data.etoken)
+            localStorage.setItem("entreprise", res.data.username)
+            localStorage.setItem("entrepriseId", res.data.id)
             setEntrerpiseToken(res.data.etoken)
 
 
@@ -151,7 +154,8 @@ export default function Controller({ entreprise, entrepriseSite, entreprisePosit
 
 
 export function StartPub() {
-
+    
+    const [visbility, v] = useModal(false)
     const [level, setLevel] = React.useState(10)
     const router = useRouter()
     const entreprise = React.useContext(EntrepriseContext).data.entreprise.entreprise
@@ -159,6 +163,8 @@ export function StartPub() {
     const position = React.useContext(EntrepriseContext).data.entreprisePosition.position
     const getPost = React.useContext(EntrepriseContext).data.getPost.posts
     const getProduct = React.useContext(EntrepriseContext).data.getProduct.products
+    const getPub = React.useContext(EntrepriseContext).data.getPub
+    const getOffer = React.useContext(EntrepriseContext).data.getOffer
     return (
 <>
 <Head>
@@ -199,18 +205,19 @@ export function StartPub() {
                             {site && site.name  && <span className={level == 9 ? styles.active : styles.span} onClick={() => { setLevel(9) }}> <DisplayFill size={20} color={level == 9 ? "#fff" : "#fff9"} className={level == 9 ? styles.acticon : styles.icon} /> Visualiation de la page </span>}
 
                         <span className={level == 3 ? styles.active : styles.span} onClick={() => { setLevel(3) }}> <Flower1 size={20} color={level == 3 ? "#fff" : "#fff9"} className={level == 3 ? styles.acticon : styles.icon} /> Activités </span>
-                        <span className={level == 5 ? styles.active : styles.span} onClick={() => { setLevel(5) }}> <BarChartFill size={20} color={level == 5 ? "#fff" : "#fff9"} className={level == 5 ? styles.acticon : styles.icon} /> Statistiques </span>
+                            {entreprise.site && <span className={level == 11 ? styles.active : styles.span} onClick={() => { setLevel(11) }}> <ChatSquareTextFill size={20} color={level == 11 ? "#fff" : "#fff9"} className={level == 11 ? styles.acticon : styles.icon} /> Messages </span>}
+
+                            <span className={level == 5 ? styles.active : styles.span} onClick={() => { setLevel(5) }}> <BarChartFill size={20} color={level == 5 ? "#fff" : "#fff9"} className={level == 5 ? styles.acticon : styles.icon} /> Statistiques </span>
                           
                     </nav>
                 </div>
                 <div className={styles.content}>
 
-                 
-                        <div className="dfb padding">
-                            <PasserPro />
+                      <div className="dfb padding">
+                            {entreprise.site ?  !entreprise.demande && !entreprise.pro ? <a className="btnPri" onClick={() => v(true)}> Passer pro </a> : entreprise.pro ? <a className="btnFine" > Bravo !!! </a> : <a className="btnPri" > Demande en cours... </a> : <div></div>}
                             <Connect info={{ url: "/entreprise-pass", data: entreprise, token: { name: "entreprise", token: "etoken", id: "entrepriseId" } }} />
                         </div>
-
+                        
                         {level == 10 && <div className="padding"> <Welcome /></div>}
                         {level == 1 && <Pub />}
                     {level == 2 && <Offre />}
@@ -218,11 +225,14 @@ export function StartPub() {
                     {level == 5 && <Stat />}
                         {entreprise.site ? level == 8 && <ModSite /> : level == 4 && <Site onTermine={setLevel}/>}
                         {level == 6 && <AddPost />}
-                        {level == 9 && <Page data={site} entreprise={entreprise} position={position} getProduct={getProduct} getPost={getPost}/>}
-                    {level == 7 && <AddProduct />}
+                        {level == 9 && <Page data={site} entreprise={entreprise} position={position} getPub={getPub} getOffer={getOffer} getProduct={getProduct} getPost={getPost}/>}
+                        {level == 7 && <AddProduct />}
+                        {level == 11 && <Messages /> }
                 </div>
             </div>
             </main >
+            {visbility && <CustomModal onModalChange={v} component={<><NotPro pass={false} /><center className="padding"><PasserPro /></center> </>} />}
+
             </>
     )
 }
@@ -242,6 +252,7 @@ export async function getServerSideProps({ query }) {
     const getProduct = await fecthProduct(id)
     const getPub = await fecthPub(id)
     const getOffer = await fecthOffer(id)
+    const getMesssage = entreprise && entreprise.entreprise.site ? await fecthMessage(id) : []
 
 
 
@@ -254,7 +265,8 @@ export async function getServerSideProps({ query }) {
             getPost,
             getProduct,
             getPub,
-            getOffer
+            getOffer,
+            getMesssage
 
           
 

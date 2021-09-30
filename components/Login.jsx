@@ -34,10 +34,10 @@ function Login({ stateChange, setToken, e ,school}) {
                 
                 await axios.post('/entreprise', data).then(res => {
 
-                    sessionStorage.setItem("etoken", res.data.etoken)
-                    sessionStorage.setItem("entreprise", res.data.username)
-                    sessionStorage.setItem("entrepriseId", res.data.id)
-                    setToken(sessionStorage.getItem("etoken"))
+                    localStorage.setItem("etoken", res.data.etoken)
+                    localStorage.setItem("entreprise", res.data.username)
+                    localStorage.setItem("entrepriseId", res.data.id)
+                    setToken(localStorage.getItem("etoken"))
                     setFine("Votre comte est connecter avec succes!")
                     stateChange(false)
                     router.push(`/StartPub?id=${res.data.id}&token=${res.data.etoken}`)
@@ -53,9 +53,9 @@ function Login({ stateChange, setToken, e ,school}) {
                 
                 await axios.post("/school", data).then(res => {
 
-                    sessionStorage.setItem("schoolToken", res.data.schoolToken)
-                    sessionStorage.setItem("school", res.data.school)
-                    sessionStorage.setItem("schoolId", res.data.id)
+                    localStorage.setItem("schoolToken", res.data.schoolToken)
+                    localStorage.setItem("school", res.data.school)
+                    localStorage.setItem("schoolId", res.data.id)
                     setFine("Vous êtes connecter avec succes!")
                     stateChange(false)
                     router.push(`/addSchoolPro/${res.data.id}?token=${res.data.schoolToken}`)
@@ -70,10 +70,10 @@ function Login({ stateChange, setToken, e ,school}) {
 
                 await axios.post('/user', data).then(res => {
 
-                    sessionStorage.setItem("token", res.data.token)
-                    sessionStorage.setItem("username", res.data.username)
-                    sessionStorage.setItem("userId", res.data.id)
-                    setToken(sessionStorage.getItem("token"))
+                    localStorage.setItem("token", res.data.token)
+                    localStorage.setItem("username", res.data.username)
+                    localStorage.setItem("userId", res.data.id)
+                    setToken(localStorage.getItem("token"))
                     setFine("Votre comte est connecter avec succes!")
                     stateChange(false)
                   

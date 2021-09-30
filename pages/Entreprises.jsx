@@ -23,8 +23,8 @@ function Entreprises() {
     const [entrepriseId, setEntreprise] = React.useState()
 
     React.useEffect(() => {
-        setEtoken(sessionStorage.getItem("etoken"))
-        setEntreprise(sessionStorage.getItem("entrepriseId"))
+        setEtoken(localStorage.getItem("etoken"))
+        setEntreprise(localStorage.getItem("entrepriseId"))
 },[entrepriseId])
 
 
@@ -41,7 +41,7 @@ function Entreprises() {
 
     const handleClickVerif = (e) => {
         e.preventDefault()
-        if (sessionStorage.getItem("etoken")) {
+        if (localStorage.getItem("etoken")) {
             router.push("/StartPub?id=" + entrepriseId + "&token=" + etoken)
         } else {
             v(true)

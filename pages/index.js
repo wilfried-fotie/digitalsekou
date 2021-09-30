@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css"
 import { Binoculars, Check, Facebook, Globe, Google, Linkedin, PersonBoundingBox } from 'react-bootstrap-icons'
 import Footer from './Template/footer';
 import Link from 'next/link';
-import { fecthAllPub, fecthAllOffer } from '../Model/getIndex';
+import { fecthFinePub, fecthFineOffer } from '../Model/getIndex';
 import { Markup } from 'interweave'
 
 
@@ -230,8 +230,8 @@ export default function Home({getPub,getOffer}) {
 export async function getServerSideProps() {
 
 
-    const getOffer = await fecthAllOffer()
-    const getPub = await fecthAllPub()
+    const getOffer = await fecthFineOffer()
+    const getPub = await fecthFinePub()
 
 
 

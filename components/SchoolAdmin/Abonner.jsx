@@ -3,6 +3,7 @@ import React from 'react'
 import { ClipboardData, Whatsapp } from 'react-bootstrap-icons'
 import { SchoolContext } from '../../pages/addSchoolPro/[id]'
 import styles from '../../styles/startpub.module.css'
+import NotPro from '../CustomHooks/NotPro'
 
 
 
@@ -20,14 +21,7 @@ export default function Abonner() {
             
                 <div className="container">
                     {users.lenght !== 0 ? <table>
-                        {/* <thead>
-                            <tr>
-                                <th>Nom</th>
-                                <th>Tel</th>
-                                <th>Status</th>
-                                <th>Contacter</th>
-                            </tr>
-                        </thead> */}
+                  
                         <tbody>
                             {users.map((e, k) => <Tr key={k} value={e} />)}
                         </tbody>
@@ -38,7 +32,7 @@ export default function Abonner() {
                     } </div></> }
             
             
-          {!data.pro && <p><center className="error">Cette fonctionnalité est réserver  à la version pro</center></p>}
+            {!data.pro && <NotPro/>}
                 
             </>
     )

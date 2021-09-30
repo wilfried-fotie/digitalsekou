@@ -2,7 +2,7 @@ import React from 'react'
 import Footer from '../Template/footer'
 import Link from 'next/link'
 import { fetchAbonnement, fetchFilieres, fetchPositions, fetchSchoolSlugData, fetchSpecialities, fetchTypes } from '../../Model/getter'
-import { ArrowLeft, Bell, ChevronLeft, EmojiNeutralFill, GeoAlt, Grid3x3GapFill, TelephoneFill, Whatsapp, XCircleFill, XOctagonFill } from 'react-bootstrap-icons'
+import { ArrowLeft, Bell, ChevronLeft, EmojiNeutralFill, EmojiSmileFill, GeoAlt, Grid3x3GapFill, TelephoneFill, Whatsapp, XCircleFill, XOctagonFill } from 'react-bootstrap-icons'
 import styles from '../../styles/AddSchool.module.css'
 import { Markup } from 'interweave';
 
@@ -12,23 +12,25 @@ import axios from 'axios'
 import Header from '../Template/Header'
 import { fecthPost } from '../../Model/getEntreprise'
 import Page from '../../components/School/Page'
+import FineModal from '../../components/fineModal'
 
 function ViewSchool({ school, positions, types, specialities, abo, getPost }) {
     const data = school.school
     const spe = specialities ? [...specialities.specialities] : []
 
     const [message, setMessage] = React.useState(true)
+    const [error, setError] = React.useState(false)
     const [abonnement, setAbonnement] = React.useState(false)
     const [userId, setuserId] = React.useState(false)
     React.useEffect(() => {
-    setuserId(sessionStorage.getItem("userId"))
+    setuserId(localStorage.getItem("userId"))
 },[userId])
     const handleClickSuscribe = () => {
-        if (sessionStorage.getItem("userId")) {
-            axios.post("/abonnement", { userId: parseInt(sessionStorage.getItem("userId")), schoolId: data.id}).then(res => setAbonnement(true)).catch(e=> console.log(e))
+        if (localStorage.getItem("userId")) {
+            axios.post("/abonnement", { userId: parseInt(localStorage.getItem("userId")), schoolId: data.id}).then(res => setAbonnement(true)).catch(e=> console.log(e))
             setAbonnement(true)
         } else {
-            alert("veuiller créer un compte ou vous connecter  avant de pouvoir vous abonner aux établissements")
+            setError(true)
         }
     }
 
@@ -36,7 +38,7 @@ function ViewSchool({ school, positions, types, specialities, abo, getPost }) {
 
 
     const handleSendData = async(e) => {
-        await axios.post("/message",{userId: sessionStorage.getItem("userId"), message: e.toString(), schoolId: data.id}).then(res => null).catch(r=>alert(r))
+        await axios.post("/message",{userId: localStorage.getItem("userId"), message: e.toString(), schoolId: data.id}).then(res => null).catch(r=>alert(r))
     }
   
     return (
@@ -83,7 +85,7 @@ function ViewSchool({ school, positions, types, specialities, abo, getPost }) {
 
             </div>}
             {message && <div className={styles.mess}>
-                <Whatsapp color="green" onClick={() => (sessionStorage.getItem("userId") ? setMessage(false) : alert("Vous devez être inscrit ou connecter! pour effectuer cette opération"))} size={40} />
+                <Whatsapp color="green" onClick={() => (localStorage.getItem("userId") ? setMessage(false) : setError(true))} size={40} />
 
 
             </div>}
@@ -94,6 +96,7 @@ function ViewSchool({ school, positions, types, specialities, abo, getPost }) {
 
 
             </div>}
+            {error && <FineModal position={{ top: 30, left: "35%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou Créer vous un compte!</div>} onModalChange={setError} />}
 
             </>
     )

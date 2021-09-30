@@ -2,6 +2,7 @@ import React from 'react'
 import { ArrowClockwise, CurrencyExchange, EyeFill, RecordFill, Sliders, Toggle2Off, Toggle2On, ToggleOff } from 'react-bootstrap-icons'
 import { EntrepriseContext } from '../../pages/StartPub'
 import { verifSupDate } from '../CustomHooks/supDate'
+import { verifTwoDate } from '../CustomHooks/verifTwoDate'
 import useModal from '../CustomHooks/useModal'
 import CustomModal from '../customModal'
 import { Visualisation as Vi} from './Offre'
@@ -15,8 +16,7 @@ export default function Activity() {
     return (
         <div className={styles.top}>
 
-            {/* {JSON.stringify(getPub)} */}
-            {/* {JSON.stringify(getOffer)} */}
+   
             <div>
 
                 <center className="h1">Status de vos Ativités</center>
@@ -66,16 +66,14 @@ export function Tr({e,pub,k}) {
     
 
 
-    return (<>
-
-        <tr>
+    return (<><tr>
             <td> {"#" + k} </td>
 
-            <td>{pub ? null  : new Date(e.expire).toLocaleDateString() || new Date(e.expiration).toLocaleDateString()} </td>
-            <td> {pub ? e.days + " jours" : null} </td>
+            <td>{pub ? new Date(e.available).toLocaleDateString() || new Date(e.date).toLocaleDateString()  : new Date(e.expire).toLocaleDateString() || new Date(e.expiration).toLocaleDateString()} </td>
+        <td> {pub ? new Date(e.days).toLocaleDateString() || new Date(e.days).toLocaleDateString() : "Créer le: " + new Date(e.create_at).toLocaleDateString()  } </td>
             <td> {pub ? "Publicité" : "Offre"} </td>
             <td ><a className="btnSecondary dfss" onClick={() => v(true)}> Voir <EyeFill size={20} color="#4a00b4" /> </a></td>
-            <td> <span className={styles.dfss} > {pub ? verifSupDate(new Date(), new Date(e.available || e.date)) ? <><Toggle2On color="green" size={20} /> Active</> : <> <Toggle2Off color="red" size={20} /> Non Active</> : verifSupDate(new Date(), new Date(e.expire || e.expiration)) ? <><Toggle2On color="green" size={20} /> Active</> : <> <Toggle2Off color="red" size={20} /> Non Active</>}</span> </td>
+        <td> <span className={styles.dfss} > {pub ? verifSupDate(new Date(), new Date(e.days || e.date)) && verifTwoDate(new Date(e.available), new Date(e.days || e.date)) && e.valid ? <><Toggle2On color="green" size={20} /> Active</> : <> <Toggle2Off color="red" size={20} /> Non Active</> : verifSupDate(new Date(), new Date(e.expire || e.expiration)) && e.valid? <><Toggle2On color="green" size={20} /> Active</> : <> <Toggle2Off color="red" size={20} /> Non Active</>}</span> </td>
         </tr>
 
         

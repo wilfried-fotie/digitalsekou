@@ -1,7 +1,8 @@
 import Link from "next/link";
 import React from "react"
 import { createRef } from "react";
-import { CursorFill, Whatsapp } from "react-bootstrap-icons";
+import { CursorFill, PhoneFill, Whatsapp } from "react-bootstrap-icons";
+import { Field } from "../FormTools";
 
 
 
@@ -105,10 +106,14 @@ export default class App extends React.Component {
                 text: 'Salut à vous!',
                 type: 'in',
                 time: this.date()
-            }]
+            }],tel: ""
         }
         this.handleNewMessage = this.handleNewMessage.bind(this);
+        this.handleTel = this.handleTel.bind(this)
 
+    }
+    handleTel() {
+        
     }
 
     handleNewMessage(inputText, type) {
@@ -119,8 +124,9 @@ export default class App extends React.Component {
             }
     render() {
         return (
-            <div className="app">
+            <div className="app, message__container">
                 <MessageContainer messages={this.state.messages} />
+                {this.props.entreprise ? <Field name="tel" type="number" image={<PhoneFill size={20} color="#4a00b4" />} onChange={this.handleTel} state={this.state.tel}>Numéro de téléphone</Field> : null}
                 <InputRow inputText={this.state.inputText} school={this.props.school} send={this.props.send} handleNewMessage={this.handleNewMessage} />
             </div>
         )

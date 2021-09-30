@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowLeft, BarChart, CursorFill, Bell, Building, CartX, Check, ChevronCompactLeft, Clipboard, Disc, Exclude, Eye, Flower1, Gear, Link, Lock, LockFill, Person, PersonCircle, SuitDiamond, Trash, Whatsapp, } from 'react-bootstrap-icons'
+import { ArrowLeft, BarChart, CursorFill,  Bell, Building, CartX, Check, ChevronCompactLeft, Clipboard, Disc, Exclude, Eye, Flower1, Gear, Link as Lk, Lock, LockFill, Person, PersonCircle, SuitDiamond, Trash, Whatsapp, CashStack, CartFill, CartDashFill, FileLockFill, } from 'react-bootstrap-icons'
 import styles from '../components/Style/CreateAccount.module.css'
 import style from '../styles/sudo.module.css'
 import "../global"
@@ -8,19 +8,24 @@ import { useRouter } from "next/router"
 import useChangeBool from '../components/handleBool'
 import FineModal from '../components/fineModal'
 import CustomModal from '../components/customModal'
-
+import Head from "next/head"
 import { useForm } from 'react-hook-form'
 import { useLayoutEffect } from 'react'
 import { useEffect } from 'react'
 import { FieldValidate, PasswordValidate } from '../components/FormTools'
 import Loader from 'react-loader-spinner'
-import { fetchAllSchoolData } from '../Model/getter'
+import { fetchAllEntrepriseData, fetchAllEntrepriseSiteData, fetchAllSchoolData, fetchAllUsersData } from '../Model/getter'
 import Activity from '../components/Sudo/Activity'
 import Entreprises from '../components/Sudo/entreprises'
 import Schools from '../components/Sudo/Schools'
 import Abonner from '../components/Sudo/Abonner'
 import Notifications from '../components/Sudo/Notifications'
 import Stats from '../components/Sudo/Stats'
+import { fecthAllOffer, fecthAllPub } from '../Model/getIndex'
+import Pubs from '../components/Sudo/pubs'
+import Offres from '../components/Sudo/offres'
+import Link from "next/link"
+
 
 const useIsomorphicLayoutEffect =
     typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -65,12 +70,12 @@ export function ControllerBuilder({ submitData, err }) {
                 <div className={style.ok}>
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                        <center>  <a > Connexion Compte Etablissements</a></center>
+                        <center>  <a > Connexion Compte Administrateur</a></center>
 
                         {err && isSubmitted && isValid && <div className="error">
                             {err}
                         </div>}
-                        <FieldValidate name="username" image={<Person color="#4a00b4" size="20px" />} auto="Entrez le sigle de votre établissement" control={control} />
+                        <FieldValidate name="username" image={<Person color="#4a00b4" size="20px" />} auto="Entrez votre login" control={control} />
                         {errors.username && errors.username.type === "required" && (
                             <span className="error">Le sigle est obligatoire</span>
                         )}
@@ -79,7 +84,7 @@ export function ControllerBuilder({ submitData, err }) {
                             <span >La valeur trop court</span>
                         )}
 
-                        <PasswordValidate name="password" image={<Lock color="#4a00b4" size="20px" />} auto="Entrez le sigle de votre établissement" control={control} />
+                        <PasswordValidate name="password" image={<Lock color="#4a00b4" size="20px" />} auto="Entrez votre login" control={control} />
                         {errors.password && errors.password.type === "required" && (
                             <span className="error">Le mot de passe est obligatoire</span>
                         )}
@@ -113,49 +118,39 @@ export function ControllerBuilder({ submitData, err }) {
 export const SudoContext = React.createContext({})
 
 
-export default function Controller({ schools }) {
+export default function Controller({ schools, entreprises,sites, pubs, offers,users }) {
 
     const [schoolId, setSchoolId] = React.useState()
     const [schoolToken, setSchoolToken] = React.useState()
     const [err, setErr] = React.useState()
     const router = useRouter()
 
-
-
+     entreprises = entreprises.entreprise
+     sites = sites.sites
+     pubs = pubs.pubs
+    offers = offers.offers
+    users = users.users
 
     const schoolReducer = React.useCallback((state, action) => {
         switch (action.type) {
 
-            case "ADD":
-                const newSatate = [...state[action.name]]
-
-                newSatate.push({ ...action.data })
-                let finish = { ...state, [action.name]: newSatate }
-
-                return finish
-            case "ADDSPE":
-                const newSatate2 = [...state[action.name]]
-
-                newSatate2.push({ ...action.data })
-                finish = { ...state, [action.name]: newSatate2 }
-
-
-                return finish
+        
             case "DELETE":
                 const delState = [...state[action.name]]
                 let num = action.id
                 delState.splice(num, 1)
-                if (delState.payload) {
-                    num = delState.payload
-                }
-                finish = { ...state, [action.name]: delState }
+                let finish = { ...state, [action.name]: delState }
+                
                 return finish
 
-            case "UPDATESCHOOL":
-                const upSchoolState = state[action.name]
-                upSchoolState.school = action.value
-
-                finish = { ...state, [action.name]: upSchoolState }
+            case "DELETEDEP":
+                let delState2 = [...state[action.name]]
+                num = action.id
+                let newVal = delState2.filter(e => e.entreprise_id == num)
+                newVal.map(e => {
+                    delState2.splice(delState2.indexOf(e),1)
+                })
+                finish = { ...state, [action.name]: delState2 }
                 return finish
             case "UPDATENewArray":
                 const upState2 = [...state[action.name]]
@@ -173,12 +168,9 @@ export default function Controller({ schools }) {
                 const upState = [...state[action.name]]
 
                 upState[action.id] = action.value
-                if (upState[action.id].fil) {
-                    upState[action.id].fil = action.fil
-                    upState[action.id].prix = action.prix
-                }
+               console.log(upState)
 
-                finish = { ...state, [action.name]: upState }
+                 finish = { ...state, [action.name]: upState }
 
                 return finish
             default:
@@ -197,15 +189,15 @@ export default function Controller({ schools }) {
     useIsomorphicLayoutEffect(() => {
 
 
-        setSchoolToken(sessionStorage.getItem("sudoToken"))
-        setSchoolId(sessionStorage.getItem("sudo"))
+        setSchoolToken(localStorage.getItem("sudoToken"))
+        setSchoolId(localStorage.getItem("sudo"))
     }, [])
 
     const handleSubmit = async(data) => {
         await axios.post("/sudo", data).then( (res) => {
 
-            sessionStorage.setItem("sudoToken", res.data.token)
-            sessionStorage.setItem("sudo", res.data.id)
+            localStorage.setItem("sudoToken", res.data.token)
+            localStorage.setItem("sudo", res.data.id)
             setSchoolToken(res.data.token)
 
             
@@ -215,12 +207,16 @@ export default function Controller({ schools }) {
         }).catch(e => setErr("Cet utilisateur n'existe pas"))
     }
 
-    const [data, dispacth] = React.useReducer(schoolReducer, { ...schools})
+    const [data, dispacth] = React.useReducer(schoolReducer, { ...schools, entreprises, sites, pubs, offers, users})
 
     const value = React.useMemo(() => ({ data, dispacth }), [data, dispacth])
 
     return (
         <>
+            <main>
+                <Head>
+                    <title>Administration du site</title>
+          </Head>
             {(schoolToken && schoolToken !== "" && schoolToken !== undefined )
                 ?
                
@@ -231,66 +227,12 @@ export default function Controller({ schools }) {
                 :
                 <ControllerBuilder submitData={handleSubmit} err={err} />
                 
-            }
-        </>
+            } </main>
+        </>      
+           
     )
 }
 
-
-export async function getServerSideProps({ params, query }) {
-
-    const token = query.token
-    
-    const schools = await fetchAllSchoolData()
-
-
-    return {
-        props: {
-            schools,
-         
-
-        },
-    };
-
-
-
-}
-
-
-
-
-
-
-// export async function getServerSideProps({ params }) {
-
-//     const token = query.token
-//     const id = parseInt(params.id)
-//     const fils = await fetchFilieres(id);
-//     const specialities = await fetchSpecialities(id);
-//     const types = await fetchTypes(id);
-//     const positions = await fetchPositions(id);
-//     const schoolData = await fetchSchoolData(id, token);
-//     const abo = await fetSchoolAbo(id)
-//     const mes = await fetSchoolMessages(id)
-
-
-
-//     return {
-//         props: {
-//             schoolData,
-//             fils,
-//             specialities,
-//             types,
-//             positions,
-//             abo,
-//             mes
-
-//         },
-//     };
-
-
-
-// }
 
 
 
@@ -355,14 +297,25 @@ export function Dasboard() {
                                 e.preventDefault()
                                 setLevel(0)
                                 router.push("/")
-                            }}> <ArrowLeft size={20} color={level == 0 ? "#fff" : "#4a00b4"} className={level == 0 ? style.acticon : style.icon} /> Revenir au site</span>
+                            }}> <ArrowLeft size={20} color={level == 0 ? "#fff" : "#fff9"} className={level == 0 ? style.acticon : style.icon} /> Revenir au site</span>
 
-                            <span className={level == 1 ? style.active : style.span} onClick={() => { setLevel(1) }} > <Flower1 size={20} color={level == 1 ? "#fff" : "#4a00b4"} className={level == 1 ? style.acticon : style.icon} /> Activités </span>
-                            <span className={level == 2 ? style.active : style.span} onClick={() => { setLevel(2) }}> <Building size={20} color={level == 2 ? "#fff" : "#4a00b4"} className={level == 2 ? style.acticon : style.icon} /> Entreprises </span>
-                            <span className={level == 3 ? style.active : style.span} onClick={() => { setLevel(3) }}> <SuitDiamond size={20} color={level == 3 ? "#fff" : "#4a00b4"} className={level == 3 ? style.acticon : style.icon} /> Etablissements </span>
-                            <span className={level == 4 ? style.active : style.span} onClick={() => { setLevel(4) }}> <PersonCircle size={20} color={level == 4 ? "#fff" : "#4a00b4"} className={level == 4 ? style.acticon : style.icon} /> Parents/Élève </span>
-                            {/* <span className={level == 5 ? style.active : style.span} onClick={() => { setLevel(5) }}> <Bell size={20} color={level == 5 ? "#fff" : "#4a00b4"} className={level == 5 ? style.acticon : style.icon} /> Notifications </span> */}
-                            <span className={level == 6 ? style.active : style.span} onClick={() => { setLevel(6) }}> <BarChart size={20} color={level == 6 ? "#fff" : "#4a00b4"} className={level == 6 ? style.acticon : style.icon} /> Statistiques </span>
+                            
+                            <div className="avatar">
+                                <center className="padding">  <PersonCircle size={50} color="#FFF" />
+                                    <center style={{ color: "#FFF" }}>  Admin </center>
+                                </center>
+                                
+</div>
+
+                            <span className={level == 1 ? style.active : style.span} onClick={() => { setLevel(1) }} > <Flower1 size={20} color={level == 1 ?  "#fff" : "#fff9"} className={level == 1 ? style.acticon : style.icon} /> Demandes </span>
+                            <span className={level == 2 ? style.active : style.span} onClick={() => { setLevel(2) }}> <Building size={20} color={level == 2 ?  "#fff" : "#fff9"} className={level == 2 ? style.acticon : style.icon} /> Entreprises </span>
+                            <span className={level == 3 ? style.active : style.span} onClick={() => { setLevel(3) }}> <SuitDiamond size={20} color={level == 3 ?  "#fff" : "#fff9"} className={level == 3 ? style.acticon : style.icon} /> Etablissements </span>
+
+                            <span className={level == 7 ? style.active : style.span} onClick={() => { setLevel(7) }}> <CashStack size={20} color={level == 6 ? "#fff" : "#fff9"} className={level == 7 ? style.acticon : style.icon} /> Publicités </span>
+                            <span className={level == 8 ? style.active : style.span} onClick={() => { setLevel(8) }}> <CartDashFill size={20} color={level == 6 ? "#fff" : "#fff9"} className={level == 8 ? style.acticon : style.icon} /> Offres </span>                            <span className={level == 4 ? style.active : style.span} onClick={() => { setLevel(4) }}> <PersonCircle size={20} color={level == 4 ? "#fff" : "#fff9"} className={level == 4 ? style.acticon : style.icon} /> Parents/Élèves </span>
+
+                            <span className={level == 6 ? style.active : style.span} onClick={() => { setLevel(6) }}> <BarChart size={20} color={level == 6 ? "#fff" : "#fff9"} className={level == 6 ? style.acticon : style.icon} /> Statistiques </span>
+                     
 
                         </div>
 
@@ -371,14 +324,15 @@ export function Dasboard() {
                         <nav className="dfb">
 
 
-                            <span className={level == 1 ? style.h1 : style.no}  >Activités </span>
+                            <span className={level == 1 ? style.h1 : style.no} > Demande Paser Pro </span>
                             <span className={level == 2 ? style.h1 : style.no} > Entreprises </span>
                             <span className={level == 3 ? style.h1 : style.no} >  Etablissements </span>
                             <span className={level == 4 ? style.h1 : style.no} >  Parents/Élève </span>
-                            {/* <span className={level == 5 ? style.h1 : style.no} >Envoyer Des Notifications </span> */}
                             <span className={level == 6 ? style.h1 : style.no} > Statistiques </span>
+                            <span className={level == 7 ? style.h1 : style.no} > Publicités </span>
+                            <span className={level == 8 ? style.h1 : style.no} > Offres </span>
 
-                            <Connect />
+                            <Connect info={{ url: "/sudo", data: {}, token: { name: "sudo", token: "sudoToken", id: "sudo" } }}/>
 
                         </nav>
 
@@ -388,8 +342,9 @@ export function Dasboard() {
                             {level == 2 && <Entreprises />}
                             {level == 3 && <Schools />}
                             {level == 4 && <Abonner />}
-                            {/* {level == 5 && <Notifications />} */}
                             {level == 6 && <Stats />}
+                            {level == 7 && <Pubs />}
+                            {level == 8 && <Offres />}
                         </div>
 
                     </article>
@@ -407,9 +362,9 @@ export function Verif({info}) {
     const router = useRouter()
     const [visible, v] = useModal(false)
     const handleDisconnect = () => {
-        sessionStorage.removeItem(info.token.name)
-        sessionStorage.removeItem(info.token.id)
-        sessionStorage.removeItem(info.token.token)
+        localStorage.removeItem(info.token.name)
+        localStorage.removeItem(info.token.id)
+        localStorage.removeItem(info.token.token)
         router.push("/")
     }
 
@@ -422,7 +377,7 @@ export function Verif({info}) {
 
 
                 <a onClick={handleDisconnect} className="dfss">
-                    <Link size={20} color="#4a00b4"  className={style.icon} /> Se Déconnecter</a>
+                    <Lk size={20} color="#4a00b4"  className={style.icon} /> Se Déconnecter</a>
 
                 <a onClick={handleChangePassWord} className="dfss">
                     <LockFill size={20} color="#4a00b4" className={style.icon} /> Changer de mot de passe</a>
@@ -451,7 +406,7 @@ export function ChangePasse({info}) {
             setLoader(true)
             axios.put(info.url, { ...info.data, password: data.password, oldpassword: data.oldpassword }, {
                 headers: {
-                    Authorization: "Bearer " + sessionStorage.getItem(info.token.token)
+                    Authorization: "Bearer " + localStorage.getItem(info.token.token)
                 }
 
             }).then(res => { setFine("Modification éffectuer avec succès"); setErr(""); setLoader(false) }).catch(rres => { setErr("Une erreur est survenu veuillez réessayer"); setFine(""); setLoader(false) })
@@ -513,23 +468,37 @@ export function ChangePasse({info}) {
 
 
 
-export function Verif1() {
+export function Verif1({ info, v }) {
+    const dispacth = React.useContext(SudoContext).dispacth
+
+    const handleDelete = async () => {
+        await axios.delete(`/${info.url}/` + info.id,
+            {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("sudoToken")
+                }
+
+            }
+        ).then(res => {
+
+            dispacth({ type: "DELETE", name: info.name, id: info.index })
+v(false)
+        }).catch(r => alert(r))
+
+    }
+    const handleSubmit = () => {
+        v(false)
+    }
     return (
         <>
             Voulez vous delete?
-
-            <a className={style.agree}>
+            <div className="dfss pad">
+                <a className={style.agree} onClick={handleDelete}>
                 <Check size={20} color="#ffff" className={style.icon} /> Accepter</a>
-            <a className={style.disagree} >  <Trash size={20} color="#ffff" className={style.icon} /> Annuler</a>
+            <a className={style.disagree} onClick={handleSubmit} >  <Trash size={20} color="#ffff" className={style.icon} /> Annuler</a></div>
         </>
     )
 }
-
-
-
-
-
-
 
 
 
@@ -587,16 +556,18 @@ export function Login({ handleSetSudoToken }) {
 
 
 
-export function Test3({ id, onDelete }) {
+export function Test3({ id, value, onDelete }) {
     const refIci = React.useRef(null)
+    const tel = value.tel
     return (<>
         <tr ref={refIci}>
-            <td>#{id}</td>
-            <td>Lorem ipsum </td>
-            <td>+237 678 61 56 77 </td>
+            <td>{id + 1}</td>
+            <td>{value.username} </td>
+            <td>{value.tel} </td>
+            <td>{value.status} </td>
             <td className="dfss">
-                <a className={style.disagree3}>
-                 <Whatsapp color="#FFF" size={20}  className={style.icon} /> écrire whatsapp</a>
+                <Link href={"https://wa.me/237" + tel}><a className={style.disagree3}>
+                <Whatsapp color="#FFF" size={20}  className={style.icon} /> écrire whatsapp</a></Link>
                 <a className={style.agree} onClick={() => {
 
                     onDelete(refIci)
@@ -604,4 +575,35 @@ export function Test3({ id, onDelete }) {
                 }}>  <Trash size={20} color="#ffff" className={style.icon} /> Supprimer</a></td>
 
         </tr>    </>)
+}
+
+
+
+export async function getServerSideProps({ params, query }) {
+
+    const token = query.token
+
+    const schools = await fetchAllSchoolData()
+    const entreprises = await fetchAllEntrepriseData()
+    const users = await fetchAllUsersData()
+    const sites = await fetchAllEntrepriseSiteData()
+    const pubs = await fecthAllPub()
+    const offers = await fecthAllOffer()
+
+
+    return {
+        props: {
+            schools,
+            entreprises,
+            sites,
+            pubs,
+            offers,
+            users
+
+
+        },
+    };
+
+
+
 }

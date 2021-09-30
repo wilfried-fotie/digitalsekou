@@ -18,11 +18,11 @@ function CreateAccount({ stateChange, setToken, e}) {
     const [err, setErr] = React.useState()
     const [fine, setFine] = React.useState()
     const [loader, setLoader] = React.useState(false)
-    const token = sessionStorage.getItem("token")
-    const etoken = sessionStorage.getItem("etoken")
+    const token = localStorage.getItem("token")
+    const etoken = localStorage.getItem("etoken")
     const router = useRouter()
-    const entrepriseId = sessionStorage.getItem("entrepriseId")
-    const userId = sessionStorage.getItem("userId")
+    const entrepriseId = localStorage.getItem("entrepriseId")
+    const userId = localStorage.getItem("userId")
     const data = React.useContext(AccountContext).data
 
     console.log(data)
@@ -52,7 +52,7 @@ function CreateAccount({ stateChange, setToken, e}) {
 
                     }).then(res => {
 
-                        sessionStorage.setItem("username", formData.username)
+                        localStorage.setItem("username", formData.username)
                         setFine("Votre comte à été créer avec succes!")
 
 
@@ -70,10 +70,10 @@ function CreateAccount({ stateChange, setToken, e}) {
                     formData.tel = formData.tel.trim()
                     setLoader(true)
                     await axios.post('/add-entreprise', formData).then(res => {
-                        sessionStorage.setItem("etoken", res.data.etoken)
-                        sessionStorage.setItem("entreprise", res.data.username)
-                        sessionStorage.setItem("entrepriseId", res.data.id)
-                        setToken(sessionStorage.getItem("etoken"))
+                        localStorage.setItem("etoken", res.data.etoken)
+                        localStorage.setItem("entreprise", res.data.username)
+                        localStorage.setItem("entrepriseId", res.data.id)
+                        setToken(localStorage.getItem("etoken"))
                         setFine("Votre comte à été créer avec succes!")
                         stateChange(false)
                         router.push(`/StartPub?id=${res.data.id}&token=${res.data.etoken}`)
@@ -103,7 +103,7 @@ function CreateAccount({ stateChange, setToken, e}) {
 
                     }).then(res => {
 
-                        sessionStorage.setItem("username", formData.username)
+                        localStorage.setItem("username", formData.username)
                         setFine("Votre comte à été créer avec succes!")
 
 
@@ -127,10 +127,10 @@ function CreateAccount({ stateChange, setToken, e}) {
                     formData.tel = formData.tel.trim()
                     setLoader(true)
                     await axios.post('/add-user', formData).then(res => {
-                        sessionStorage.setItem("token", res.data.token)
-                        sessionStorage.setItem("username", res.data.username)
-                        sessionStorage.setItem("userId", res.data.id)
-                        setToken(sessionStorage.getItem("token"))
+                        localStorage.setItem("token", res.data.token)
+                        localStorage.setItem("username", res.data.username)
+                        localStorage.setItem("userId", res.data.id)
+                        setToken(localStorage.getItem("token"))
 
 
                         setFine("Votre compte à été créer avec succes!")

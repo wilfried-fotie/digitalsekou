@@ -43,6 +43,7 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
     const [entreprise, setEntreprise] = React.useState()
     const [school, setSchool] = React.useState()
     const [schoolId, setSchoolId] = React.useState()
+    const [entrepriseId, setEntrepriseId] = React.useState()
     const [schoolToken, setSchoolToken] = React.useState()
     const [token, setToken] = React.useState()
     const [etoken, setEtoken] = React.useState()
@@ -68,14 +69,15 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
 
 
     useEffect(() => {
-        setToken(sessionStorage.getItem("token"))
-        setUser(sessionStorage.getItem("username"))
-        setSchoolToken(sessionStorage.getItem("schoolToken"))
-        setSchool(sessionStorage.getItem("school"))
-        setSchoolId(sessionStorage.getItem("schoolId"))
+        setToken(localStorage.getItem("token"))
+        setUser(localStorage.getItem("username"))
+        setSchoolToken(localStorage.getItem("schoolToken"))
+        setSchool(localStorage.getItem("school"))
+        setSchoolId(localStorage.getItem("schoolId"))
 
-        setEtoken(sessionStorage.getItem("etoken"))
-        setEntreprise(sessionStorage.getItem("entreprise"))
+        setEtoken(localStorage.getItem("etoken"))
+        setEntreprise(localStorage.getItem("entreprise"))
+        setEntrepriseId(localStorage.getItem("entrepriseId"))
 
     }, [token,school,entreprise,user])
 
@@ -105,13 +107,10 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
                 </div>
                 <div className={styles.links}>
 
-
-
-
                     {value == 1 ? <Link href="/"><a className="active">Acceuil</a></Link> : <Link href="/">Acceuil</Link>}
                     {value == 2 ? <Link href="/Schools"><a className="active">Trouver une école</a></Link> : <Link href="/Schools">Trouver une école</Link>}
                     {value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href={`/addSchoolPro/${schoolId}?token=${schoolToken}`}><a className="active"> School Administration</a></Link> : <Link href="/AddSchool"><a className="active">Pour les établissements</a></Link> : schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href={`/addSchoolPro/${schoolId}?token=${schoolToken}`}><a > School Administration</a></Link> : <Link href="/AddSchool"><a > Pour les établissements</a></Link>}
-                    {value == 4 ? etoken !== "" && etoken !== undefined && etoken ? <Link href="/StartPub"><a className="active"> Entreprise Administration</a></Link> : <Link href="/Entreprises"><a className="active"> Pour les entreprises</a></Link> : etoken !== "" && etoken !== undefined && etoken ? <Link href="/StartPub"><a > Entreprise Administration</a></Link> : <Link href="/Entreprises"><a > Pour les entreprises</a></Link>  }
+                    {value == 4 ? etoken !== "" && etoken !== undefined && etoken ? <Link href={"/StartPub?id=" + entrepriseId + "&token=" + etoken}><a className="active"> Entreprise Administration</a></Link> : <Link href="/Entreprises"><a className="active"> Pour les entreprises</a></Link> : etoken !== "" && etoken !== undefined && etoken ? <Link href="/StartPub"><a > Entreprise Administration</a></Link> : <Link href="/Entreprises"><a > Pour les entreprises</a></Link>  }
 
 
                 </div>
@@ -209,7 +208,7 @@ export function Account({ user, onTokenChange, e, school = false, userData, entr
     const [visible, setVisible] = useModal(false)
     const [entreprise, setEntreprise] = React.useState()
     React.useEffect(() => {
-        setEntreprise(sessionStorage.getItem("entreprise"))
+        setEntreprise(localStorage.getItem("entreprise"))
     }, [entreprise])
     const handleClick = () => {
         setVisible(true)
@@ -229,33 +228,33 @@ export function Account({ user, onTokenChange, e, school = false, userData, entr
 
 export function Disconnect({ v, onTokenChange, e, school, userData, entrepriseData }) {
     const [visbility, v1] = useModal(false)
-    const token = sessionStorage.getItem("token")
-    const entreprise = sessionStorage.getItem("etoken")
-    const entrepriseId = parseInt(sessionStorage.getItem("entrepriseId"))
-    const userId = parseInt(sessionStorage.getItem("userId"))
+    const token = localStorage.getItem("token")
+    const entreprise = localStorage.getItem("etoken")
+    const entrepriseId = parseInt(localStorage.getItem("entrepriseId"))
+    const userId = parseInt(localStorage.getItem("userId"))
     const router = useRouter()
     const [data, setData] = React.useState()
     const handleDisconnect = () => {
 
 
         if (e !== null && e !== undefined && e)  {
-            sessionStorage.removeItem("etoken")
-            sessionStorage.removeItem("entreprise")
-            sessionStorage.removeItem("entrepriseId")
+            localStorage.removeItem("etoken")
+            localStorage.removeItem("entreprise")
+            localStorage.removeItem("entrepriseId")
             v(false)
             onTokenChange("")
         } else if (school) {
-            sessionStorage.removeItem("schoolToken")
-            sessionStorage.removeItem("school")
-            sessionStorage.removeItem("schoolId")
+            localStorage.removeItem("schoolToken")
+            localStorage.removeItem("school")
+            localStorage.removeItem("schoolId")
             router.push("/AddSchool")
             v(false)
             onTokenChange("")
          }
         else {
-              sessionStorage.removeItem("token")
-            sessionStorage.removeItem("username")
-            sessionStorage.removeItem("userId")
+              localStorage.removeItem("token")
+            localStorage.removeItem("username")
+            localStorage.removeItem("userId")
             v(false)
             onTokenChange("")
         }

@@ -112,6 +112,44 @@ export const fetchAllSchoolData = async function () {
 }
 
 
+export const fetchAllEntrepriseData = async function () {
+
+    return await axios.get(`/entreprises`)
+        .then(res => ({
+            error: false,
+            entreprise: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            entreprise: null,
+        }))
+}
+export const fetchAllUsersData = async function () {
+
+    return await axios.get(`/users`)
+        .then(res => ({
+            error: false,
+            users: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            users: null,
+        }))
+}
+
+export const fetchAllEntrepriseSiteData = async function () {
+
+    return await axios.get(`/entreprises-sites`)
+        .then(res => ({
+            error: false,
+            sites: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            sites: null,
+        }))
+}
+
 
 export const fetchSchoolData = async function (id, token) {
 

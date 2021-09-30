@@ -17,12 +17,13 @@ import FineModal from '../fineModal'
 
 
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg', 'jpeg',"mp4","MP4"]
+const ALLOWED_EXTENSIONS_PRO = ['webp', 'svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG" ,"mp4", "MP4"]
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
-const allowOnlyPicture = (filename) => {
+const allowOnlyPicture = (filename,pro=false) => {
 
     let ext = (filename).split(".", -1)[1]
-    if (ALLOWED_EXTENSIONS.includes(ext)) {
+    if (pro ? ALLOWED_EXTENSIONS_PRO.includes(ext) : ALLOWED_EXTENSIONS.includes(ext)) {
         return true
     }
     return false
@@ -86,11 +87,11 @@ export function ModSchool() {
 
         }
 
-        if (allowOnlyPicture(dataToUpload.data2.profilName)) {
+        if (allowOnlyPicture(dataToUpload.data2.profilName,data.pro)) {
             formData2.append("file", dataToUpload.data2.profilData, "school-profil-" + data.id + "-" + random + "." + data2.profilName.split(".", -1)[1]);
         }
         axios.all([
-            axios.put("/schools/" + sessionStorage.getItem('schoolId'), dataToUpload),
+            axios.put("/schools/" + localStorage.getItem('schoolId'), dataToUpload),
             data2.logoData && axios.post("/upload", formData1),
             data2.profilData && axios.post("/upload", formData2),
             data2.logoName && axios.delete("/upload/" + data.logo),

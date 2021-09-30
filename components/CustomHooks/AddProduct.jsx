@@ -13,9 +13,10 @@ import axios from 'axios'
 import Loader from 'react-loader-spinner'
 import CustomModal from '../customModal'
 import ModalEditor from '../modalEditor'
+import NotPro from './NotPro'
 
 
-const ALLOWED_EXTENSIONS = ['webp', 'svg', 'png', 'jpg',"JPG","PNG","JPEG", 'jpeg']
+const ALLOWED_EXTENSIONS = ['svg', "SVG", 'png', 'jpg', 'jpeg', "JPG", "PNG", "JPEG"]
 
 const allowOnlyPicture = (filename) => {
 
@@ -73,12 +74,6 @@ function AddProduct() {
         <div>
 
             <center className="h1 pad">Création d'une Offre</center>
-
-
-            {/* <center className={styles.nav}>
-                <a className={choise ? styles.active : styles.inactive} onClick={() => handleChoiseState(true)}><PencilSquare className="mr" size={25} color="#4a00b4" /> Création </a>
-                <a className={!choise ? styles.active : styles.inactive} onClick={() => handleChoiseState(false)}><DisplayFill size={25} className="mr" color="#4a00b4" /> Visualiation </a>
-            </center> */}
 
             
             <center className={styles.nav}>
@@ -288,7 +283,11 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
 
     const [loader, setLoader] = React.useState(false)
     const [visible, v] = useModal(false)
-
+    const [visible2, v2] = useModal(false)
+    const handleClickPro = (e) => {
+        e.preventDefault()
+        v2(true)
+    }
     const handleChangeText = (e) => {
         onHandleTextStateChange(e)
     }
@@ -374,7 +373,7 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
 
 
                     <center className="pad">   <div className={styles.df}>
-                        <button disabled={loader} className="dfss btnPri" >
+                        <button disabled={loader} onClick={entreprise.pro ? null : handleClickPro} className="dfss btnPri" >
                             {loader && <Loader
                                 type="TailSpin"
                                 color="white"
@@ -388,6 +387,7 @@ export function Creation({ onHandleImageStateChange, onHandleTextStateChange, da
 
             </div>
             {visible && <FineModal position={{ top: 30, left: "35%", width: "40%" }} onModalChange={v} component={<Validator />} />}
+            {visible2 && <CustomModal onModalChange={v2} component={<NotPro />} />}
         </>
     )
 }
@@ -438,7 +438,7 @@ export function Edit({ onHandleImageStateChange, onHandleTextStateChange, data, 
 
                     axios.put("/products/" + id, { media: img || data.media, image: img || data.media, entrepriseId: entreprise.id, name: data.name, price: data.price, proprio: "entreprise" }, {
                         headers: {
-                            Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                            Authorization: "Bearer " + localStorage.getItem("etoken")
                         }
                     }),
 
@@ -537,7 +537,7 @@ export function Delete({ close, id, k }) {
             axios.delete(`/products/${id || getProduct.id}`,
             {
                 headers: {
-                    Authorization: "Bearer " + sessionStorage.getItem("etoken")
+                    Authorization: "Bearer " + localStorage.getItem("etoken")
                 }
 
             }

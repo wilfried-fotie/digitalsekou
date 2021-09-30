@@ -1,16 +1,33 @@
 import React from "react"
-import { GeoAlt, Image as Img, ImageFill, Globe, TelephoneFill } from 'react-bootstrap-icons'
+import { GeoAlt, Image as Img, ImageFill, Globe, TelephoneFill, XCircleFill, Eraser, EmojiSmileFill } from 'react-bootstrap-icons'
 import styles from "./site.module.css"
 import { Markup } from 'interweave'
 import Link from 'next/link'
 import styl from "../Entreprise/offre.module.css"
+import SimpleSlider from "../caroussel"
+import useModal from '../CustomHooks/useModal'
+import App from "../SchoolAdmin/notif"
+import ModalEditor from "../modalEditor"
+import CustomModal from "../customModal"
+import FineModal from "../fineModal"
+import axios from "axios"
 
 
+export default function Page({ data, position, getPost, getProduct, entreprise, mode, getPub, getOffer}) {
 
-
-export default function Page({ data,position,getPost,getProduct,entreprise ,mode}) {
-
-
+    const [visible, v] = useModal(false)
+    const [error, setError] = React.useState(false)
+    const handleClik = () => {
+        if (localStorage.getItem("userId")) {
+             v(true)
+        } else {
+            setError(true)
+        }
+      
+    }
+    const handleSendData = async (e) => {
+        await axios.post("/message-entreprise", { userId: localStorage.getItem("userId"), message: e.toString(), schoolId: entreprise.id }).then(res => null).catch(r => alert(r))
+    }
     return (
         <div className={styles.pag}>
             <nav className={styles.nav}>
@@ -42,14 +59,13 @@ export default function Page({ data,position,getPost,getProduct,entreprise ,mode
 
             <div className={mode ? styles.cont : "padding"} id="contact">
                 <div className={mode ? styles.cont0 : "padding"}>
-                <Link href={"https://wa.me/237" + data.tel}><a className="btnPrimary">Nous contacter</a></Link>
+                <Link href={"https://wa.me/237" + data.tel}><a className="btnPrimary" >Nous contacter</a></Link>
 
                 </div>
                 
             <b className="padding" style={{top: "30px"}}>{data.activity}</b>
 
             <div className={styles.padding}>
-
             
             <div>
                 <span className={styles.dfs}>   <TelephoneFill size={20} color="#4a00b4" /> {data.tel || "Téléphone"}</span>
@@ -71,6 +87,18 @@ export default function Page({ data,position,getPost,getProduct,entreprise ,mode
             <div>
             
             </div>
+
+{entreprise.pro &&
+            (getPub.pubs && getPub.pubs[0] !== undefined || getOffer.offers[0] !== undefined) && <div className={styles.pub} >
+<center><div className="h1">OFFRES ET PUBLICITÉS</div></center>
+                <div className="pad">
+                    
+        
+                    <SimpleSlider data={getOffer.offers} en={true} pub={getPub.pubs} />
+</div>      </div>}
+
+
+
             <div>
 
               {data.pres &&  <div className={mode ? styles.cont : "pad"}>
@@ -95,7 +123,7 @@ export default function Page({ data,position,getPost,getProduct,entreprise ,mode
                             <div className="pad">
                               <Markup content={e.description}/>
                                 </div>
-                                <center className="pad"><a className="btnSecondary">Demander un dévis</a></center>
+                                <center className="pad"><a className="btnSecondary" onClick={mode ? handleClik : null}>Demander un dévis</a></center>
 
                         </div>
 
@@ -128,6 +156,13 @@ export default function Page({ data,position,getPost,getProduct,entreprise ,mode
                     </div>)} </div>
                 </div>}
             </div>
+            {visible && <CustomModal onModalChange={v} component={<div className={styles.message}>
+
+                <App   school={entreprise} size={40} send={handleSendData} />
+
+
+            </div>} />}
+            {error && <FineModal position={{ top: 30, left: "35%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou vous inscrirez vous!</div>} onModalChange={setError} />}
 
         </div>
     )

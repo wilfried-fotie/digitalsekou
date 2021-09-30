@@ -7,6 +7,7 @@ import FineModal from '../fineModal'
 import Link from "next/link"
 import style from '../../styles/sudo.module.css'
 import CustomModal from '../customModal'
+import NotPro from '../CustomHooks/NotPro'
 import axios from 'axios'
 
 function Notification() {
@@ -14,6 +15,7 @@ function Notification() {
 
     const schoolData = React.useContext(SchoolContext)
 
+    const data = React.useContext(SchoolContext).data.schoolData.school
 
     
     const mes = schoolData.data.mes.mes
@@ -26,11 +28,13 @@ function Notification() {
     }
     return (
         <>
-            <center className="h1 padding">Liste de messages</center>
-            {mes && mes.map((e, k) => <Row key={k} sender={e.user} onHandleClick={() => handleClick(e.message.id, k)} message={e.message.message} />) }
+            {data.pro && <>  <center className="h1 padding">Liste de messages</center>
+                {mes && mes.map((e, k) => <Row key={k} sender={e.user} onHandleClick={() => handleClick(e.message.id, k)} message={e.message.message} />)}
   
-            {visbility3 && <CustomModal onModalChange={v3} component={<Delete v={v3} data={ident}/>} />}
-  </>
+                {visbility3 && <CustomModal onModalChange={v3} component={<Delete v={v3} data={ident} />} />}
+            </>}
+            {!data.pro && <NotPro/>}
+            </>
             )
 }
 
@@ -39,7 +43,7 @@ export default Notification
 
 
 export function Delete({ v,data}) {
-    let Token = sessionStorage.getItem("schoolToken")
+    let Token = localStorage.getItem("schoolToken")
     const [fine, setFine] = React.useState()
     const [error, setError] = React.useState()
     const schoolData = React.useContext(SchoolContext)

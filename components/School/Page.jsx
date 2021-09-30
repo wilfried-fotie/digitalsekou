@@ -59,7 +59,7 @@ function Page({data,positions,types,spe,getPost,handleSubs,ab,abo,userId}) {
                                 <div>
 
 
-                                    <div className={data.disposition == 1 ? "padding" :styles.textContent}><Markup content={data.description} /> </div>
+                                        <div className={data.disposition == 1 ? "padding" :"containText"}><Markup content={data.description} /> </div>
 
 
                                         <div className="mlef">

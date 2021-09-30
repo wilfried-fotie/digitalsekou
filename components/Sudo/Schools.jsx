@@ -12,61 +12,42 @@ import axios from 'axios'
 function Schools() {
 
     const [visbility3, v3] = useModal(false)
-    const [visbility, v] = useModal(false)
+    const [info, setInfo] = React.useState({ id: "", index: "" })
 
-    const [position, setPosition] = React.useState({})
     const schools = React.useContext(SudoContext).data.school
     const dispacth = React.useContext(SudoContext).dispacth
 
+    const handleClick = async(id, index) => {
+        v3(true)
+        setInfo({ id: id, index: index, name: "school",url: "schools" })
+        
+    }
+       
+   
 
-        const handleClick =(pos) => {
-            v3(true)
+    const handleSubmit = async (id, index) => {
 
-         
-        }
+        await axios.put("/TogglevStatusSchool/" + id, {}).then(res => null).catch(r => alert(r))
 
-    const handleClickDelete = React.useCallback(async (id, index) => {
-
-
-        await axios.put("/DelStatusSchool/" + id, {}).then(res => null).catch(r => null)
-        dispacth({ type: "DELETE", name: "school", data: { ...schools, id: index } })
-
-
-    })
-
-    const handleSubmit = React.useCallback(async (id, index) => {
-alert("y")
-        await axios.put("/TogglevStatusSchool/" + id, {}).then(res => null).catch(r => null)
-
-        dispacth({ type: "UPDATE", name: "school", data: { ...schools, id: index } })
+        dispacth({ type: "UPDATE", name: "school", id: index, value: { ...schools[index], demande: false, pro: !schools[index].pro } })
 
 
 
-    })
+    }
     
     
         return (
             <>
-                <div className={style.end}>
-                    <a className="btnPri" onClick={() =>v(true)}>Ajouter</a>
-                </div>
-
+              
 
 
                 <table>
-                    <thead>
-                        <tr>
-                            <th>#id</th><th>Liste des Etablissements</th><th>Status</th><th>Actions</th>
-
-                        </tr>
-
-                    </thead>
+                   
                     <tbody>
-{schools.map((e, f) => <Tr key={f} id={f} value={e} onSubmit={handleSubmit} onDelete={handleClick} />)}
+                        {schools.map((e, f) => <Tr key={f} id={f} value={e} onSubmit={handleSubmit} onDelete={handleClick} />)}
                     </tbody>
                 </table>
-                {visbility3 && <CustomModal onModalChange={v3} position={position} component={<Verif1 />} />}
-                {visbility && <CustomModal onModalChange={v} component={<AddSchool />} />}
+                {visbility3 && <CustomModal onModalChange={v3} component={<Verif1 info={info} v={v3}/>} />}
             </>
         )
     }
@@ -76,16 +57,18 @@ export default Schools
 
 
 
-export function Tr({ id, onDelete, onSubmit, value }) {
+export function Tr({ id, onDelete, onSubmit, value,e=false }) {
     
     
       
  
     return (<>
         <tr >
-            <td>#{value.id}</td>
-            <td>{value.sigle}</td>
-            <td>{value.pro ? "Pro" : "Gratuit"}</td>
+            <td>{id + 1}</td>
+            <td>{value.sigle || value.username || value.name}</td>
+            <td>{value.tel}</td>
+            {e ? <td>{value.site ? "A Créer Un Site" : "N'as Pas De Site"}</td> : null}
+            <td>{value.pro || value.valid ? "Pro" : "Gratuit"}</td>
             <td className="dfss">
                 <a className={style.disagree2} onClick={() => { onSubmit(value.id, id) }}> <ToggleOff size={20} color="#ffff"  className={style.icon} /> Changer le status</a>
 
