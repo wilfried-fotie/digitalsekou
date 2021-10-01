@@ -55,10 +55,7 @@ export default function Activity({ choise, handleChoiseState }) {
 
     return (
         <>
-            {/* <div className={style.choose}>
-                <span className={choise ? style.act : style.noact} onClick={() => { handleChoiseState(choise) }}> <Clipboard className={style.icon} size={20} color="#4a00b4" /> Publicités et Offres </span>
-                <span className={choise ? style.noact : style.act} onClick={() => { handleChoiseState(!choise) }}> <Building className={style.icon} size={20} color="#4a00b4" /> Demande Passer Pro</span>
-            </div> */}
+          
             <div className={choise ? style.no : null}>
 
                 <table>

@@ -13,5 +13,5 @@ stat pub et offer |/
 pro mode school et entreprise|/
 format d'image|/
 localstorage|/
-sudo
+sudo|/
 responsive
