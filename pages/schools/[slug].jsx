@@ -13,6 +13,8 @@ import Header from '../Template/Header'
 import { fecthPost } from '../../Model/getEntreprise'
 import Page from '../../components/School/Page'
 import FineModal from '../../components/fineModal'
+import useModal from '../../components/CustomHooks/useModal'
+import Menu from '../../components/Menu'
 
 function ViewSchool({ school, positions, types, specialities, abo, getPost }) {
     const data = school.school
@@ -22,6 +24,7 @@ function ViewSchool({ school, positions, types, specialities, abo, getPost }) {
     const [error, setError] = React.useState(false)
     const [abonnement, setAbonnement] = React.useState(false)
     const [userId, setuserId] = React.useState(false)
+
     React.useEffect(() => {
     setuserId(localStorage.getItem("userId"))
 },[userId])
@@ -33,7 +36,6 @@ function ViewSchool({ school, positions, types, specialities, abo, getPost }) {
             setError(true)
         }
     }
-
 
 
 
@@ -96,8 +98,8 @@ function ViewSchool({ school, positions, types, specialities, abo, getPost }) {
 
 
             </div>}
-            {error && <FineModal position={{ top: 30, left: "35%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou Créer vous un compte!</div>} onModalChange={setError} />}
-
+            {error && <FineModal position={{ top: 30, left: "25%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou Créer vous un compte!</div>} onModalChange={setError} />}
+           
             </>
     )
 }

@@ -27,6 +27,12 @@
     padding: 7px 20px 5px
 }
 
+.barMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+}
+
 .acticon {
     margin-right: 10px;
     height: 20;
@@ -87,6 +93,17 @@
     display: flex;
     align-items: center;
     margin-right: 5px;
+}
+
+.mobdfss {
+    display: flex;
+    align-items: center;
+    justify-self: start;
+    border: 1px solid #FFF;
+    border-radius: 20px;
+    background-color: #FFF;
+    margin-top: 5px;
+    padding: 7px 20px 5px
 }
 
 .disagree2 {
@@ -349,4 +366,28 @@
 
 .no {
     display: none;
+}
+
+@media screen and (max-width: 1150px) {
+    .article2 {
+        margin: 0;
+    }
+    .bar {
+        display: none;
+    }
+    .barMobile {
+        background: #4a00b4;
+    }
+    .barMobile .span {
+        color: #FFF9;
+        padding: 20px 0px 10px;
+        display: flex;
+        align-items: center;
+    }
+    .article {
+        margin-left: 0;
+    }
+    .h1 {
+        font-size: 1.2em;
+    }
 }

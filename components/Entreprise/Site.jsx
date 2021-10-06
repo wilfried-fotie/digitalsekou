@@ -492,9 +492,9 @@ let state = data
                     Enregistrer</button>
             </center>
 
-            {visible && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v} component={<Tools />} />}
-            {visible2 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
-            {visible3 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
+            {visible && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v} component={<Tools />} />}
+            {visible2 && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
+            {visible3 && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
 
             </div>
     )

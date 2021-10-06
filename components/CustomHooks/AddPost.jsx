@@ -65,7 +65,7 @@ export default function PostTeur() {
     return (
         <div>
 
-            <center className="h1 pad">Création d'un Post</center>
+            <center className="h1 pad">Création d'une Prestation</center>
 
 
             <center className={styles.nav}>
@@ -247,7 +247,7 @@ export function Visualisation({ data }) {
                 <div className={styles.act}>
                     
                     <center className="h2">{ data.name || "Nom de la prestation"}</center>
-                <div className={data.position == 1 ? styles.dg : data.position == 2 ? "dfss" : styles.dfr }>
+                <div className={data.position == 1 ? styles.dg : data.position == 2 ? styles.dfss : styles.dfr }>
 
                     <div className="dfss">
 

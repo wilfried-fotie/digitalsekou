@@ -1,5 +1,7 @@
 import React from 'react'
 import styles from "./offre.module.css"
+import styl from "../../styles/sudo.module.css"
+
 import { AlignMiddle, ArrowLeft, ArrowRight, Building, Calendar2DateFill, CalendarX, DisplayFill, EyeFill, FileImageFill, ImageFill, Link as Lk, Outlet, PaintBucket, PencilFill, PencilSquare, PenFill, Person, PhoneFill, PhoneVibrateFill, PinFill, TelephoneFill, TrashFill, TrophyFill } from 'react-bootstrap-icons'
 import { Editor, Field, FieldValidate, File, FileValidate } from '../FormTools'
 import Link from 'next/link'
@@ -217,7 +219,7 @@ export function AddPost({reset}) {
                                 <td>#{k + 1}</td>
                                 <td>{e.objet || e.title}</td>
 
-                                <td> <div className={styles.dfss}> <a className="btnPri dfss" onClick={() => handleMod(e.id, k)}> <PenFill className={styles.right} size="20px" color="#FFF" /> Modifier</a><a className="btnPriRed dfss" onClick={() => handleDel(e.id, k)}> <TrashFill className={styles.right} size={20} color="#FFF" /> Supprimer</a></div></td>
+                                <td> <div className="dfss"> <a className={styl.disagree} onClick={() => handleMod(e.id, k)}> <PenFill className={styles.right} size="20px" color="#FFF" /> Modifier</a><a className={styl.agree} onClick={() => handleDel(e.id, k)}> <TrashFill className={styles.right} size={20} color="#FFF" /> Supprimer</a></div></td>
                             </tr>)}
                     </tbody>
                 </table>
@@ -628,7 +630,7 @@ export function Delete({ close, id, k }) {
 
                 }
             ),
-            (entreprise.id + "-entreprise-" + site.logo) == getOffer.logo.replaceAll("/", "") ? null : axios.delete("/upload/" + getOffer.logo.replaceAll("/", "")) 
+            site.logo == getOffer.logo.replaceAll("/", "") ? null : axios.delete("/upload/" + getOffer.logo.replaceAll("/", "")) 
 
             
         ])

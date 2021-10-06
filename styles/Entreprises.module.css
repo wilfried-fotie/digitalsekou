@@ -55,4 +55,29 @@
         display: flex;
         margin: 0px 30% 2%;
         justify-content: space-evenly;
+        flex-wrap: wrap;
+    }
+    
+    @media screen and (max-width: 1150px) {
+        .df {
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: column;
+        }
+        .df svg {
+            display: none;
+        }
+        .mg {
+            margin: 0;
+            flex-direction: column;
+            flex-grow: auto;
+            gap: 20px;
+            margin: 1px 5% 2px;
+        }
+        .main img {
+            max-width: 90vw;
+        }
+        .text {
+            font-size: 1.3em;
+        }
     }

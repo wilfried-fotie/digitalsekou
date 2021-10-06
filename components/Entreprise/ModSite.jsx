@@ -508,10 +508,10 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors, handleDispo }
                     Enregistrer</button>
             </center>
 
-            {visible && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v} component={<Tools />} />}
-            {visible2 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
-            {visible3 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
-            {visible4 && <FineModal position={{ top: 30, left: "35%" }} component={<div color="green"> <center> <CheckCircle size={40} color="green" /> </center><br />  Les données ont étés mis à jour avec succes!!</div>} onModalChange={v4} />}
+            {visible && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v} component={<Tools />} />}
+            {visible2 && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
+            {visible3 && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
+            {visible4 && <FineModal position={{ top: 30, left: "25%" }} component={<div color="green"> <center> <CheckCircle size={40} color="green" /> </center><br />  Les données ont étés mis à jour avec succes!!</div>} onModalChange={v4} />}
 
         </div>
     )

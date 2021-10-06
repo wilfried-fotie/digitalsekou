@@ -148,11 +148,15 @@
 }
 
 .nav {
-    width: 100%;
     padding: 10px 40px 10px;
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
     margin-top: 30px;
+}
+
+.nav .df {
+    min-width: 60vw;
 }
 
 .page {
@@ -185,4 +189,62 @@
 
 .padding button:disabled {
     background-color: grey;
+}
+
+@media screen and (max-width: 1150px) {
+    .container {
+        padding: 5px 2px 2px;
+        margin: 0;
+    }
+    .prev {
+        padding: 0;
+        border: 0px!important;
+        border-radius: 0;
+        margin: 0;
+    }
+    .prev .nav {
+        padding: 2px 5px 2px;
+        align-items: center;
+    }
+    .prev nav .df a {
+        display: none;
+    }
+    .flexTab,
+    .dfb,
+    .dfss,
+    .dfr {
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 3%;
+        margin: 0;
+    }
+    .flexTab p,
+    .dfb p,
+    .dfss p,
+    .dfr p {
+        width: 100%;
+    }
+    .contain {
+        width: 100%;
+        max-width: unset;
+    }
+    .nav {
+        align-items: center;
+        justify-content: space-between;
+    }
+    .dgp,
+    .dfss,
+    .dfr {
+        padding: 2px 3px 2px;
+    }
+    .cont {
+        margin: 0;
+    }
+    .grid {
+        padding: 2px 3px 2px;
+        flex-direction: column;
+    }
+    .grid>div {
+        width: unset;
+    }
 }

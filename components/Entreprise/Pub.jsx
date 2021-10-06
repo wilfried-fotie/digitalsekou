@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from "./pub.module.css"
+import styl from "../../styles/sudo.module.css"
 import { AlignMiddle, ArrowLeft, ArrowRight, Building, Calendar2DateFill, DisplayFill, ImageFill, Link as Lk, Mastodon, Outlet, PaintBucket, PencilFill, PencilSquare, PenFill, Person, PinFill, TrashFill } from 'react-bootstrap-icons'
 import { Field, FieldValidate, File, FileValidate } from '../FormTools'
 import Link from 'next/link'
@@ -193,7 +194,7 @@ export function AddPost({reset}) {
                             <td>#{k + 1}</td>
                             <td>{e.date && new Date(e.date).toLocaleDateString() || new Date(e.available).toLocaleDateString() }</td>
                             <td><img src={e.logo || e.media } className="logo" alt={e.days} /></td>
-                            <td> <div className={styles.dfss}> <a className="btnPri dfss" onClick={() => handleMod(e.id, k)}> <PenFill className={styles.right} size="20px" color="#FFF" /> Modifier</a><a className="btnPriRed dfss" onClick={() => handleDel(e.id, k)}> <TrashFill className={styles.right} size={20} color="#FFF" /> Supprimer</a></div></td>
+                            <td> <div className={styles.dfss}> <a className={styl.disagree} onClick={() => handleMod(e.id, k)}> <PenFill className={styles.right} size="20px" color="#FFF" /> Modifier</a><a className={styl.agree} onClick={() => handleDel(e.id, k)}> <TrashFill className={styles.right} size={20} color="#FFF" /> Supprimer</a></div></td>
                         </tr>)}
                     </tbody>
                 </table>
@@ -248,7 +249,7 @@ export function Visualisation({ data, mode = false }) {
 
                 {data.media ? null :<> <span className="h1">Publicité</span> <br /></>}
 
-                <div className="dfss pad">
+                <div className={styles.dfss}>
 
 
                     {data.media ? null : <ArrowLeft size={20} color="#4a00b4" />} {data.logo || data.media ? <Link href={data.name}><a onClick={mode ? handleClick : null}><img src={data.logo || data.media} className={styles.img} alt="Publicité" /></a></Link> : <ImageFill size={200} color="#4a00b4" />}  {data.media ? null : <ArrowRight size={20} color="#4a00b4" />}

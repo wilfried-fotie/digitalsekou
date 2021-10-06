@@ -50,14 +50,25 @@ function ViewSchool({ entreprise, positions, site, getProduct, getPost, getOffer
                     <title>{site.site.name}</title>
                     <meta name="description" content={site.site.outro.substr(0, 1000) } />
                 </Head>
-                {userId ? <div className="container" style={{width: "8%",marginLeft: "5%"}}> <Link href="/"><a className="btnSecondary dfss" > <ArrowLeft size={20} color="#4a00b4" /> Retour </a></Link></div>: <Header value={2} normal={false} />}
+                {userId ? <div className="container" style={{marginLeft: "5%"}}> <Link href="/"><a className="btnSecondary dfss" > <ArrowLeft size={20} color="#4a00b4" /> Retour </a></Link></div>: <Header value={2} normal={false} />}
 
                 <main className={styles.body}>
 
                     <Page data={site.site} getPub={getPub} getOffer={getOffer} mode={true} entreprise={entreprise.entreprise} position={positions.position} getProduct={getProduct.products} getPost={getPost.posts} />
 
                 </main>
+                {site.error && !site.site.id && <div>
 
+                    <div className={styles.contain}>
+                        <center>
+                            <EmojiNeutralFill size={200} color="#FF0000" /> <br />
+                            <span className="h1">404 ! Cet établissement n'existe pas </span>
+                        </center>
+
+                    </div>
+
+
+                </div>}
                    
                 <Footer />
 
@@ -89,7 +100,7 @@ function ViewSchool({ entreprise, positions, site, getProduct, getPost, getOffer
             <div>
 
             </div>
-            {errorConnect && <FineModal position={{ top: 30, left: "35%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou vous inscrirez vous!</div>} onModalChange={setErrorConnect} />}
+            {errorConnect && <FineModal position={{ top: 30, left: "25%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou  inscrirez vous!</div>} onModalChange={setErrorConnect} />}
 
         </>
     )
@@ -120,8 +131,8 @@ export async function getServerSideProps({ params }) {
     const positions = !site.site.error && site.site.entreprise_id ? await fetchentrEpriseSitePositionData(site.site.entreprise_id) : null;
     const getPost = !site.site.error && site.site.entreprise_id ? await fecthSitePost(site.site.entreprise_id) : null
     const getProduct = !site.site.error && site.site.entreprise_id ? await fecthSiteProduct(site.site.entreprise_id) : null
-    const getOffer = !site.site.error && site.site.entreprise_id ? await fecthFineOffer(site.site.entreprise_id) : null
-    const getPub = !site.site.error && site.site.entreprise_id ? await fecthFinePub(site.site.entreprise_id) : null
+    const getOffer = !site.site.error && site.site.entreprise_id ? await fecthSiteOffer(site.site.entreprise_id) : null
+    const getPub = !site.site.error && site.site.entreprise_id ? await fecthSitePub(site.site.entreprise_id) : null
 
     return {
         props: {

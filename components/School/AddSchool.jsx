@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowLeft, ArrowRight, BoundingBox, Building, DisplayFill, FileEarmarkPostFill, GeoAlt, GeoAltFill, Image, ImageFill, Link, LockFill, PencilSquare, PhoneVibrateFill, TelephoneFill, TelephoneXFill, TrophyFill } from 'react-bootstrap-icons'
+import { ArrowLeft, ArrowRight, BoundingBox, Building, DisplayFill, FileEarmarkPostFill, GeoAlt, GeoAltFill, GridFill, Image, ImageFill, Link, List, LockFill, PencilSquare, PhoneVibrateFill, TelephoneFill, TelephoneXFill, TrophyFill } from 'react-bootstrap-icons'
 import styles from "../Entreprise/site.module.css"
 import style from "../Entreprise/offre.module.css"
 import { CheckBox, Editor, Field, File, Password, Radio, SelectoR, Selector, TextArea } from '../FormTools'
@@ -525,9 +525,9 @@ export function Page4({ data, onHandleEditor, errors, onSetErrors,lastId }) {
                     Enregistrer</button>
             </center>
 
-            {visible && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v} component={<Tools />} />}
-            {visible2 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
-            {visible3 && <FineModal position={{ top: 30, left: "35%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
+            {visible && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v} component={<Tools />} />}
+            {visible2 && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v2} component={<ToolsBefore >  Veuillez vérifier les informations soumis!</ToolsBefore>} />}
+            {visible3 && <FineModal position={{ top: 30, left: "25%" }} onModalChange={v3} component={<ToolsBefore >  Verifier le format d'image soumis</ToolsBefore>} />}
 
         </div>
     )
@@ -550,10 +550,16 @@ export function Preview({ data }) {
                     <a className="active"> Acceuil</a>
                     <a>Nos Spécialités</a>
                     <a>Nous Contacter</a>
+                    <center className="mobileScreen">
+                    {data.sigle || "sigle"}
+                </center>
                 </div>
 
+               
 
-
+                <div className="mobileScreen">
+                    <GridFill size={30} color="#4a00b4"/>
+                </div>
 
             </nav>
             <div className={ data.disposition == 1 ? style.tabl : data.disposition == 3 ? "dfss" : style.dfr }>

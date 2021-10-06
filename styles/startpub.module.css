@@ -247,3 +247,31 @@
     transition: background-color .5s;
     align-items: center;
 }
+
+.barMobile .span {
+    color: #FFF9;
+    padding: 20px 0px 10px;
+    display: flex;
+    align-items: center;
+}
+
+.barMobile {
+    gap: 5vw;
+}
+
+@media screen and (max-width: 1150px) {
+    .dgs {
+        flex-direction: unset;
+    }
+    .wraper {
+        flex-wrap: wrap;
+        padding: 5px 10px 3px;
+    }
+    .bar {
+        display: none;
+    }
+    .content {
+        width: 100%;
+        margin-left: unset;
+    }
+}

@@ -1,5 +1,5 @@
 import React from "react"
-import { GeoAlt, Image as Img, ImageFill, Globe, TelephoneFill, XCircleFill, Eraser, EmojiSmileFill } from 'react-bootstrap-icons'
+import { GeoAlt, Image as Img, ImageFill, Globe, TelephoneFill, XCircleFill, Eraser, EmojiSmileFill, HouseFill, BriefcaseFill, PhoneFill, List, CardList, CartDash, CartDashFill } from 'react-bootstrap-icons'
 import styles from "./site.module.css"
 import { Markup } from 'interweave'
 import Link from 'next/link'
@@ -11,12 +11,17 @@ import ModalEditor from "../modalEditor"
 import CustomModal from "../customModal"
 import FineModal from "../fineModal"
 import axios from "axios"
+import Menu from "../Menu"
 
 
 export default function Page({ data, position, getPost, getProduct, entreprise, mode, getPub, getOffer}) {
 
     const [visible, v] = useModal(false)
     const [error, setError] = React.useState(false)
+    const [menu, setMenu] = useModal(false)
+    const handleMenuClick = () => {
+        setMenu(true)
+    }
     const handleClik = () => {
         if (localStorage.getItem("userId")) {
              v(true)
@@ -35,15 +40,31 @@ export default function Page({ data, position, getPost, getProduct, entreprise, 
 
                 {data.logo && <img src={"/" +  data.logo} className='logo' alt={data.name} /> || <div className="dfss"> <ImageFill size={20} color="#4a00b4" />  <span>Logo</span> </div>}
 
-
+<div className="desktopScreen">
 
                 <div  className={styles.df}>
                     <a className="active"> Acceuil</a>
                     {data.prod && <Link href="#catalogue"><a>Catalogue</a></Link>}
                     {data.pres && <Link href="#services"><a>Nos Services</a></Link>}
                     <Link href="#contact"><a>Nous Contacter</a></Link>
+                    </div></div>
+                <div className="mobileScreen padding cap">
+                    {data.name}
                 </div>
+                <div className="mobileScreen">
+                    <List size={30} color="#4a00b4" onClick={handleMenuClick} className="rounder" />
+                </div>
+                {menu && <Menu onModalChange={setMenu} component={<>
+                    <div className="tableMenu">
 
+
+                        <a className="active ds" ><HouseFill size={20} color="#4a00b4" /> Acceuil </a>
+                        {data.prod && <Link href="#catalogue"><a className="ds"> <CartDashFill size={20} color="#4a00b4" /> Catalogue</a></Link>}
+                        {data.pres && <Link href="#services"><a className="ds"> <BriefcaseFill size={20} color="#4a00b4" /> Nos Services</a></Link>}
+                        <Link href="#contact" ><a className="ds"><PhoneFill size={20} color="#4a00b4" /> Contact </a></Link>
+
+                    </div>
+                </>} />}
             </nav>
 
             <div className={data.disposition == 1 ? styles.flexTab : data.disposition == 3 ? styles.dfb : styl.dfr} >
@@ -52,7 +73,6 @@ export default function Page({ data, position, getPost, getProduct, entreprise, 
 
                 </div>
 
-                {/* {data.profil ? <img  src={data.profil} /> : } */}
 
                 {data.profil ? <img src={"/" + data.profil} className="imgFill" alt="image ou vidéo chargé" /> : <Img size={250} color="#4a00b4" />}
             </div>
@@ -101,7 +121,7 @@ export default function Page({ data, position, getPost, getProduct, entreprise, 
 
             <div>
 
-              {data.pres &&  <div className={mode ? styles.cont : "pad"}>
+                {data.pres && entreprise.pro &&  <div className={mode ? styles.cont : "pad"}>
                     <center> <h1 id="services" className={styles.top} style={{color: "#4a00b4" }}>Nos Services</h1></center>
 
                     {getPost.map((e,k) => <div key={k}>
@@ -137,11 +157,11 @@ export default function Page({ data, position, getPost, getProduct, entreprise, 
                     )}
 
                 </div>}
-                {data.prod && <div className={mode ? styles.cont : "pad"}>
+                {data.prod && entreprise.pro && <div className={mode ? styles.cont : "pad"}>
                     <center> <h1 id="catalogue" className={styles.top} style={{ color: "#4a00b4" }}>Nos Articles</h1></center>
                     <div className={styles.grid}>
      
-                        {getProduct.map((e,k) => <div key={k} className="pad" >
+                        {getProduct && getProduct.map((e,k) => <div key={k} className="pad" >
 
                         <div className="dfss">
 
@@ -162,8 +182,8 @@ export default function Page({ data, position, getPost, getProduct, entreprise, 
 
 
             </div>} />}
-            {error && <FineModal position={{ top: 30, left: "35%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou vous inscrirez vous!</div>} onModalChange={setError} />}
-
+            {error && <FineModal position={{ top: 30, left: "25%" }} component={<div color="red"> <center> <EmojiSmileFill size={40} color="red" /> </center><br />  Veuillez vous connecter ou  inscrirez vous!</div>} onModalChange={setError} />}
+           
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from "../Entreprise/offre.module.css"
+import styl from "../../styles/sudo.module.css"
 import { AlignMiddle, DisplayFill, FileEarmarkPostFill, FileImageFill, ImageFill, Link as Lk, Outlet, PaintBucket, PencilFill, PencilSquare, PenFill, Person, PhoneFill, PhoneVibrateFill, PinFill, TelephoneFill, TrashFill, TrophyFill } from 'react-bootstrap-icons'
 import { Editor, Field, File } from '../FormTools'
 import FineModal from '../fineModal'
@@ -72,7 +73,7 @@ export default function AddThink() {
             <center className={styles.nav}>
                 <a className={choise == 0 ? styles.active : styles.inactive} onClick={() => handleChoiseState(0)}><PencilSquare className="mr" size={25} color="#4a00b4" /> Création </a>
                 <a className={choise == 1 ? styles.active : styles.inactive} onClick={() => handleChoiseState(1)}><DisplayFill size={25} className="mr" color="#4a00b4" /> Visualiation </a>
-                <a className={choise == 2 ? styles.active : styles.inactive} onClick={() => handleChoiseState(2)}><AlignMiddle size={25} className="mr" color="#4a00b4" /> Gestionnaire de prestations </a>
+                <a className={choise == 2 ? styles.active : styles.inactive} onClick={() => handleChoiseState(2)}><AlignMiddle size={25} className="mr" color="#4a00b4" /> Gestionnaire de Posts </a>
             </center>
 
             <div className={choise !== 2 ? "container" : null}>
@@ -195,20 +196,14 @@ export function AddPost() {
             <div className={styles.table}>
 
                 <table >
-                    {/* <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Nom de la prestation</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead> */}
+                    
                     <tbody>
 
                         {getPost == "" ? <center className="h2">Vide!!!</center> :
                             getPost.map((e, k) => <tr key={k}>
                                 <td>#{k + 1}</td>
                                 <td>{e.name}</td>
-                                <td> <div className={styles.dfss}> <a className="btnPri dfss" onClick={() => handleMod(e.id, k)}> <PenFill className={styles.right} size="20px" color="#FFF" /> Modifier</a><a className="btnPriRed dfss" onClick={() => handleDel(e.id, k)}> <TrashFill className={styles.right} size={20} color="#FFF" /> Supprimer</a></div></td>
+                                <td> <div className={styles.dfss}> <a className={styl.disagree} onClick={() => handleMod(e.id, k)}> <PenFill className={styles.right} size="20px" color="#FFF" /> Modifier</a><a className={styl.agree} onClick={() => handleDel(e.id, k)}> <TrashFill className={styles.right} size={20} color="#FFF" /> Supprimer</a></div></td>
                             </tr>)}
                     </tbody>
                 </table>
@@ -253,8 +248,8 @@ export function Visualisation({ data }) {
 
                 <div className={styles.act}>
 
-                    <center className="h2">{data.name || "Nom de la prestation"}</center>
-                    <div className={data.position == 1 ? styles.dg : data.position == 2 ? "dfss" : styles.dfr}>
+                    <center className="h2">{data.name || "Titre"}</center>
+                    <div className={data.position == 1 ? styles.dg : data.position == 2 ? styles.dfss : styles.dfr}>
 
                         <div className="dfss">
 
@@ -629,7 +624,6 @@ export function Delete({ close, id, k }) {
 
     return (
         <div >
-            {JSON.stringify(data["getPost"]["posts"])}
             <p >
                 Voulez-vous réellement supprimer ??
             </p>

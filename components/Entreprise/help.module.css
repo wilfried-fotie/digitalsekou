@@ -23,3 +23,14 @@
         transform: translateX(0px);
     }
 }
+
+@media screen and (max-width: 1150px) {
+    .all {
+        max-width: 70vw;
+        max-height: 80vh;
+    }
+    .all * {
+        padding: 2px 5px 3px;
+        margin: 0;
+    }
+}

@@ -1,17 +1,16 @@
 import Image from 'next/image'
 import styles from '../../styles/Header.module.css'
 import CustomModal from '../../components/customModal'
+import Menu from '../../components/Menu'
 import React, { useState } from 'react'
 import Link from 'next/link'
 import CreateAccount from '../../components/CreateAccount'
 import Login from '../../components/Login'
 import { useEffect } from 'react'
-import { Display, Lamp, LockFill, PersonBoundingBox, PersonCircle, PersonDash } from 'react-bootstrap-icons'
+import { Display, Lamp, LockFill, GridFill,List, PersonBoundingBox, PersonCircle, PersonDash, HouseFill, Search, Building, BriefcaseFill } from 'react-bootstrap-icons'
 import FineModal from '../../components/fineModal'
-import axios from 'axios'
 import "../../global"
 import { useRouter } from 'next/router'
-import { fetchEntreprisesData, fetchUsersData } from '../../Model/getter'
 
 
 function useModal(initial) {
@@ -37,6 +36,7 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
     const [visbility5, v5] = useModal(false)
     const [visbility4, v4] = useModal(false)
     const [visbility2, v2] = useModal(false)
+    const [menu, setMenu] = useModal(false)
     const [position, setPosition] = useState(0)
     const [scroll, setScroll] = useState(false)
     const [user, setUser] = React.useState()
@@ -49,7 +49,9 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
     const [etoken, setEtoken] = React.useState()
 
 
-
+    const handleMenuClick = () => {
+    setMenu(true)
+}
 
 
     useEffect(() => {
@@ -97,14 +99,15 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
   
 
     return (
-        <nav >
+        <nav className="fullScreen">
          {normal &&   <main className={!scroll ? styles.main : styles.fixed} >
 
                 <div className="logos">
-                    <center>  <Link href="/"><a className="logo">  <Image src="/logo.png" alt="Digital Education Logo" width={65} height={50} /></a></Link></center>
-                    <center> <Link href="/"><a>{!scroll && !visibleName ? <span className="log"><img src="/log.svg" alt="" /> </span> : null}</a></Link></center>
+                    <center >  <Link href="/"><a className="logo">  <Image src="/logo.png" className="logoHome" alt="Digital Education Logo" width={65} height={50} /></a></Link></center>
+                    <center className={styles.log}> <Link href="/"><a>{!scroll && !visibleName ? <span className="log"><img src="/log.png" alt="" /> </span> : null}</a></Link></center>
 
                 </div>
+
                 <div className={styles.links}>
 
                     {value == 1 ? <Link href="/"><a className="active">Acceuil</a></Link> : <Link href="/">Acceuil</Link>}
@@ -120,7 +123,7 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
                 
 
                 
-
+                {/* <div className="desktopScreen"> */}
                         
                  {   value == 4 ? etoken !== "" && etoken !== undefined && etoken ?
 
@@ -139,27 +142,20 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
                 }
                       
                 
-
-
-
-
-                {/* {value == 4 && etoken !== "" && etoken !== undefined && etoken ? <Account user={entreprise} e={true} onTokenChange={setEtoken} /> : <Auth v={v3} e={true} v2={v4} visbility2={visbility4} visbility={visbility3} setToken={handleEtoken} />}
-                {value == 3 && schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Account user={school} e={true} onTokenChange={setSchoolToken} /> : <Auth v={v1} e={true} v2={v5} visbility2={visbility5} visbility={visbility1} setToken={handleSchoolToken} />}
-                {value == 2 && token !== "" && token !== undefined && token ? <Account user={user} onTokenChange={setToken} /> : <Auth v={v} v2={v2} visbility2={visbility2} visbility={visbility} setToken={handleToken} />}
-                {value == 1 && token !== "" && token !== undefined && token ? <Account user={user} onTokenChange={setToken} /> : <Auth v={v} v2={v2} visbility2={visbility2} visbility={visbility} setToken={handleToken} />}
- */}
-
+                {/* </div> */}
+                <div className="mobileScreen">
+                    <List size={30} color="#4a00b4" onClick={handleMenuClick} className="rounder"/>
+</div>
             </main>
             }
        
             
             {!normal && 
             
-
-               
-                <main style={{padding: "10px 40px 5px", borderBottom: "2px solid grey"}} className={ !scroll ? styles.main : styles.fixed}>
+  <main style={{padding: "10px 20px 5px", borderBottom: "2px solid grey"}} className={ !scroll ? styles.main : styles.fixed}>
                 
-                <Link href="/Schools"><a>{scroll || !visibleName ? <span className="log"><img src="/log.svg" alt="" /> </span> : null}</a></Link>
+                <Link href="/" ><a className="desktopScreen">{scroll || !visibleName ? <span className="log"><img src="/log.svg" alt="" /> </span> : null}</a></Link>
+                   <Link href="/"><a className="logo mobileScreen">  <Image src="/logo.png" className="logoHome" alt="Digital Education Logo" width={65} height={50} /></a></Link>
 
 <div> </div>
                { token !== "" && token !== undefined && token !== null ?
@@ -173,7 +169,28 @@ function Header({ value, visibleName, userData, entrepriseData, normal = true })
         
             }
        
-       
+            {menu && <Menu onModalChange={setMenu} component={<>
+            
+
+            
+                <div className="tableMenu">
+                    <div className={styles.ds} >  <Link href="/"><a className="logo">  <Image src="/logo.png" className="logoHome" alt="Digital Education Logo" width={48} height={40} /></a></Link>
+                        <Link href="/"><a> <span className="log"><img src="/log.png" className="logoHome" alt="" /> </span> </a></Link>
+
+                    
+                    </div>
+
+
+                    {value == 1 ? <Link href="/"><a className="active ds"><HouseFill size={20} color="#4a00b4" /> Acceuil</a></Link> : <Link href="/" ><a className="ds a"><HouseFill size={20} color="#4a00b4" />Acceuil</a></Link>}
+                    {value == 2 ? <Link href="/Schools"><a className="active ds"><Search size={20} color="#4a00b4" /> Trouver une école</a></Link> : <Link href="/Schools"><a className="ds a"><Search size={20} color="#4a00b4" /> Trouver une école</a></Link>}
+                    {value == 3 ? schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href={`/addSchoolPro/${schoolId}?token=${schoolToken}`}><a className="active ds"><Building size={20} color="#4a00b4" /> School Administration</a></Link> : <Link href="/AddSchool"><a className="active ds"><Building size={20} color="#4a00b4" />Pour les établissements</a></Link> : schoolToken !== "" && schoolToken !== undefined && schoolToken ? <Link href={`/addSchoolPro/${schoolId}?token=${schoolToken}`}><a className="ds"><Building size={20} color="#4a00b4" /> School Administration</a></Link> : <Link href="/AddSchool"><a className="ds"><Building size={20} color="#4a00b4" /> Pour les établissements</a></Link>}
+                    {value == 4 ? etoken !== "" && etoken !== undefined && etoken ? <Link href={"/StartPub?id=" + entrepriseId + "&token=" + etoken}><a className="active ds"><BriefcaseFill size={20} color="#4a00b4" /> Entreprise Administration</a></Link> : <Link href="/Entreprises"><a className="active ds"><BriefcaseFill size={20} color="#4a00b4" /> Pour les entreprises</a></Link> : etoken !== "" && etoken !== undefined && etoken ? <Link href={"/StartPub?id=" + entrepriseId + "&token=" + etoken}><a className="ds"><BriefcaseFill size={20} color="#4a00b4" /> Entreprise Administration</a></Link> : <Link href="/Entreprises"><a className="ds"><BriefcaseFill size={20} color="#4a00b4" /> Pour les entreprises</a></Link>}
+
+
+                </div>
+            
+            
+            </>} />}
         </nav >
        
 
@@ -191,7 +208,7 @@ export function Auth({ visbility, visbility2, v, v2, setState, setToken, e, scho
  
     return (
         <div>
-            <div className={styles.connect}>
+            <div className="flx">
                 <a style={{ color: "#4a00b4" }} className={school ? "btnSecondary" : null } onClick={v2}>  Se Connecter</a>
 
                 {school ? null :     <a className="btnPrimary" onClick={v}
@@ -298,6 +315,7 @@ export function Disconnect({ v, onTokenChange, e, school, userData, entrepriseDa
         </div>
     )
 }
+
 
 
 

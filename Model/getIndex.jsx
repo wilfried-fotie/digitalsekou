@@ -56,3 +56,32 @@ export const fecthFineOffer = async function () {
         }))
 
 }
+
+
+export const fecthSitePub = async function () {
+
+    return await axios.get(`/get-site-pubs`)
+        .then(res => ({
+            error: false,
+            pubs: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            pubs: null,
+        }))
+
+}
+
+export const fecthSiteOffer = async function () {
+
+    return await axios.get(`/get-site-offers`)
+        .then(res => ({
+            error: false,
+            offers: res.data,
+        }))
+        .catch((e) => ({
+            error: true,
+            offers: null,
+        }))
+
+}

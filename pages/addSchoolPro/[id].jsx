@@ -1,17 +1,15 @@
 import React, { useEffect, useLayoutEffect } from 'react'
-import { ArrowLeft, Lock, Person, PersonCircle, FileWordFill,  DisplayFill, FileRuled, Pen, DoorClosed, Briefcase, Cash,  KanbanFill, AlignMiddle, Link, ChevronRight, HouseFill, BellFill, BarChartFill, Joystick, TrophyFill, FileWord, Globe, } from 'react-bootstrap-icons'
+import { ArrowLeft, Lock, Person, PersonCircle, List, FileWordFill,  DisplayFill, FileRuled, Pen, DoorClosed, Briefcase, Cash,  KanbanFill, AlignMiddle, Link, ChevronRight, HouseFill, BellFill, BarChartFill, Joystick, TrophyFill, FileWord, Globe, } from 'react-bootstrap-icons'
 import style from '../../styles/sudo.module.css'
 import "../../global"
 import axios from "axios"
 import { useRouter } from "next/router"
 import useChangeBool from '../../components/handleBool'
-import FineModal from '../../components/fineModal'
 import { useForm } from 'react-hook-form'
 import { FieldValidate, PasswordValidate } from '../../components/FormTools'
 import styles from '../../styles/startpub.module.css'
 import Loader from "react-loader-spinner";
 import { fetchPositions, fetchTypes, fetchFilieres, fetchSchoolData, fetchSpecialities, fetSchoolAbo, fetSchoolMessages } from "../../Model/getter"
-import { Account } from '../Template/Header'
 import { ModSchool, SiteWeb } from '../../components/SchoolAdmin/web'
 import Welcome from '../../components/SchoolAdmin/Welcome'
 import { Home } from '../../components/SchoolAdmin/Fiches'
@@ -26,7 +24,7 @@ import AddThink from '../../components/SchoolAdmin/AddThink'
 import { fecthPost } from '../../Model/getEntreprise'
 import CustomModal from '../../components/customModal'
 import NotPro from '../../components/CustomHooks/NotPro'
-
+import  Menu  from '../../components/Menu'
 
 const useIsomorphicLayoutEffect =
     typeof window !== 'undefined' ? useLayoutEffect : useEffect;
@@ -313,12 +311,16 @@ export function Dasboard({  specialities}) {
     const [level, setLevel] = React.useState(1)
     const [choise, handleChoiseState] = useChangeBool(true)
     const [visbility, v] = useModal(false)
-
+    const [menu, setMenu] = useModal(false)
+    
     const school = React.useContext(SchoolContext)
     const dataSchool = school.data.schoolData && school.data.schoolData.school
     const [schoolToken, setSchoolToken] = React.useState()
     const user = React.useContext(SchoolContext).data.schoolData.school.sigle
-
+    const handleMenuClick = () => {
+        setMenu(true)
+    }
+   
     return (
         <>
             <Head>
@@ -359,11 +361,16 @@ export function Dasboard({  specialities}) {
                     <article className={style.article}>
                         <nav className="dfb">
 
-<ForPro />
-                            <Connect info={{ url: "/school-change-pass", data: dataSchool,token: {name: "school",token:"schoolToken",id: "schoolId"}}}/>
+                            <ForPro />
+                            <div className="desktopScreen">
 
                            
+                            <Connect info={{ url: "/school-change-pass", data: dataSchool,token: {name: "school",token:"schoolToken",id: "schoolId"}}}/>
 
+                            </div>
+                            <div className="mobileScreen">
+                                <List size={30} color="#4a00b4" onClick={handleMenuClick} className="rounder" />
+                            </div>
 
                         </nav>
 
@@ -383,7 +390,38 @@ export function Dasboard({  specialities}) {
                     </article>
                 </div>
             </div>
+            {menu && <Menu onModalChange={setMenu} color={true} component={<>
+                <Connect mob={true} info={{ url: "/school-change-pass", data: dataSchool, token: { name: "school", token: "schoolToken", id: "schoolId" } }} />
 
+                <div className={style.barMobile}>
+             
+                <span className={level == 0 ? style.active : style.span} onClick={(e) => {
+                    e.preventDefault()
+                    setLevel(0)
+                    router.push("/")
+                }}> <ArrowLeft size={20} color={level == 0 ? "#fff" : "#FFF9"} className={level == 0 ? style.acticon : style.icon} /> Revenir au site</span>
+
+
+                <div className={style.ava} >
+                    <img className={style.avatar} src={dataSchool && "/" + dataSchool.logo} alt={dataSchool && dataSchool.sigle || "Logo"} />
+
+                </div>
+
+
+                    <span className={level == 1 ? style.active : style.span} onClick={() => { setLevel(1)}}> <HouseFill size={20} color={level == 1 ? "#fff" : "#FFF9"} className={level == 1 ? style.acticon : style.icon} /> Acceuil  </span>
+                <span className={level == 2 ? style.active : style.span} onClick={() => { setLevel(2) }}> <FileRuled size={20} color={level == 2 ? "#fff" : "#FFF9"} className={level == 2 ? style.acticon : style.icon} /> Fiches  </span>
+                <span className={level == 8 ? style.active : style.span} onClick={() => { setLevel(8) }}> <Globe size={20} color={level == 8 ? "#fff" : "#FFF9"} className={level == 8 ? style.acticon : style.icon} /> Enrichir Votre Site Web </span>
+                <span className={level == 3 ? style.active : style.span} onClick={() => { setLevel(3) }}> <FileWordFill size={20} color={level == 3 ? "#fff" : "#FFF9"} className={level == 3 ? style.acticon : style.icon} /> Modifier Votre Site Web </span>
+                <span className={level == 7 ? style.active : style.span} onClick={() => { setLevel(7) }}> <DisplayFill size={20} color={level == 7 ? "#fff" : "#FFF9"} className={level == 7 ? style.acticon : style.icon} /> Visualiser Votre Site Web </span>
+                <span className={level == 4 ? style.active : style.span} onClick={() => { setLevel(4) }}> <PersonCircle size={20} color={level == 4 ? "#fff" : "#FFF9"} className={level == 4 ? style.acticon : style.icon} /> Abonnés </span>
+                <span className={level == 5 ? style.active : style.span} onClick={() => { setLevel(5) }}> <BellFill size={20} color={level == 5 ? "#fff" : "#FFF9"} className={level == 5 ? style.acticon : style.icon} /> Notifications </span>
+                <span className={level == 6 ? style.active : style.span} onClick={() => { setLevel(6) }}> <BarChartFill size={20} color={level == 6 ? "#fff" : "#FFF9"} className={level == 6 ? style.acticon : style.icon} /> Statistiques </span>
+
+            
+            
+
+                </div>
+            </>} />}
         </>
     )
 }

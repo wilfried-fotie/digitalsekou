@@ -432,3 +432,39 @@
 .nope {
     display: none;
 }
+
+.dfbm {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 1150px) {
+    /* .bar {
+        display: none;
+    } */
+    .flex {
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: column;
+        gap: 3%;
+    }
+    .bar {
+        display: none;
+    }
+    .offDesk {
+        padding: 0;
+    }
+    .nav {
+        padding: 0;
+    }
+    .message {
+        width: unset;
+        max-height: unset;
+    }
+    .outro {
+        padding: 2px 3px 2px;
+    }
+    .textContent {
+        max-width: unset;
+    }
+}

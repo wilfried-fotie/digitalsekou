@@ -29,7 +29,7 @@ function Login({ stateChange, setToken, e ,school}) {
 
             setLoader(true)
 
-            data.username = data.username.trim().replaceAll(" ","-").toLowerCase()
+            data.username = data.username.trim().toLowerCase()
             if (e !== null && e !== undefined && e) {
                 
                 await axios.post('/entreprise', data).then(res => {

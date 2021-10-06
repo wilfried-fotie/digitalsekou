@@ -18,7 +18,7 @@ function AddSchool({ schoolData}) {
     return (
         <>
             <Head>
-
+                <title>Créer le site web de votre école gratuitement</title>
             </Head>
             <Header value="3" />
             <main className={styles.main}>
@@ -61,7 +61,8 @@ function AddSchool({ schoolData}) {
 
 
                     </div>
-                    <div style={{flex: 1}}>
+                    <div style={{ flex: 1 }}>
+                        <center className="h1 padding">CRÉER LE SITE WEB DE VOTRE ETABLISSEMENT</center>
                         <ADD lastId={schoolData.school[[...schoolData.school].length - 1] && schoolData.school[[...schoolData.school].length - 1].id || 1}/>
 
 

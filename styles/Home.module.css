@@ -75,6 +75,7 @@
 .dfc {
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .raison center {
@@ -88,7 +89,6 @@
 
 .card {
     padding: 10px 20px 100px;
-    color: #ccccccff;
     box-shadow: #9860e79b 10px 10px 10px;
     min-width: 40vw;
     text-align: center;
@@ -148,4 +148,51 @@
 
 .dolor {
     padding-top: 3%;
+}
+
+@media screen and (max-width: 1150px) {
+    .main .df {
+        display: flex;
+        flex-direction: column;
+        gap: 3%;
+    }
+    .text {
+        padding: 10px 4px 2px;
+        max-width: 90vw;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+    }
+    .description {
+        padding: 2px 4px 2px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .btns {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: auto;
+        margin-bottom: 10px;
+    }
+    .pub {
+        height: auto!important;
+        max-height: auto;
+    }
+    .card3 {
+        width: auto!important;
+        box-shadow: none;
+        border-radius: 5px;
+    }
+    .card {
+        width: auto;
+        box-shadow: none;
+    }
+    .card:hover {
+        box-shadow: none;
+    }
+    .pub {
+        margin: 0;
+        width: 100%;
+    }
 }

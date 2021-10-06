@@ -26,9 +26,9 @@ export default function SimpleSlider({ data, pub, en=false}) {
         <Slider {...settings}>
 
           
-
-            {data.map((e, k) => <center><Visualisation key={k} mode={true} data={{ ...e, expiration: e.expire, objet: e.title,outro: en ? e.content : null,content: en ? null : e.content,logo: en ? "/" + e.logo : e.logo  }} /></center>)}
-            {pub.map((e, k) => <center><V key={k} mode={true} data={{...e,media: "/" + e.media}} /></center>)}
+            
+            {data.map((e, k) => <center className="ideal"><Visualisation key={k} mode={true} data={{ ...e, expiration: e.expire, objet: e.title,outro: en ? e.content : null,content: en ? null : e.content,logo: en ? "/" + e.logo : e.logo  }} /></center>)}
+            {pub.map((e, k) => <center className="ideal"><V key={k} mode={true} data={{...e,media: "/" + e.media}} /></center>)}
 
         </Slider>
     );

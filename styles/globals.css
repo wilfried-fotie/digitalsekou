@@ -1,449 +1,586 @@
-html,
-body {
-    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    color: var(--main-color);
-}
-
-* {
-    font-weight: 600;
-}
-
-.reveal {
-    opacity: 0;
-    transform: translateY(30px);
-}
-
-.reveal2 {
-    opacity: 0;
-    transform: translateY(50px);
-}
-
-.reveal-visible {
-    opacity: 1;
-    transition: 1s cubic-bezier(.5, 0, 0, 1) transform;
-    transform: translateY(0);
-}
-
-p,
-.p {
-    font-weight: 600;
-    text-align: justify;
-    padding: 10px 20px 10px;
-    line-height: 1.5em;
-    color: rgb(44, 44, 44);
-}
-
-.mr {
-    margin-right: 20px;
-}
-
-.pad {
-    margin-top: 20px;
-}
-
-p::first-letter {
-    margin-left: 20px;
-    text-transform: uppercase;
-}
-
-.active {
-    color: rgb(233, 88, 4)!important;
-}
-
-.btnPrimary {
-    padding: 5px 20px 3px;
-    background-color: #4a00b4;
-    color: white;
-    font-weight: bold;
-    border-radius: 12px;
-}
-
-.bntDisable {
-    padding: 5px 20px 3px;
-    background-color: #3f3f3f;
-    color: white;
-    font-weight: bold;
-    border-radius: 12px;
-}
-
-b {
-    font-weight: bold;
-    color: black;
-}
-
-.digi {
-    text-align: left!important;
-    padding: 20px 10px 20px;
-}
-
-.op {
-    z-index: 10000;
-}
-
-.dfb {
-    display: flex;
-    justify-content: space-between;
-}
-
-.ds {
-    display: flex;
-    justify-content: flex-start;
-    gap: 20px
-}
-
-.btnPri {
-    padding: 7px 20px 7px;
-    background-color: #4a00b4;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 5px;
-}
-
-.btnFine {
-    padding: 7px 20px 7px;
-    background-color: green;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 5px;
-}
-
-form {
-    margin-bottom: 4%;
-}
-
-.btnPriRed {
-    padding: 7px 20px 7px;
-    background-color: red;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 5px;
-}
-
-.btnSecondary {
-    padding: 5px 20px 3px;
-    border-radius: 12px;
-    color: #4a00b4;
-    border: 1px solid #4a00b4;
-}
-
-[class*="btn"] {
-    text-decoration: none;
-    line-height: 1.25;
-    font-weight: bold;
-}
-
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    --main-color: #000000aa;
-    --primary-color: #4a00b4;
-}
-
-.containText {
-    max-width: 50vw;
-}
-
-.iconiseur {
-    padding: 7px 10px 7px;
-    background-color: #c1c1c5;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 20px;
-}
-
-.flexTab {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column-reverse;
-    gap: 5vh;
-}
-
-:root {
-    --main-color: #000000bb;
-    --primary-color: #4a00b4;
-}
-
-@font-face {
-    font-family: "montserratBold";
-    src: url(/Montserrat/Montserrat-Black.ttf);
-}
-
-@font-face {
-    font-family: "montserrat";
-    src: url(/Montserrat/Montserrat-Regular.ttf);
-}
-
-h1,
-h2 {
-    font-family: "montserratBold"!important;
-    color: black;
-}
-
-.db {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.container {
-    max-width: 90vw;
-    display: flex;
-    justify-content: center;
-    padding: 20px 30px 10px;
-}
-
-.bb {
-    border-bottom: 2px solid #4a00b4;
-}
-
-.bb input {
-    border: 0px!important;
-    width: 220px;
-}
-
-table {
-    border-collapse: collapse;
-}
-
-.fine {
-    color: green;
-    font-size: .88em;
-}
-
-a:hover {
-    cursor: pointer;
-}
-
-input[type=password] {
-    list-style: initial!important;
-}
-
-a {
-    text-decoration: none;
-    color: var(--main-color);
-    font-size: .88em;
-    color: rgb(44, 44, 44);
-    font-weight: bold;
-    font-family: "Montserrat"!important;
-}
-
-ol,
-ul {
-    text-align: left!important;
-    margin-left: 40px;
-    line-height: 2em!important;
-}
-
-.padding h1,
-.padding h2,
-.padding h3 {
-    margin-left: 40px;
-}
-
-select,
-option {
-    border: 0!important;
-    font-family: "Montserrat";
-    padding: 5px 10px 5px;
-    color: #4a00b4;
-    outline: transparent;
-    background-color: transparent;
-}
-
-.df {
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.dfss {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.dfs {
-    display: grid;
-    grid-template-columns: 10% 80%;
-    grid-gap: 2%;
-    align-items: center;
-}
-
-button {
-    list-style: none;
-    border: 0;
-    box-decoration-break: 0;
-    font-family: "Montserrat";
-}
-
-.error {
-    color: red;
-    padding: 10px 20px 10px;
-    font-size: .88em;
-}
-
-.h2 {
-    font-size: x-large;
-    font-weight: bold;
-    color: black;
-    font-family: "MontserratBold";
-}
-
-.a:hover {
-    cursor: pointer;
-}
-
-.h1 {
-    font-family: "montserratBold";
-    color: black;
-    font-size: 2em;
-}
-
-.logo {
-    align-items: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.log {
-    font-size: large;
-    font-weight: bold;
-    color: #4a00b4;
-}
-
-.split {
-    padding: 20% 20px .2%;
-}
-
-#input {
-    min-width: 30%;
-    width: 100%;
-}
-
-input {
-    font-family: "Montserrat";
-    outline: transparent;
-    margin-right: 20px;
-    padding: 7px 20px 7px;
-    border-left: 0px;
-    border-top: 0px;
-    border-color: #4a00b4;
-    border-right: 0px;
-    list-style: none;
-    text-decoration: none;
-}
-
-.mr {
-    margin-right: 10px;
-}
-
-.input__field {
-    display: block;
-    border: 0;
-    padding: 1em;
-    border-radius: 0.4em;
-    width: 100%;
-    outline: none;
-    color: #4b4b4b;
-}
-
-.mleft {
-    margin-left: 40px;
-}
-
-.d a {
-    margin-left: 40px;
-}
-
-.input__row {
-    background-color: #c6a9ee;
-    padding: 0.5em 2em;
-}
-
-.beta-mode {
-    cursor: not-allowed;
-}
-
-.time {
-    font-size: 11px;
-    color: rgba(0, 0, 0, 0.45);
-    position: absolute;
-    right: 0.25em;
-    bottom: 0.25em;
-}
-
-.message {
-    position: relative;
-    display: inline-block;
-    padding: 0.5em 4em 0.5em 0.5em;
-    border-radius: 0.46875em;
-    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-}
-
-.message__row {
-    margin-bottom: 0.75em;
-    z-index: 1;
-}
-
-.message--in {
-    background-color: #fff;
-}
-
-.message--out {
-    background-color: #dcf8c6;
-    float: right;
-}
-
-.message__container {
-    display: flex;
-    align-items: stretch;
-    justify-content: flex-end;
-    flex-direction: column;
-    position: relative;
-    background-color: #e5ddd5;
-    flex: 1 1 0;
-    padding: 1em 9%;
-}
-
-.message__tile {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.06;
-    background: url(http://res.cloudinary.com/keiwo/image/upload/v1498803497/whatsapp-bg_dpw6kf.png);
-}
-
-.editor-class {
-    padding: 0px 20px 10px;
-    line-height: 1.52em!important;
-    font-size: .98em;
-}
-
-.wrapper-class {
-    border: 2px solid #4a00b4;
-}
-
-.padding {
-    padding: 20px 20px 20px;
-}
-
-.particular .editor-class {
-    height: 40vh;
-}
-
-.imgFill {
-    max-width: 50vh;
-    /* min-height: 30vh; */
-    /* min-width: 30vw; */
-    max-height: 60vh;
-}
-
-.logo {
-    max-width: 100px;
-}
+    html,
+    body {
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        color: var(--main-color);
+    }
+    
+    * {
+        font-weight: 600;
+    }
+    
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    
+    .reveal2 {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    
+    .reveal-visible {
+        opacity: 1;
+        transition: 1s cubic-bezier(.5, 0, 0, 1) transform;
+        transform: translateY(0);
+    }
+    
+    p,
+    .p {
+        font-weight: 600;
+        text-align: justify;
+        padding: 10px 20px 10px;
+        line-height: 1.5em;
+        color: rgb(44, 44, 44);
+    }
+    
+    .mr {
+        margin-right: 20px;
+    }
+    
+    .pad {
+        margin-top: 20px;
+    }
+    
+    p::first-letter {
+        margin-left: 20px;
+        text-transform: uppercase;
+    }
+    
+    .active {
+        color: rgb(233, 88, 4)!important;
+    }
+    
+    .btnPrimary {
+        padding: 7px 20px 5px;
+        background-color: #4a00b4;
+        color: white;
+        font-weight: bold;
+        border-radius: 12px;
+    }
+    
+    .bntDisable {
+        padding: 7px 20px 5px;
+        background-color: #3f3f3f;
+        color: white;
+        font-weight: bold;
+        border-radius: 12px;
+    }
+    
+    b {
+        font-weight: bold;
+        color: black;
+    }
+    
+    .digi {
+        text-align: left!important;
+        padding: 20px 10px 20px;
+    }
+    
+    .op {
+        z-index: 10000;
+    }
+    
+    .dfb {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    
+    .dfbm {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2px 5px 2px;
+    }
+    
+    .ds {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 20px
+    }
+    
+    .tableMenu {
+        display: flex;
+        flex-direction: column;
+        gap: 10vh;
+    }
+    
+    .logoHome {
+        height: 20px;
+    }
+    
+    .btnPri {
+        padding: 7px 20px 7px;
+        background-color: #4a00b4;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+    
+    .btnFine {
+        padding: 7px 20px 7px;
+        background-color: green;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+    
+    .flexeur {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    form {
+        margin-bottom: 4%;
+    }
+    
+    .btnPriRed {
+        padding: 7px 20px 7px;
+        background-color: red;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+    
+    .btnSecondary {
+        padding: 7px 20px 5px;
+        border-radius: 12px;
+        color: #4a00b4;
+        border: 1px solid #4a00b4;
+    }
+    
+    [class*="btn"] {
+        text-decoration: none;
+        line-height: 1.25;
+        font-weight: bold;
+    }
+    
+    * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        --main-color: #000000aa;
+        --primary-color: #4a00b4;
+    }
+    
+    .containText {
+        max-width: 50vw;
+    }
+    
+    .iconiseur {
+        padding: 7px 10px 7px;
+        background-color: #c1c1c5;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+    }
+    
+    .flexTab {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column-reverse;
+        gap: 5vh;
+    }
+    
+     :root {
+        --main-color: #000000bb;
+        --primary-color: #4a00b4;
+    }
+    
+    @font-face {
+        font-family: "montserratBold";
+        src: url(/Montserrat/Montserrat-Black.ttf);
+    }
+    
+    @font-face {
+        font-family: "montserrat";
+        src: url(/Montserrat/Montserrat-Regular.ttf);
+    }
+    
+    h1,
+    h2 {
+        font-family: "montserratBold"!important;
+        color: black;
+    }
+    
+    .db {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .container {
+        max-width: 90vw;
+        display: flex;
+        justify-content: center;
+        padding: 20px 30px 10px;
+    }
+    
+    .bb {
+        border-bottom: 2px solid #4a00b4;
+    }
+    
+    .bb input {
+        border: 0px!important;
+        width: 220px;
+    }
+    
+    table {
+        border-collapse: collapse;
+    }
+    
+    .fine {
+        color: green;
+        font-size: .88em;
+    }
+    
+    a:hover {
+        cursor: pointer;
+    }
+    
+    input[type=password] {
+        list-style: initial!important;
+    }
+    
+    a {
+        text-decoration: none;
+        color: var(--main-color);
+        font-size: .88em;
+        color: rgb(44, 44, 44);
+        font-weight: bold;
+        font-family: "Montserrat"!important;
+    }
+    
+    ol,
+    ul {
+        text-align: left!important;
+        margin-left: 40px;
+        line-height: 2em!important;
+    }
+    
+    .padding h1,
+    .padding h2,
+    .padding h3 {
+        margin-left: 40px;
+    }
+    
+    select,
+    option {
+        border: 0!important;
+        font-family: "Montserrat";
+        padding: 5px 10px 5px;
+        color: #4a00b4;
+        outline: transparent;
+        background-color: transparent;
+    }
+    
+    .df {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+    }
+    
+    .dfonly {
+        display: flex;
+        justify-content: space-evenly;
+    }
+    
+    .dfss {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .dfs {
+        display: grid;
+        grid-template-columns: 10% 80%;
+        grid-gap: 2%;
+        align-items: center;
+    }
+    
+    button {
+        list-style: none;
+        border: 0;
+        box-decoration-break: 0;
+        font-family: "Montserrat";
+    }
+    
+    .error {
+        color: red;
+        padding: 10px 20px 10px;
+        font-size: .88em;
+    }
+    
+    .h2 {
+        font-size: x-large;
+        font-weight: bold;
+        color: black;
+        font-family: "MontserratBold";
+    }
+    
+    .a:hover {
+        cursor: pointer;
+    }
+    
+    .h1 {
+        font-family: "montserratBold";
+        color: black;
+        font-size: 2em;
+    }
+    
+    .logo {
+        align-items: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .log {
+        font-size: large;
+        font-weight: bold;
+        color: #4a00b4;
+    }
+    
+    .split {
+        padding: 20% 20px .2%;
+    }
+    
+    #input {
+        min-width: 30%;
+        width: 100%;
+    }
+    
+    input {
+        font-family: "Montserrat";
+        outline: transparent;
+        margin-right: 20px;
+        padding: 7px 20px 7px;
+        border-left: 0px;
+        border-top: 0px;
+        border-color: #4a00b4;
+        border-right: 0px;
+        list-style: none;
+        text-decoration: none;
+    }
+    
+    .mr {
+        margin-right: 10px;
+    }
+    
+    .input__field {
+        display: block;
+        border: 0;
+        padding: 1em;
+        border-radius: 0.4em;
+        width: 100%;
+        outline: none;
+        color: #4b4b4b;
+    }
+    
+    .mleft {
+        margin-left: 40px;
+    }
+    
+    .d a {
+        margin-left: 40px;
+    }
+    
+    .input__row {
+        background-color: #c6a9ee;
+        padding: 0.5em 2em;
+    }
+    
+    .beta-mode {
+        cursor: not-allowed;
+    }
+    
+    .time {
+        font-size: 11px;
+        color: rgba(0, 0, 0, 0.45);
+        position: absolute;
+        right: 0.25em;
+        bottom: 0.25em;
+    }
+    
+    .message {
+        position: relative;
+        display: inline-block;
+        padding: 0.5em 4em 0.5em 0.5em;
+        border-radius: 0.46875em;
+        box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+    }
+    
+    .message__row {
+        margin-bottom: 0.75em;
+        z-index: 1;
+    }
+    
+    .message--in {
+        background-color: #fff;
+    }
+    
+    .message--out {
+        background-color: #dcf8c6;
+        float: right;
+    }
+    
+    .message__container {
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-end;
+        flex-direction: column;
+        position: relative;
+        background-color: #e5ddd5;
+        flex: 1 1 0;
+        padding: 1em 9%;
+    }
+    
+    .message__tile {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.06;
+        background: url(http://res.cloudinary.com/keiwo/image/upload/v1498803497/whatsapp-bg_dpw6kf.png);
+    }
+    
+    .editor-class {
+        padding: 0px 20px 10px;
+        line-height: 1.52em!important;
+        font-size: .98em;
+    }
+    
+    .wrapper-class {
+        border: 2px solid #4a00b4;
+    }
+    
+    .padding {
+        padding: 20px 20px 20px;
+    }
+    
+    .particular .editor-class {
+        height: 40vh;
+    }
+    
+    .imgFill {
+        max-width: 50vh;
+        /* min-height: 30vh; */
+        /* min-width: 30vw; */
+        max-height: 60vh;
+    }
+    
+    .flx {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .logo {
+        max-width: 100px;
+    }
+    
+    .desktopScreen {
+        display: block;
+    }
+    
+    .white {
+        background-color: #fff;
+    }
+    
+    .mobileScreen {
+        display: none;
+    }
+    
+    .ideal img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .rounder {
+        border: 2px solid #4a00b4;
+        border-radius: 5px;
+        padding: 2px 2px 1px;
+    }
+    
+    .tableModSite {
+        max-width: 50vw;
+    }
+    
+    .cap {
+        text-transform: capitalize;
+    }
+    
+    @media screen and (max-width: 1150px) {
+        .desktopScreen {
+            display: none;
+        }
+        .mobileScreen {
+            display: block;
+        }
+        .fullScreen {
+            width: 100vw!important;
+        }
+        .imgScreen {
+            max-width: 80vw
+        }
+        h1,
+        .h1 {
+            font-size: 1.5em;
+        }
+        .h2,
+        .h2 {
+            font-size: 1.3em;
+        }
+        .spacer {
+            padding: 3px 0px 3px;
+        }
+        .containText {
+            max-width: 100%;
+            padding: 10px 0px 3px;
+        }
+        .d a {
+            margin-left: 0;
+        }
+        .d {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin: 5px 5% 2px;
+        }
+        .input__row {
+            padding: 0;
+            width: 90vw;
+        }
+        .message__container {
+            padding: 10px 0px 3px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .tableModSite {
+            max-width: 95vw;
+            padding: 20px 5px 10px;
+        }
+        .dfss {
+            gap: 20px
+        }
+        .container {
+            padding: 20px 5px 2px;
+            max-width: 100vw;
+        }
+        .imgFill {
+            max-width: 100%;
+        }
+        .flexeur,
+        .dfonly {
+            flex-wrap: wrap;
+        }
+    }

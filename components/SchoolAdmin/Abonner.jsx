@@ -19,7 +19,7 @@ export default function Abonner() {
                 data.pro && <>
                     <center className="h1 padding">Liste de vos abonnés</center>
             
-                <div className="container">
+                <div >
                     {users.lenght !== 0 ? <table>
                   
                         <tbody>

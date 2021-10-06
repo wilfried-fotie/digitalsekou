@@ -8,6 +8,12 @@
     transition: all .2s;
 }
 
+.dfss {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
 .tabl {
     display: flex;
     flex-direction: column-reverse;
@@ -210,4 +216,55 @@
     display: flex;
     flex: 1;
     justify-content: center;
+}
+
+@media screen and (max-width: 1150px) {
+    .nav {
+        padding: 10px 2px 10px;
+        flex-wrap: wrap;
+        gap: 20px
+    }
+    .activeborder2,
+    .activeborder0,
+    .activeborder1,
+    .activeborder,
+    .border,
+    .border1,
+    .border2 {
+        width: auto;
+    }
+    .dfr,
+    .dfss {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .imageFill {
+        max-width: 100%;
+    }
+    .act {
+        padding: 3px 5px 2px;
+    }
+    .table table td:nth-child(1) {
+        display: none;
+        max-width: unset;
+    }
+    .table td {
+        padding: 3px 4px 2px;
+    }
+    .anim {
+        width: 100%;
+    }
+    .offer {
+        margin: 0;
+        padding: 2px 5px 3px;
+    }
+    .aff {
+        max-height: unset;
+        margin: 0;
+        padding: 2px 5px 3px;
+        width: 100%;
+    }
+    .logo {
+        max-height: 40px;
+    }
 }

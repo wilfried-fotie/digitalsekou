@@ -12,6 +12,19 @@
     overflow-x: hidden;
 }
 
+.menu {
+    z-index: 5;
+    background-color: #fff;
+    box-shadow: #4a00b4 3px 3px 10px;
+    width: 80vw;
+    height: 100vh;
+    padding: 20px 30px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    animation: menu .5s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
 .modal2 {
     z-index: 6;
     background-color: #fff;
@@ -37,6 +50,57 @@
     z-index: 5;
 }
 
+.remove {
+    animation: remove .5s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.appMenu {
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    z-index: 4;
+    position: fixed;
+}
+
 .header {
     transform: translate(100%, -50%);
+}
+
+@keyframes menu {
+    from {
+        transform: translateX(50%);
+        opacity: .99;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes remove {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .modal {
+        max-width: 95vw;
+    }
+    .modal2 {
+        width: unset;
+        max-width: 95vw;
+        padding: 2px 3px 3px;
+    }
+    .header {
+        transform: translate(90%, 0%);
+    }
 }

@@ -21,7 +21,7 @@ const router = useRouter()
 
         <div className={styles.res}>
             
-            <div className="dfss">
+            <div className={styles.dfss} >
 
                 <div className="dfss" style={{maxWidth: "20%"}}>
                     <img style={{maxWidth: "100px",maxHeight: "75px"}} src={"/" + school.logo} />
@@ -30,21 +30,13 @@ const router = useRouter()
                 </div>
 
                 <div className={styles.app} >
-                    <Link href={"/schools/" + school.sigle + "#" + type} ><a className="h2 a" onClick={handleClick} style={{ color: "#4a00b4" }}> {school.name} </a></Link> <br />
+                    <Link href={"/schools/" + school.sigle + "#" + type} className={styles.title} ><center><a className="h2 a" onClick={handleClick} style={{ color: "#4a00b4" }}> {school.name}  ( {school.sigle.toUpperCase()} ) </a></center></Link> <br />
+                    <div className={styles.site}>
+                        
            
-<p>
-                    {/* { <Markup content={school.description.substr(0, 200) + " ..."} />} */}
-                    </p>
-                 
-                    {/*    <div >
-                        <PieChartFill size={20} color="#4a00b4" />  Status: {school.status}
-
-                    </div> */}
-                    
                     <div className="dfs"> <LayoutSidebarReverse color="#4a00b4" size={20} /> <span>{type}</span></div>
-
                     <div className="dfs pad"> <GeoAltFill color="#4a00b4" size={20} /> <span>{p.map(e => e.position + ", ")}</span></div>
-                </div></div>
+                </div></div></div>
         </div>
     )
 }

@@ -55,13 +55,14 @@ function Entreprises() {
     return (
         <>
             <Head>
-
+                <title>Entreprise</title>
+                
             </Head>
             <Header value="4" />
             <main className={styles.main}>
 
-                <div className="db">
-                    <img src="/entreLeft.svg" />
+                <div className="flexeur">
+                    <img src="/entreLeft.png" />
 
                     <div >
                         <span className={styles.text}>
@@ -74,7 +75,7 @@ function Entreprises() {
                         </span>
                     </div>
 
-                    <img src="/entreRight.svg" />
+                    <img src="/entreRight.png" />
 
                 </div>
 

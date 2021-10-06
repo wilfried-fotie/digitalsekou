@@ -1,7 +1,5 @@
 import Head from 'next/head'
 import Header from './Template/Header.jsx'
-import Image from 'next/image'
-import CustomModal from '../components/customModal'
 import styles from '../styles/Search.module.css'
 import React from 'react'
 import Footer from './Template/footer'
@@ -15,12 +13,13 @@ function Schools({ schools,positions,types}) {
     const positionData = positions.positions
     const typesData = types.types
 
-    const [state, setState] = React.useState({})
+    const [state, setState] = React.useState({types: "all",level: "all"})
 
 
     const change = (e) => {
-        const name = e.target.id
-        const value = e.target.checked
+        const name = e.target.name
+        const value = e.target.value
+        
         setState(s => ({ ...s,[name]: value}))
     }
     
@@ -39,6 +38,7 @@ function Schools({ schools,positions,types}) {
 
     })
     const [search, setSearch] = React.useState("")
+
     const  handleSearch = (e) => {
         setSearch(e.target.value)
     }
@@ -47,13 +47,17 @@ function Schools({ schools,positions,types}) {
 
     return (
         <>
+            <Head>
+                <title>trouver toutes les informations rélative aux établissement camerounais</title>
+            </Head>
             <Header value={2} />
             <main>
                 <div className={styles.search}>
                     <h1>Rechercher les établissements</h1>
                 </div>
 
-                <div className={styles.df}>  <div className={styles.searBar}>
+                <div className={styles.df}>
+                    <div className={styles.searBar}>
                     <input type="search" id={styles.input} value={search} onChange={handleSearch} placeholder="Recherchez tous sur les écoles" />
                     <div className={styles.icon}>
                         <Search color="#fff" size="20px" />
@@ -65,15 +69,22 @@ function Schools({ schools,positions,types}) {
                         <b>Filtrer Par</b> <br />
                         <div className={styles.pad}>
                             <a>types</a>
-
                             <div className={styles.pad}>
                                 <div>
-                                    <input type="checkbox" name="public" value={state.type} onChange={change} className={styles.pub} id="pub" />
+                                    <input type="radio" name="types" value="all" defaultChecked={state.types == "all"} onChange={change}  className={styles.pub} id="all" />
+                                    <label htmlFor="all">Tous</label>
+                                </div>
+                                <div>
+                                    <input type="radio" name="types" value="pub" defaultChecked={state.types == "pub"} onChange={change} className={styles.pub} id="pub" />
                                     <label htmlFor="pub">Public</label>
                                 </div>
                                 <div >
-                                    <input type="checkbox" name="Privé" onChange={change} className={styles.pub} id="priv" />
+                                    <input type="radio" name="types" onChange={change} value="priv" defaultChecked={state.types == "priv"} className={styles.pub} id="priv" />
                                     <label htmlFor="priv">Privé</label>
+                                </div>
+                                <div >
+                                    <input type="radio" name="types" onChange={change} value="para" defaultChecked={state.types == "para"} className={styles.pub} id="para" />
+                                    <label htmlFor="para">Para-Publique</label>
                                 </div>
                             </div>
 
@@ -82,29 +93,32 @@ function Schools({ schools,positions,types}) {
 
                         <div className={styles.pad}>
                             <a>Niveau</a>
-
                             <div className={styles.pad}>
 
                                 <div >
-                                    <input type="checkbox" name="Supérieur" onChange={change} className={styles.pub} id="uni" />
+                                    <input type="radio" name="level" value="all" onChange={change} defaultChecked={state.level == "all"} className={styles.pub} id="tous"/>
+                                    <label htmlFor="tous">Tous</label>
+                                </div>
+                                <div >
+                                    <input type="radio" name="level" value="Supérieur" onChange={change} defaultChecked={state.level == "Supérieur"} className={styles.pub} id="uni" />
                                     <label htmlFor="uni">Universités</label>
                                 </div>
 
                                 <div >
-                                    <input type="checkbox" name="Secondaire" onChange={change} className={styles.pub} id="lyc" />
+                                    <input type="radio" name="level" value="Secondaire" onChange={change} defaultChecked={state.level == "Secondaire"} className={styles.pub} id="lyc" />
                                     <label htmlFor="lyc">Secondaire</label>
                                 </div>
                                 <div>
-                                    <input type="checkbox" name="Primaire" onChange={change} className={styles.pub} id="pri" />
+                                    <input type="radio" name="level" value="Primaire" onChange={change} defaultChecked={state.level == "Primaire"} className={styles.pub} id="pri" />
                                     <label htmlFor="pri">Primaire</label>
                                 </div>
                                 <div >
-                                    <input type="checkbox" name="Maternelles" onChange={change} className={styles.pub} id="mat" />
+                                    <input type="radio" name="level" value="Maternelles" onChange={change} defaultChecked={state.level == "Maternelles"} className={styles.pub} id="mat" />
                                     <label htmlFor="mat">Maternelles</label>
                                 </div>
 
                                 <div >
-                                    <input type="checkbox" name="Crèches" onChange={change} className={styles.pub} id="cre" />
+                                    <input type="radio" name="level" value="Crèches" onChange={change} defaultChecked={state.level == "Crèches"} className={styles.pub} id="cre" />
                                     <label htmlFor="cre">Crèches</label>
                                 </div>
 
@@ -117,98 +131,28 @@ function Schools({ schools,positions,types}) {
                     </div>
                     <div className={styles.right}>
                         {fineData && fineData.map((e,k) => {
-
-                            const ts = typesData.filter(t => {
-                                return t.school_id == e.school.id
-                            })
-                            
-
-                           
-                            
-                            for (const key in state) {
-         
-                        
-
-
-
-                                if (state[key] && key == "priv"  ) {
-
-                                    if (e.school.status !== "Privé") {
-                                        return
-                                    }
-                                    
-
-                                }
-                                  
-
-
-
-
-
-                                if (state[key] && key == "pub" ) {
-
-                                    if (e.school.status !== "Public") {
-                                        
-                                              return
-                                      
-                                      
-                                    }
-
-
-                                }
-                                
-                                if (state[key] && key == "uni" ) {
-                                   
-                                    if (e.type !== "Supérieur") {
-                                        return
-                                    }
-
-
-                                   
-
-                                }
-                                if (state[key] && key == "lyc") {
-
-                                    if (e.type !== "Secondaire") {
-                                        return
-                                    }
-
-
-
-                                }
-
-                                if (state[key] && key == "pri") {
-
-                                    if (e.type !== "Primaire") {
-                                        return
-                                    }
-
-
-
-                                }
-
-                                if (state[key] && key == "mat") {
-
-                                    if (e.type !== "maternelle") {
-                                        return
-                                    }
-
-
-
-                                }
-
-
-                                if (state[key] && key == "cre") {
-
-                                    if (e.type !== "crêche") {
-                                        return
-                                    }
-
-
-
-                                }
-                                
+                            if (state.level !== e.type && state.level !== "all" ) {
+                                    return
                             }
+                            
+                           
+                            if (state.types == "priv") {
+                                if (e.school.status !== "Privé") {
+                                        return
+                                }
+                            }
+                            if (state.types == "pub") {
+                                if (e.school.status !== "Public") {
+                                    return
+                                }
+                            }
+                            if (state.types == "para") {
+                                if (e.school.status !== "Para-Public") {
+                                    return
+                                }
+                            }
+                         
+                            
 
                             if (e.school.name.toLowerCase().indexOf(search.toLowerCase()) === -1 && e.school.sigle.toLowerCase().indexOf(search.toLowerCase()) === -1) {
                                 return
@@ -220,9 +164,8 @@ function Schools({ schools,positions,types}) {
                             
                         })}
                         {state && filter }
-
+                      
                     </div>
-
                 </div>
 
               

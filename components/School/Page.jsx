@@ -1,5 +1,5 @@
 import React from 'react'
-import { BellFill, CloudArrowUpFill, GeoAlt, Grid3x3GapFill, TelephoneFill } from 'react-bootstrap-icons'
+import { BellFill, BriefcaseFill, CloudArrowUpFill, GeoAlt, Grid3x3GapFill, HouseFill, PhoneFill, TelephoneFill, Tools } from 'react-bootstrap-icons'
 import styles from '../../styles/AddSchool.module.css'
 import style from '../../styles/sudo.module.css'
 import useChangeBool from '../handleBool'
@@ -9,6 +9,7 @@ import styl from "../Entreprise/offre.module.css"
 import useModal from '../CustomHooks/useModal'
 import ModalEditor from '../modalEditor'
 import { View } from '../SchoolAdmin/Fiches'
+import Menu from '../Menu'
 
 
 
@@ -19,11 +20,18 @@ function Page({data,positions,types,spe,getPost,handleSubs,ab,abo,userId}) {
     const [choise, handleChoiseState] = useChangeBool(true)
     const [fixed, setFixed] = React.useState(false)
     const tab = abo ? abo.abo.abo : []
-
+    const [menu, setMenu] = useModal(false)
+const handleMenuClick = () => {
+        setMenu(true)
+    }
     const handleSubCribe = () => {
        handleSubs && handleSubs()
     }
+    const handleCloseClick = () => {
+        setMenu(false)
 
+    }
+    
 
     return (
         <div>
@@ -34,27 +42,63 @@ function Page({data,positions,types,spe,getPost,handleSubs,ab,abo,userId}) {
                     <div >
 
                         <div className={choise ? styles.offDesk : styles.offMob}>
-                            <div className={styles.nav}>
-                                <div className={choise ? "dfss" : styles.dfb}>
 
+                            <div className={styles.nav}>
+<div className="desktopScreen">
+
+
+                                    
+                                <div className={choise ? "dfss" : styles.dfb}>
                                     <div>
                                         <img src={"/" + data.logo} className={styles.img} alt="Logo" />
                                     </div>
+                                    <div className="mobileScreen" >
+                                        {data.sigle.toUpperCase() || "Sigle"}
+                                    </div>
+                                        <Grid3x3GapFill className="mobileScreen" onClick={handleMenuClick} color="#4a00b4" size={20} />
+                                        
                                     <div style={{ textTransform: "uppercase!important" }} className={!choise ? styles.bloc : styles.menu}>
                                         {data.sigle || "Sigle"}
                                     </div>
-                                    <Grid3x3GapFill className={!choise ? styles.bloc : styles.menu} color="#4a00b4" size={20} />
+                                        <Grid3x3GapFill onClick={handleMenuClick} className={!choise ? styles.bloc : styles.menu} color="#4a00b4" size={20} />
+
+                                    
                                     <div className={choise ? styles.links : styles.menu}>
                                         <a className="active"> Acceuil </a>
                                         <Link href="#spe"><a > Spécialités </a></Link>
                                         <Link href="#contact"><a > Contact </a></Link>
 
 
+                                        </div></div></div> 
+                                    <div className={choise ? "mobileScreen" : styles.dfb}>
+                                    <div className={choise ? "dfbm" : styles.dfb}>
+
+                                    <div>
+                                        <img src={"/" + data.logo} className={styles.img} alt="Logo" />
                                     </div>
+                                    <div className="mobileScreen" >
+                                        {data.sigle.toUpperCase() || "Sigle"}
+                                    </div>
+                                        <Grid3x3GapFill onClick={handleMenuClick} className="mobileScreen" color="#4a00b4" size={20} />
+
+                                    <div style={{ textTransform: "uppercase!important" }} className={!choise ? styles.bloc : styles.menu}>
+                                        {data.sigle || "Sigle"}
+                                    </div>
+                                        <Grid3x3GapFill onClick={handleMenuClick} className={!choise ? styles.bloc : styles.menu} color="#4a00b4" size={20} />
+                                    <div className="desktopScreen">
+
+                                    
+                                    <div className={choise ? styles.links : styles.menu}>
+                                        <a className="active"> Acceuil </a>
+                                        <Link href="#spe"><a > Spécialités </a></Link>
+                                        <Link href="#contact"><a > Contact </a></Link>
+
+
+                                            </div></div> </div>
                                 </div>
                             </div>
                             <div className="pad">
-                            <div className={data.disposition == 1 ? styl.tabl : data.disposition == 3 ? "dfss" : styl.dfr}>
+                                <div className={data.disposition == 1 ? styl.tabl : data.disposition == 3 ? "dfonly" : styl.dfr}>
 
                                 <div>
 
@@ -62,7 +106,7 @@ function Page({data,positions,types,spe,getPost,handleSubs,ab,abo,userId}) {
                                         <div className={data.disposition == 1 ? "padding" :"containText"}><Markup content={data.description} /> </div>
 
 
-                                        <div className="mlef">
+                                        <div className="mlef pad">
                                             <div className="d">
                                             
                                         <Link href={"https://wa.me/237" + data.tel}><a id="contact" className="btnSecondary ">Nous Contacter</a></Link>
@@ -119,13 +163,14 @@ function Page({data,positions,types,spe,getPost,handleSubs,ab,abo,userId}) {
 
                                     <center className="pading h2">{e.name.toUpperCase()}</center>
                                     <div className="pad">
-                                    <div className={e.disposition == 1 ? style.dgp : e.disposition == 2 ? "dfss" : styl.dfr}>
+                                    <div className={e.disposition == 1 ? style.dgp : e.disposition == 2 ? styl.dfss : styl.dfr}>
 
 
 
                                         <div className="dfss">
 
-                                            <img src={"/" + e.image} className={e.disposition !== 2 ? "imgFill" : "imgFill"} alt="image d'un post" />
+                                                {/* <img src={"/" + e.image} className={e.disposition !== 2 ? "imgFill" : "imgFill"} alt="image d'un post" /> */}
+                                                <img src={"/Images/" + e.image} className={e.disposition !== 2 ? "imgFill" : "imgFill"} alt="image d'un post" />
 
 
                                         </div>
@@ -169,6 +214,16 @@ function Page({data,positions,types,spe,getPost,handleSubs,ab,abo,userId}) {
 
 
             </article>
+            {menu && <Menu onModalChange={setMenu} component={<>
+                <div className="tableMenu">
+                    
+          
+                    <a className="active ds" ><HouseFill size={20} color="#4a00b4" /> Acceuil </a>
+                    <Link href="#spe" ><a  className="ds"> <BriefcaseFill size={20} color="#4a00b4"/> Spécialités </a></Link>
+                    <Link href="#contact" ><a  className="ds"> <PhoneFill size={20} color="#4a00b4"/> Contact </a></Link>
+
+              </div>
+            </>} />}
         </div>
     )
 }

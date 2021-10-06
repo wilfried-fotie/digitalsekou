@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowLeft, BarChart, CursorFill,  Bell, Building, CartX, Check, ChevronCompactLeft, Clipboard, Disc, Exclude, Eye, Flower1, Gear, Link as Lk, Lock, LockFill, Person, PersonCircle, SuitDiamond, Trash, Whatsapp, CashStack, CartFill, CartDashFill, FileLockFill, } from 'react-bootstrap-icons'
+import { ArrowLeft, BarChart, CursorFill,  Bell, Building, CartX, Check, ChevronCompactLeft, Clipboard, Disc, Exclude, Eye, Flower1, Gear, Link as Lk, Lock, LockFill, Person, PersonCircle, SuitDiamond, Trash, Whatsapp, CashStack, CartFill, CartDashFill, FileLockFill, List, } from 'react-bootstrap-icons'
 import styles from '../components/Style/CreateAccount.module.css'
 import style from '../styles/sudo.module.css'
 import "../global"
@@ -25,6 +25,7 @@ import { fecthAllOffer, fecthAllPub } from '../Model/getIndex'
 import Pubs from '../components/Sudo/pubs'
 import Offres from '../components/Sudo/offres'
 import Link from "next/link"
+import Menu from '../components/Menu'
 
 
 const useIsomorphicLayoutEffect =
@@ -234,19 +235,14 @@ export default function Controller({ schools, entreprises,sites, pubs, offers,us
 }
 
 
-
-
-
-
-
-
-export function Connect({info}) {
+export function Connect({info,mob = false}) {
     const [visbility2, v2] = useModal(false)
     const pos = React.useRef(null)
     const [position, setPosition] = React.useState({})
 
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.stopPropagation()
         v2(true)
 
         setPosition({
@@ -257,8 +253,8 @@ export function Connect({info}) {
     }
 
     return (<>
-        <div>
-            <a className={style.dfss} onClick={handleClick} ref={pos}>
+        <div >
+            <a className={mob ? style.mobdfss : style.dfss} onClick={handleClick} ref={pos}>
 
                 <Gear size={20} className={style.icon} color="#4a00b4" /> <span>Paramètre</span>  </a>
 
@@ -274,12 +270,16 @@ export function Dasboard() {
 
     const router = useRouter()
     const [level, setLevel] = React.useState(1)
+    const [menu, setMenu] = useModal(false)
 
     const [choise, handleChoiseState] = useChangeBool(true)
     const [visbility, v] = useModal(false)
 
 
 
+    const handleMenuClick = () => {
+        setMenu(true)
+    }
 
 
 
@@ -324,16 +324,21 @@ export function Dasboard() {
                         <nav className="dfb">
 
 
-                            <span className={level == 1 ? style.h1 : style.no} > Demande Paser Pro </span>
+                            <span className={level == 1 ? style.h1 : style.no} > Demande Passer Pro </span>
                             <span className={level == 2 ? style.h1 : style.no} > Entreprises </span>
                             <span className={level == 3 ? style.h1 : style.no} >  Etablissements </span>
                             <span className={level == 4 ? style.h1 : style.no} >  Parents/Élève </span>
                             <span className={level == 6 ? style.h1 : style.no} > Statistiques </span>
                             <span className={level == 7 ? style.h1 : style.no} > Publicités </span>
                             <span className={level == 8 ? style.h1 : style.no} > Offres </span>
+                            <div className="desktopScreen">
+                                
 
                             <Connect info={{ url: "/sudo", data: {}, token: { name: "sudo", token: "sudoToken", id: "sudo" } }}/>
-
+                            </div>
+                            <div className="mobileScreen">
+                                <List size={30} color="#4a00b4" onClick={handleMenuClick} className="rounder" />
+                            </div>
                         </nav>
 
                         <div className={style.right}>
@@ -350,6 +355,37 @@ export function Dasboard() {
                     </article>
                 </div>
             </div>
+            {menu && <Menu onModalChange={setMenu} color={true} component={<>
+
+                <Connect mob={true} info={{ url: "/sudo", data: {}, token: { name: "sudo", token: "sudoToken", id: "sudo" } }} />
+                <div className={style.barMobile}>
+
+
+                <span className={level == 0 ? style.active : style.span} onClick={(e) => {
+                    e.preventDefault()
+                    setLevel(0)
+                    router.push("/")
+                }}> <ArrowLeft size={20} color={level == 0 ? "#fff" : "#fff9"} className={level == 0 ? style.acticon : style.icon} /> Revenir au site</span>
+
+
+                <div className="avatar">
+                    <center className="padding">  <PersonCircle size={50} color="#FFF" />
+                        <center style={{ color: "#FFF" }}>  Admin </center>
+                    </center>
+
+                </div>
+
+                <span className={level == 1 ? style.active : style.span} onClick={() => { setLevel(1) }} > <Flower1 size={20} color={level == 1 ? "#fff" : "#fff9"} className={level == 1 ? style.acticon : style.icon} /> Demandes </span>
+                <span className={level == 2 ? style.active : style.span} onClick={() => { setLevel(2) }}> <Building size={20} color={level == 2 ? "#fff" : "#fff9"} className={level == 2 ? style.acticon : style.icon} /> Entreprises </span>
+                <span className={level == 3 ? style.active : style.span} onClick={() => { setLevel(3) }}> <SuitDiamond size={20} color={level == 3 ? "#fff" : "#fff9"} className={level == 3 ? style.acticon : style.icon} /> Etablissements </span>
+
+                <span className={level == 7 ? style.active : style.span} onClick={() => { setLevel(7) }}> <CashStack size={20} color={level == 6 ? "#fff" : "#fff9"} className={level == 7 ? style.acticon : style.icon} /> Publicités </span>
+                <span className={level == 8 ? style.active : style.span} onClick={() => { setLevel(8) }}> <CartDashFill size={20} color={level == 6 ? "#fff" : "#fff9"} className={level == 8 ? style.acticon : style.icon} /> Offres </span>                            <span className={level == 4 ? style.active : style.span} onClick={() => { setLevel(4) }}> <PersonCircle size={20} color={level == 4 ? "#fff" : "#fff9"} className={level == 4 ? style.acticon : style.icon} /> Parents/Élèves </span>
+
+                <span className={level == 6 ? style.active : style.span} onClick={() => { setLevel(6) }}> <BarChart size={20} color={level == 6 ? "#fff" : "#fff9"} className={level == 6 ? style.acticon : style.icon} /> Statistiques </span>
+
+</div>
+            </>} />}
         </>
     )
 }

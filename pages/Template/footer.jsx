@@ -10,19 +10,23 @@ function Footer() {
         <>
 
             <footer className={styles.footer} >
-                <div className="df">
+                <div className="ds">
                     <div className={styles.app}>
                         <div className="dfss">
                             <Facebook color="#fff" size="25" />
                             <span className={styles.ttx}>
-                                Digital éducation cameroun
+                                DigitalSekou cameroun
                             </span>
                         </div>
                     </div>
                     <div className={styles.app}>
                         <div className="dfss">
                             <Facebook color="#fff" size="25" />
+                        <span className={styles.ttx}>
+                            MiSofe cameroun
+                            </span>
                         </div>
+                        
                     </div>
                 </div>
             </footer>

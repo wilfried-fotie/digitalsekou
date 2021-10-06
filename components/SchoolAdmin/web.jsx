@@ -182,8 +182,8 @@ export function ModSchool() {
     }
 
     return (<>
-        <span className="h1">Modifier votre site web</span>
-        <div className={"container", styles.dg}>
+        <div className="h1 pad">Modifier votre site web</div>
+        <div className="tableModSite">
 
             
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -328,8 +328,8 @@ export function ModSchool() {
             </form>
 
 
-            {succes && <FineModal position={{ top: 30, left: "35%" }} component={<div color="green"> <center> <CheckCircle size={40} color="green" /> </center><br />  Les données ont étés mis à jour avec succes!!</div>} onModalChange={setSucces} />}
-            {error && <FineModal position={{ top: 30, left: "35%" }} component={<div color="red"> <center> <Eraser size={40} color="red" /> </center><br />  Les données n'ont pas étés mis à jour avec succes!!</div>} onModalChange={setError} />}
+            {succes && <FineModal position={{ top: 30, left: "25%" }} component={<div color="green"> <center> <CheckCircle size={40} color="green" /> </center><br />  Les données ont étés mis à jour avec succes!!</div>} onModalChange={setSucces} />}
+            {error && <FineModal position={{ top: 30, left: "25%" }} component={<div color="red"> <center> <Eraser size={40} color="red" /> </center><br />  Les données n'ont pas étés mis à jour avec succes!!</div>} onModalChange={setError} />}
         </div>
         </>)
 }
