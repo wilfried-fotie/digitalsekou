@@ -8,7 +8,7 @@ import S3 from 'react-aws-s3';
 
 
 
-
+// jes usi au sol
 
 function Upload() {
 
