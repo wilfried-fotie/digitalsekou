@@ -3,21 +3,14 @@ import axios from 'axios'
 import "../global"
 import { File } from '../components/FormTools';
 import { useForm } from 'react-hook-form';
-
-
+import { config } from '../components/imageConfig'
 import S3 from 'react-aws-s3';
 
 
 
-function Upload() {
 
-   const config = {
-    bucketName: 'digitalsekou',
-    region: 'us-east-2',
-    accessKeyId: 'AKIAYMXWVHOCFUJ7HGPJ',
-    secretAccessKey: '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',
-    
-}
+
+function Upload() {
 
 const ReactS3Client = new S3(config);
 
